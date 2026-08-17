@@ -467,6 +467,13 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
 .vp-speaker { font-size: 11.5px; letter-spacing: 1.6px; text-transform: uppercase; color: #f5c76a; font-weight: 700; margin-bottom: 3px; }
 .vp-speaker.you { color: #8fd4ae; }
 .vp-line { font-size: 17.5px; font-weight: 600; line-height: 1.4; min-height: 25px; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.vp-line-pt {
+  font-size: 13.5px; font-style: italic; color: #ffd98a;
+  line-height: 1.35; margin-top: 3px; min-height: 18px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  animation: rise .3s ease both;
+}
+.vp-line-pt:empty { animation: none; }
 .vp-mood {
   position: absolute; bottom: 14px; right: 16px;
   font-size: 12px; background: rgba(0,0,0,.45); color: #fff;
@@ -578,6 +585,43 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
 .heard-box.miss { background: var(--gold-wash); }
 .spoke-note { margin-top: 7px; font-size: 13px; color: var(--green-deep); font-weight: 600; }
 
+/* ============ Bilingual (PT-first) helpers ============ */
+.say-pt {
+  display: block;
+  font-size: 12.5px; font-style: italic;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+.sub-en {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--line);
+}
+.sub-en::before { content: "🇬🇧 "; font-size: 10px; }
+.lang-switch {
+  display: inline-flex; gap: 3px; margin-left: 10px;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 99px; padding: 3px;
+}
+.lang-btn {
+  border: none; background: transparent;
+  border-radius: 99px; padding: 4px 11px;
+  font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
+}
+.lang-btn.active { background: var(--green); color: #fff; }
+.sc-title-pt {
+  display: block; font-family: var(--font);
+  font-size: 12px; font-weight: 500; font-style: italic;
+  color: var(--ink-faint); margin-top: 1px;
+}
+.page-title-pt {
+  font-size: 15px; font-style: italic; color: var(--ink-faint); margin-top: 2px;
+}
+.rs-label { color: var(--ink-faint); }
+
 /* ============ Watch (POV) mode ============ */
 .watch-intro { animation: rise .25s ease both; }
 .watch-progress { font-size: 13px; color: var(--ink-faint); padding: 8px 2px; }
@@ -659,11 +703,11 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
       <nav class="nav">
         <a class="nav-item" href="#/home" data-route="home"><span class="nav-emoji">🏠</span> Home</a>
 
-        <div class="nav-label">Study</div>
+        <div class="nav-label" id="study-label">Study</div>
         <a class="nav-item" href="#/grammar" data-route="grammar"><span class="nav-emoji">📚</span> Grammar</a>
         <a class="nav-item" href="#/exercises" data-route="exercises"><span class="nav-emoji">✏️</span> Exercises</a>
 
-        <div class="nav-label">Real Life English</div>
+        <div class="nav-label" id="rle-label">Real Life English</div>
         <div id="scenario-nav"></div>
       </nav>
 
@@ -845,6 +889,343 @@ window.SLANG_PACKS = {
       "'Wee' softens everything: 'a wee question' is the politest possible interruption.",
       "The trap: 'aye right' (sarcastic) = no way. Tone is everything."
     ]
+  }
+};
+
+</script>
+<script>
+// RealTalk — interface language layer. PT-BR first (the learners are Brazilian),
+// EN toggle available. L(key) resolves UI strings; dialogue translations live in pt-scenes.js.
+window.RT_LANG = localStorage.getItem("realtalk-lang") || "pt";
+
+window.UI = {
+  en: {
+    home: "Home", grammar: "Grammar", exercises: "Exercises", study: "Study",
+    g_daily: "Daily Life", g_settling: "Settling In", g_social: "Social", g_work: "Work",
+    accent: "Accent", voiceOn: "🔊 Voice on", voiceOff: "🔇 Voice off",
+    heroP: "This isn't school English. Every scene is a real conversation from your first months abroad — in your point of view, with real choices, real mistakes and real reactions. You're training your ear for {accent} English {flag} — switch accents up top and watch everything change.",
+    heroCta: "▶ Start with Ordering Coffee",
+    stScenes: "scenes completed", stLessons: "grammar lessons read", stQuizzes: "quizzes attempted",
+    grammarBlurb: "Lessons built entirely around the mistakes Brazilians actually make — have vs be, prepositions, false friends, plus the local slang decoder.",
+    exercisesBlurb: "Quick quizzes with instant explanations. Best scores are saved — beat yourself.",
+    grammarPageBlurb: "Not a textbook — a trap map. Each lesson targets mistakes Portuguese speakers actually make, with the exact fix.",
+    exercisesPageBlurb: "Short quizzes, instant explanations. Wrong answers teach more than right ones — that's the whole philosophy here.",
+    backLessons: "← All lessons", backExercises: "← All exercises",
+    practiceCta: "Practice this in Exercises →",
+    question: "Question", of: "of", score: "score", correct: "✓ Correct!", notQuite: "✗ Not quite.",
+    nextQ: "Next question ▸", seeResult: "See result ▸", tryAgain: "↻ Try again",
+    best: "best:", notAttempted: "not attempted", questions: "questions",
+    quizPerfect: "Perfect. Nothing to teach you here. 🏆",
+    quizStrong: "Strong — reread the ones you missed and it's yours. 💪",
+    quizWeak: "The misses are the lesson. Read the explanations, then run it back. 🔁",
+    tLearn: "📖 Learn", tPov: "📹 POV", tPlay: "🎬 Play", tSpeak: "🎙️ Speak",
+    keyPhrases: "🗝️ Key phrases", slangTitle: "Slang you'll hear", tips: "💡 Insider tips",
+    traps: "🇧🇷 Brazilian traps in this situation",
+    dontSay: "Don't say", say: "Say", why: "Why",
+    watchFirst: "📹 Watch the POV first", playScene: "🎬 Play the scene", speakIt: "🎙️ Speak it",
+    whatSay: "What do you say?", cont: "Continue ▸",
+    modeWatch: "POV · full conversation", modeSpeak: "POV · speaking practice", modeTap: "POV · you choose",
+    swapNote: "placeholder scene — drop real smart-glasses clips into clips/ and the placeholders disappear",
+    speakPrompt: "🎙️ Your turn — say one of these out loud",
+    micHint: "Tap the mic, then say your line", micListening: "Listening… speak now",
+    micBlocked: "Microphone blocked — allow mic access in the browser, or tap your line instead.",
+    micNoSpeech: "Didn't hear anything — tap the mic and try again, a bit louder.",
+    micErr: "Mic hiccup — try again, or tap your line instead.",
+    micUnsupported: "Speech recognition isn't available in this browser (try Chrome or Edge) — tap your line instead.",
+    weHeard: "We heard:", match: "match", noMatch: "didn't match any line. In real life you'd hear:",
+    noMatchEmpty: "Couldn't make that out. In real life you'd hear:",
+    tryAgainMic: "Perfect practice for real life! Tap the mic and try again — slower is fine.",
+    spokeNote: "🎙️ You said it out loud — {pct}% match. That sentence is yours now.",
+    watchIntro: "This is the POV cut — the whole conversation at real speed, like standing there wearing the glasses. Watch it once before you play it.",
+    lines: "lines", watchBtn: "▶ Watch the conversation",
+    lineOf: "line {i} of {n}", skipEnd: "skip to end",
+    watchDone: "That's the full conversation 🎬",
+    watchDoneP: "You just watched it happen. Now step into the glasses yourself:",
+    playTap: "🎬 Play it — tap your lines", speakLoud: "🎙️ Speak it out loud", rewatch: "↻ Watch again",
+    clipRack: "📼 Clip rack — the real footage slots",
+    awaitingFootage: "📼 awaiting footage", footageReady: "🎥 footage ready",
+    rackNote: "Each card is one clip to film with the glasses. Drop files in clips/ and the placeholder disappears.",
+    sceneComplete: "Scene complete", natural: "natural", awkward: "awkward", wrongs: "classic mistakes",
+    vFlawless: "Flawless. You'd fool a local. 🏆",
+    vSolid: "Solid — a few rough edges, zero disasters. 💪",
+    vSurvived: "You survived — and the mistakes you made here, you'll never make out there. That's the point. 🎯",
+    vChaotic: "Chaotic — but every one of those reactions just became a memory. Replay and feel the difference. 🔁",
+    vSpoke: "And you did it with your actual voice — that's the real training.",
+    reviewSlips: "Review your slips", youSaid: "You said:",
+    replay: "↻ Replay scene", backHome: "Back to scenarios",
+    fbNatural: "✓ Natural", fbAwkward: "~ A bit awkward", fbWrong: "✗ Classic mistake",
+    done: "✓ done", read: "✓ read",
+    heroTitleSuffix: ""
+  },
+  pt: {
+    home: "Início", grammar: "Gramática", exercises: "Exercícios", study: "Estudo",
+    g_daily: "Dia a Dia", g_settling: "Chegando no País", g_social: "Social", g_work: "Trabalho",
+    accent: "Sotaque", voiceOn: "🔊 Voz ligada", voiceOff: "🔇 Voz desligada",
+    heroP: "Isso aqui não é inglês de escolinha. Cada cena é uma conversa real dos seus primeiros meses fora — em primeira pessoa, com escolhas reais, erros reais e reações reais. Você está treinando o ouvido para o inglês {accent} {flag} — troque o sotaque ali em cima e veja tudo mudar.",
+    heroCta: "▶ Comece por: Pedindo um Café",
+    stScenes: "cenas completas", stLessons: "lições de gramática lidas", stQuizzes: "quizzes feitos",
+    grammarBlurb: "Lições construídas em cima dos erros que brasileiros realmente cometem — have vs be, preposições, falsos cognatos, e o decodificador de gírias locais.",
+    exercisesBlurb: "Quizzes rápidos com explicação na hora. A melhor pontuação fica salva — supere você mesmo.",
+    grammarPageBlurb: "Não é um livro didático — é um mapa de armadilhas. Cada lição ataca erros que falantes de português realmente cometem, com a correção exata.",
+    exercisesPageBlurb: "Quizzes curtos, explicação instantânea. Errar ensina mais que acertar — essa é a filosofia da casa.",
+    backLessons: "← Todas as lições", backExercises: "← Todos os exercícios",
+    practiceCta: "Pratique isso nos Exercícios →",
+    question: "Pergunta", of: "de", score: "pontos", correct: "✓ Certo!", notQuite: "✗ Não foi dessa vez.",
+    nextQ: "Próxima pergunta ▸", seeResult: "Ver resultado ▸", tryAgain: "↻ Tentar de novo",
+    best: "melhor:", notAttempted: "não feito", questions: "perguntas",
+    quizPerfect: "Perfeito. Nada mais a ensinar aqui. 🏆",
+    quizStrong: "Muito bom — releia as que errou e é sua. 💪",
+    quizWeak: "Os erros são a lição. Leia as explicações e faça de novo. 🔁",
+    tLearn: "📖 Aprender", tPov: "📹 POV", tPlay: "🎬 Jogar", tSpeak: "🎙️ Falar",
+    keyPhrases: "🗝️ Frases-chave", slangTitle: "Gírias que você vai ouvir", tips: "💡 Dicas de quem vive lá",
+    traps: "🇧🇷 Armadilhas brasileiras nessa situação",
+    dontSay: "Não fale", say: "Fale", why: "Por quê",
+    watchFirst: "📹 Assista o POV primeiro", playScene: "🎬 Jogue a cena", speakIt: "🎙️ Fale em voz alta",
+    whatSay: "O que você diz?", cont: "Continuar ▸",
+    modeWatch: "POV · conversa completa", modeSpeak: "POV · prática de fala", modeTap: "POV · você escolhe",
+    swapNote: "cena ilustrativa — quando os vídeos reais dos óculos forem gravados, eles entram aqui",
+    speakPrompt: "🎙️ Sua vez — fale uma dessas em voz alta",
+    micHint: "Toque no microfone e fale sua frase", micListening: "Ouvindo… pode falar",
+    micBlocked: "Microfone bloqueado — permita o acesso no navegador, ou toque na frase.",
+    micNoSpeech: "Não ouvimos nada — toque no microfone e tente de novo, um pouco mais alto.",
+    micErr: "Falha no microfone — tente de novo, ou toque na frase.",
+    micUnsupported: "Reconhecimento de voz não disponível neste navegador (use Chrome ou Edge) — toque na frase.",
+    weHeard: "Ouvimos:", match: "de acerto", noMatch: "não bateu com nenhuma frase. Na vida real, você ouviria:",
+    noMatchEmpty: "Não deu pra entender. Na vida real, você ouviria:",
+    tryAgainMic: "Treino perfeito pra vida real! Toque no microfone e tente de novo — devagar tá ótimo.",
+    spokeNote: "🎙️ Você falou em voz alta — {pct}% de acerto. Essa frase agora é sua.",
+    watchIntro: "Este é o corte POV — a conversa inteira em velocidade real, como se você estivesse lá de óculos. Assista uma vez antes de jogar.",
+    lines: "falas", watchBtn: "▶ Assistir a conversa",
+    lineOf: "fala {i} de {n}", skipEnd: "pular pro final",
+    watchDone: "Essa é a conversa completa 🎬",
+    watchDoneP: "Você acabou de assistir. Agora entre nos óculos você mesmo:",
+    playTap: "🎬 Jogar — toque nas suas falas", speakLoud: "🎙️ Falar em voz alta", rewatch: "↻ Assistir de novo",
+    clipRack: "📼 Estante de clipes — onde entram os vídeos reais",
+    awaitingFootage: "📼 aguardando filmagem", footageReady: "🎥 vídeo pronto",
+    rackNote: "Cada cartão é um clipe a ser filmado com os óculos. Coloque os arquivos em clips/ e o placeholder some.",
+    sceneComplete: "Cena completa", natural: "naturais", awkward: "estranhas", wrongs: "erros clássicos",
+    vFlawless: "Impecável. Você enganaria um nativo. 🏆",
+    vSolid: "Sólido — algumas arestas, zero desastres. 💪",
+    vSurvived: "Você sobreviveu — e os erros que cometeu aqui, nunca mais vai cometer lá fora. É exatamente essa a ideia. 🎯",
+    vChaotic: "Caótico — mas cada uma dessas reações virou memória. Repita e sinta a diferença. 🔁",
+    vSpoke: "E você fez isso com a sua própria voz — esse é o treino de verdade.",
+    reviewSlips: "Revise seus deslizes", youSaid: "Você disse:",
+    replay: "↻ Repetir cena", backHome: "Voltar às cenas",
+    fbNatural: "✓ Natural", fbAwkward: "~ Meio estranho", fbWrong: "✗ Erro clássico",
+    done: "✓ feito", read: "✓ lida",
+    heroTitleSuffix: ""
+  }
+};
+
+window.L = function (key, params) {
+  const lang = window.UI[window.RT_LANG] || window.UI.en;
+  let s = lang[key] !== undefined ? lang[key] : (window.UI.en[key] !== undefined ? window.UI.en[key] : key);
+  if (params) for (const k of Object.keys(params)) s = s.replace("{" + k + "}", params[k]);
+  return s;
+};
+
+</script>
+<script>
+// RealTalk — Portuguese layer for the scenes.
+// meta: titlePt/blurbPt for every scenario (shown under the English titles).
+// scenes: full dialogue translation (line, note, choices[], fbs[] — index-aligned)
+//         for the Beginner scenarios. Others fall back to English gracefully.
+
+window.PT_META = {
+  coffee:     { title: "Pedindo Café",              blurb: "Sobreviva ao humano que fala mais rápido no país: o barista." },
+  food:       { title: "Pedindo Comida",            blurb: "Balcões, número da mesa, gorjeta — como comer fora funciona de verdade." },
+  directions: { title: "Pedindo Informações",       blurb: "Celular morto, você perdido. Hora de falar com um estranho." },
+  smalltalk:  { title: "Small Talk (Conversinha)",  blurb: "A copa do escritório, o elevador — conversas mínimas, habilidade gigante." },
+  phone:      { title: "Ligações Telefônicas",      blurb: "O medo nº 1 em outra língua: sem rosto, sem gestos — só vozes." },
+  haircut:    { title: "O Corte de Cabelo",         blurb: "Descrever um corte em inglês — comprovadamente pior que dentista." },
+  doctor:     { title: "Médico e Farmácia",         blurb: "Descrever sintomas, entender dosagens — a conversa que você não pode fingir." },
+  renting:    { title: "Alugando um Lugar",         blurb: "Inspeções, depósitos, aplicações — o inglês mais caro da sua vida." },
+  setup:      { title: "Primeira Semana: Burocracia", blurb: "Chip, conta no banco, e o famoso ciclo sem-endereço-sem-conta." },
+  interview:  { title: "Entrevista de Emprego",     blurb: "Os 30 minutos que decidem sua vida no visto. Ensaie aqui primeiro." },
+  flirting:   { title: "Paquera",                   blurb: "Festa em casa. Alguém interessante. Seu inglês decide os próximos 5 minutos." },
+  casual:     { title: "Conversas Casuais",         blurb: "Um churrasco no quintal com os novos amigos — densidade máxima de gíria." },
+  worktalk:   { title: "Inglês do Trabalho",        blurb: "Stand-ups, prazos, pedir ajuda — o inglês do escritório, decodificado." }
+};
+
+window.PT_SCENES = {
+  coffee: {
+    setting: "Segunda-feira, 8h40. Um café lotado. Você é o próximo da fila.",
+    nodes: {
+      n1: { line: "E aí! O que vai ser?",
+            note: "É um cumprimento em velocidade máxima — ela não quer saber da sua vida, só do pedido.",
+            choices: ["Pode ser um flat white, por favor?", "Eu quero um café.", "Os livros na mesa."],
+            fbs: ["Perfeito — é exatamente assim que os locais pedem.",
+                  "Ela entendeu, mas 'I want' soa grosseiro. 'Can I get...' é a versão simpática.",
+                  "Deu branco total — você entrou em pânico e saiu o inglês da apostila. Acontece com todo mundo."] },
+      n1a: { line: "Certo... que tipo de café? Temos lattes, flat whites, cappuccinos...",
+             note: "'Um café' não existe aqui — existem dez tipos. Escolha um e adote pra sempre.",
+             choices: ["Um flat white, por favor."],
+             fbs: ["Boa recuperação."] },
+      n1w: { line: "...Desculpa, o quê?",
+             note: "Essa é a cara. Memorize essa cara. Agora veja como é fácil se recuperar —",
+             choices: ["Desculpa! Quer dizer — um flat white, por favor.", "Nada! Desculpa. Café. Flat white."],
+             fbs: ["Viu? Um 'sorry' e você voltou. Erros não custam nada aqui.",
+                   "Recuperou, mas em modo homem das cavernas. Frases completas soam melhor — mas ela entendeu."] },
+      n2: { line: "Pra levar ou pra tomar aqui?",
+            choices: ["Pra levar, por favor.", "For to go. (tradução literal de 'para levar')", "Desculpa — o que significa isso?"],
+            fbs: ["Na mosca.",
+                  "Tradução direta de 'para levar' — inglês vestindo fantasia de português.",
+                  "Perguntar é SEMPRE natural. Nunca finja que entendeu."] },
+      n2w: { line: "Pra levar? Beleza.",
+             note: "Ela te corrigiu sem nem piscar — os locais fazem isso o tempo todo. Roube a correção." },
+      n2r: { line: "Ah — tipo, pra levar com você, ou vai tomar aqui?",
+             choices: ["Ah, pra levar então. Valeu!"],
+             fbs: ["Palavra nova desbloqueada — e ela gostou mais de você por ter perguntado."] },
+      n3: { line: "Açúcar?",
+            choices: ["Não, obrigado.", "Sim — dois, por favor.", "I have sugar. (= 'eu tenho açúcar no sangue')"],
+            fbs: ["Limpo e resolvido.", "Perfeito.",
+                  "Você acabou de contar sobre sua glicose. Ela perguntou se você QUER açúcar — o 'ter/have' atacou de novo."] },
+      n3w: { line: "...Tudo bem aí? Então — açúcar, ou sem açúcar?",
+             note: "'You right?' = 'você está bem?'. Ela está conferindo se você não está passando mal.",
+             choices: ["Ha — desculpa. Sim, um açúcar por favor."],
+             fbs: ["Recuperou rindo. É exatamente essa a energia."] },
+      n4: { line: "Perfeito. Deu cinco e cinquenta — aproxima o cartão quando quiser.",
+            note: "'Tap' = encostar o cartão na maquininha. Pagamento por aproximação é universal.",
+            choices: ["(aproxima o cartão) Aqui está.", "Desculpa, pode repetir? Um pouco mais devagar?", "Here is the money. (robótico)"],
+            fbs: ["Suave. Dizer 'there you go' enquanto encosta o cartão te faz soar local.",
+                  "Dinheiro é a coisa nº 1 que você nunca deve chutar. Pedir pra repetir é jogada de mestre.",
+                  "Gramática perfeita, socialmente robótico. Ninguém anuncia o dinheiro. Só encosta o cartão."] },
+      n4r: { line: "Cinco e cinquenta. Cartão tá ótimo — só encostar aqui.",
+             choices: ["(encosta) Valeu!"],
+             fbs: ["'Cheers' = valeu. Você é praticamente um cidadão agora."] },
+      n5: { line: "Valeu! Rapidinho. Qual é o nome?",
+            choices: ["Matheus — M, A, T, H, E, U, S.", "Por que você precisa do meu nome?", "...Pode me chamar de John."],
+            fbs: ["Soletrar sem esperar pedirem = jogada de veterano. Espere 'Mateus', 'Matthews' e 'Matthew' no copo mesmo assim.",
+                  "É pro copo, não pra polícia. Soa desconfiado/grosseiro mesmo sendo só curiosidade.",
+                  "O clássico 'nome de café' de imigrante. Sinceramente? Válido. Zero julgamento. Milhões fazem isso."] },
+      n5w: { line: "Haha — é pro copo! Pra eu poder chamar seu pedido.",
+             choices: ["Ah! Claro. Matheus."],
+             fbs: ["Tudo certo — agora você sabe: nome = copo, sempre."] },
+      end: { line: "Flat white pro... Mateus? Matthews? — enfim, aqui está. Tenha um bom dia!",
+             note: "'Have a good one' = tenha um bom dia. Você sobreviveu. Essa exata conversa acontece milhões de vezes por dia." }
+    }
+  },
+
+  food: {
+    setting: "Sábado, almoço num pub. Você está no balcão, cardápio na mão, mesa 12 garantida.",
+    nodes: {
+      n1: { line: "E aí, tudo certo — pronto pra pedir?",
+            note: "'You right to order?' = 'pronto pra pedir?'.",
+            choices: ["Sim — o frango à parmegiana, por favor.", "I will eat the chicken. (= profecia)", "One chicken for me stay here. (português fantasiado)"],
+            fbs: ["De livro. Você até usou o nome local do prato.",
+                  "Entenderam, mas soa como uma profecia do destino. O padrão é 'I'll have...' (vou querer).",
+                  "'Para mim ficar aqui' palavra por palavra. Veja o rosto dele processando."] },
+      n1w: { line: "Um frango... à parmegiana? E é... pra comer aqui, né?",
+             note: "Ele remontou sua frase pra você. Nativos são craques em decodificar inglês quebrado — mas não vamos abusar.",
+             choices: ["Sim — pra comer aqui. Desculpa, primeira semana no país!"],
+             fbs: ["A carta 'primeira semana' transforma confusão em simpatia na hora. Use sem vergonha."] },
+      n2: { line: "Boa escolha. Vem com batata frita e salada — tudo certo?",
+            choices: ["Tudo certo, obrigado.", "Espera — 'chips'? Tipo... as de pacote?", "Yes, I accept. (= assinando contrato)"],
+            fbs: ["Máximo de naturalidade.",
+                  "Pergunta justa! Aqui batata frita quente = 'chips'. As de pacote = também 'chips'. Ambiguidade eterna.",
+                  "Você não está assinando um contrato. 'Sounds good' ou 'perfect' resolve."] },
+      n2r: { line: "Ha — não, batata quente. Tipo fritas. Batata de pub de verdade.",
+             choices: ["Perfeito, melhor ainda."],
+             fbs: ["Vocabulário de comida adquirido do jeito divertido."] },
+      n3: { line: "Algo pra beber?",
+            choices: ["Só uma 'lemonade', obrigado.", "Água da torneira é de graça? Pode ser água.", "Vocês têm caipirinha?"],
+            fbs: ["Atenção: vem um refrigerante tipo Sprite, não suco de limão. 'Lemonade' aqui = refrigerante transparente.",
+                  "De graça, normal, e ninguém julga. Geralmente tem uma estação de água com copos.",
+                  "É um pub — cerveja, vinho e talvez um mojito triste. Mas pontos pelo intercâmbio cultural."] },
+      n3w: { line: "Caipi-o-quê? Temos chope, vinho da casa... esse tipo de coisa.",
+             choices: ["Tranquilo — uma lemonade então, valeu."],
+             fbs: ["Adaptar e sobreviver. (Ache um bar brasileiro depois — toda cidade grande tem.)"] },
+      n4: { line: "Fechou. Qual o número da sua mesa?",
+            choices: ["Doze, obrigado.", "What means 'table number'? (gramática + confusão)"],
+            fbs: ["Você pegou o número da mesa antes, como um profissional.",
+                  "Nota de gramática: 'What DOES it mean'. Nota cultural: viu o numerozinho na sua mesa? É isso."] },
+      n4w: { line: "O numerozinho na sua mesa — pra gente saber onde levar a comida.",
+             choices: ["Ahh. Doze! Mesa doze."],
+             fbs: ["Mistério resolvido. Esse sistema governa o país inteiro."] },
+      end: { line: "Doze, beleza. Deu vinte e oito — encosta o cartão aí. A gente leva na mesa. Bom apetite!",
+             note: "'Bucks' = dólares. A comida vai até você, e você só volta ao balcão pra pedir a segunda rodada." }
+    }
+  },
+
+  directions: {
+    setting: "15h num bairro desconhecido. Celular: morto. Um local com um café vem andando na sua direção.",
+    nodes: {
+      n0: { line: "Seu celular morreu dois bairros atrás. A estação fica 'em algum lugar por aqui'. Um local simpático se aproxima. Respira fundo —",
+            choices: ["Com licença, desculpa — você sabe como chegar na estação de trem?", "Hey! Where is station? (seco demais)", "Can you carry me to the station? (= me carrega no colo)"],
+            fbs: ["Abertura perfeita. 'Excuse me, sorry' + pergunta = máxima educação, zero atrito.",
+                  "Ele vai ajudar, mas soou como ordem. O artigo 'the' + uma suavizada resolvem.",
+                  "'Me leva' ao pé da letra. Você pediu pra esse homem te carregar no colo. Observe."] },
+      n0a: { line: "A estação de trem? Sim, é pertinho.",
+             note: "Ele entendeu — as pessoas perdoam. Mas note a pausa. 'Excuse me, do you know...' teria sido mais suave." },
+      n0w: { line: "Te CARREGAR?! Haha — você quer dizer te LEVAR? É logo ali, você não vai precisar de colo.",
+             note: "'Levar' = take (levar alguém a um lugar) / carry (carregar no colo). Ele vai contar essa história no jantar.",
+             choices: ["Levar! Sim — desculpa. Pra que lado é?"],
+             fbs: ["Riu junto e seguiu em frente. Essa é a habilidade inteira."] },
+      n1: { line: "Fácil — segue reto nessa rua, vira à esquerda no semáforo, passa do posto, e tá lá. Impossível errar.",
+            note: "Quatro instruções em três segundos. Essa é a velocidade normal. Ninguém pega tudo de primeira — nem os locais.",
+            choices: ["Desculpa — esquerda no... semáforo? E passando do quê?", "Então: reto, esquerda no semáforo, passa do posto. Entendi!", "Thanks! (você entendeu uns 30%)"],
+            fbs: ["Ecoar as palavras que você perdeu faz a pessoa reformular EXATAMENTE essas partes. Cirúrgico.",
+                  "A repetição de volta. A técnica mais poderosa do planeta pra receber direções.",
+                  "Você acenou. Você sorriu. Você não entendeu nada. Vamos ver no que dá..."] },
+      n1b: { line: "Segue reto nessa rua, esquerda no semáforo, passa do posto — tá lá. Impossível errar.",
+             choices: ["Desculpa, o que é 'servo'?", "Reto, esquerda no semáforo, passa do posto. Entendi!", "Thanks! (entendeu 30%)"],
+             fbs: ["Posto de gasolina! Agora você conhece a palavra de referência mais australiana que existe.",
+                   "Repetição de volta impecável.",
+                   "Fingindo. Estratégia corajosa. Vamos assistir ao desenrolar."] },
+      n2: { line: "O semáforo, isso. E o posto — posto de gasolina, placa verde grande. A estação é logo depois.",
+            note: "Viu? Perguntar te deu a versão mais lenta e clara. Zero irritação.",
+            choices: ["Esquerda no semáforo, depois do posto. Valeu demais!"],
+            fbs: ["Repetição + agradecimento local. Você soa como quem mora aqui há anos."] },
+      n2w: { line: "Você anda confiante... por 15 minutos... na direção exatamente oposta. O sol está se pondo. Outro local te vê perdido.",
+             note: "Esse é o custo real de fingir que entendeu: não é vergonha — são quilômetros." },
+      n2w2: { line: "Tudo bem aí, amigo? Procurando alguma coisa?",
+              note: "'You right?' = 'precisa de ajuda?'. Segunda chance. Use diferente dessa vez.",
+              choices: ["Sim — sinceramente, estou perdido. Pode me apontar a estação, devagar?", "I am right, thank you. (= 'eu estou certo')"],
+              fbs: ["Honestidade desbloqueia a versão paciente. As pessoas ADORAM ajudar quem admite que se perdeu.",
+                    "'You right?' não é sobre estar certo — significa 'você está bem / precisa de ajuda?'. Ele ficou confuso, você continua perdido."] },
+      n2w3: { line: "...Certo. Quer dizer — você precisa de uma ajuda pra achar alguma coisa?",
+              choices: ["Ah — sim! Desculpa. A estação de trem?"],
+              fbs: ["Decodificado na segunda tentativa. 'You right?' agora mora no seu cérebro pra sempre."] },
+      n3: { line: "Sem problema nenhum. Você vê os trens da esquina. De onde você é, aliás?",
+            choices: ["Brasil! Cheguei há três semanas.", "From Brazil. OK bye! (porta na cara)"],
+            fbs: ["Pedir informação virando small talk = você está indo muito bem. Isso acontece o tempo todo aqui.",
+                  "Eficiente! Mas ele estava abrindo um papo amigável e você bateu a porta. Uma frase a mais não custa nada."] },
+      end: { line: "Brasil, que massa! Bom — aproveita o país. Tenha um bom dia!",
+             note: "Estranhos desejando coisas boas é configuração padrão por aqui. Você conseguiu." }
+    }
+  },
+
+  setup: {
+    setting: "Terceiro dia no país. Missão: um número de telefone que funcione. Primeira parada: a loja de celular do shopping.",
+    nodes: {
+      n1: { line: "Oi! Bem-vindo — o que a gente resolve pra você hoje?",
+            choices: ["Oi! Acabei de me mudar pra cá — preciso de um SIM card.", "I want a chip. (chip = batata frita)"],
+            fbs: ["'I just moved here' ativa o modo guia-prestativo em qualquer atendente. É o código de trapaça do recém-chegado — use por meses.",
+                  "No Brasil é 'chip'; em inglês, chip é batata frita ou peça de computador. Ele está imaginando os dois agora. Observe."] },
+      n1w: { line: "Um chip? Tipo... batata? Ahh — um SIM! Um SIM card. Sim, tranquilo.",
+             note: "'Chip' (BR) → SIM card (EN). Uma daquelas traduções que te marcam como novato — agora aposentada do seu vocabulário pra sempre.",
+             choices: ["SIM card! Isso. Desculpa — no Brasil a gente chama de chip."],
+             fbs: ["Explicar a tradução transforma o escorregão em curiosidade divertida. Ele vai contar pra alguém no almoço."] },
+      n2: { line: "Fácil. Então — pré-pago, ou plano? Plano sai mais barato no longo prazo, mas precisa de conta em banco local e análise de crédito.",
+            note: "O labirinto da chegada se revela: o negócio melhor exige a conta de banco que você ainda não tem. É o famoso ciclo do recém-chegado.",
+            choices: ["Pré-pago por enquanto — ainda não tenho conta no banco. Qual tem uma internet decente?", "Desculpa — o que significa 'prepaid' exatamente?", "Um plano. Eu tenho dinheiro — dinheiro não é problema."],
+            fbs: ["O caminho padrão do recém-chegado, escolhido na hora: pré-pago agora, plano depois. Você atravessou a primeira bifurcação do labirinto correndo.",
+                  "Melhor dominar a palavra antes de pagar por ela.",
+                  "Não é questão de dinheiro — é HISTÓRICO de crédito, e o seu aqui é zero. Todo mundo começa do zero, até milionário. Veja ele tentando explicar com jeitinho..."] },
+      n2r: { line: "Pré-pago é recarregar conforme usa — paga primeiro, usa, sem contrato, sem banco. Recarrega online ou em qualquer mercado.",
+             choices: ["Perfeito — sou eu. Pré-pago, por favor, com uma internet boa."],
+             fbs: ["Palavra nova dominada: 'top up' (recarregar) vai fazer parte da sua rotina mensal agora."] },
+      n2w: { line: "Ah — não é bem questão de dinheiro, desculpa. O sistema roda uma análise de crédito, e você precisaria de histórico local... que leva tempo pra construir. Pré-pago é honestamente o caminho nos primeiros meses.",
+             note: "Histórico de crédito: a pontuação invisível que você começa a construir do zero ao chegar. Nenhum dinheiro substitui — só tempo e contas pagas.",
+             choices: ["Entendi — o sistema precisa me conhecer primeiro. Pré-pago então."],
+             fbs: ["'O sistema precisa me conhecer primeiro' — você resumiu histórico de crédito melhor que muito banco. Pré-pago agora, plano em seis meses."] },
+      n3: { line: "Esse aqui é trinta por mês — vinte gigas, ligações e mensagens ilimitadas no país. Quer que eu ative agora?",
+            choices: ["Sim, por favor — e eu posso manter esse número se mudar pra um plano depois?", "Vinte gigas é... muito ou pouco?"],
+            fbs: ["Isso se chama 'portar' o número — e sim, sempre pode. Perguntar ANTES de se comprometer é exatamente o instinto certo num sistema novo.",
+                  "Pergunta honesta, honestamente ok! (~20GB = mapas + WhatsApp + música com folga.) Perguntar ganha de chutar — mesmo quando a pergunta parece 'boba', e ela não é."] },
+      end: { line: "Pronto — você está no ar! O número está no recibo. Bem-vindo ao país!",
+             note: "Uma missão concluída. Próximo chefe: a conta no banco — leve passaporte e visto, peça a 'conta pra recém-chegados', e se pedirem comprovante de endereço antes de você ter um, um contrato de aluguel ou carta do empregador costuma quebrar o ciclo. O labirinto tem saídas." }
+    }
   }
 };
 
@@ -2974,24 +3355,23 @@ window.SCENARIOS_C = [
 
 </script>
 <script>
-// RealTalk — POV scene engine. Three modes share one viewport:
-//   tap   — branching scene, answer by tapping choices
-//   watch — the POV tab: auto-plays the whole conversation at real speed, plus the clip rack
-//   speak — say your line out loud; speech recognition matches it to a branch
+// RealTalk — POV scene engine. Modes: tap / watch / speak.
+// Dialogue is always English (voice + main caption); when the app language is PT,
+// a Portuguese subtitle renders under the English line, and teaching text
+// (notes, feedback) shows Portuguese first with the English original beneath.
 (function () {
   const MOOD_AVATARS = {
     friendly: "🙂", neutral: "😐", confused: "🤨", amused: "😄", awkward: "😬", worried: "😟"
   };
   const MOOD_LABELS = {
-    friendly: "friendly", neutral: "neutral", confused: "confused…", amused: "amused", awkward: "awkward…", worried: "worried!"
-  };
-  const QUALITY_META = {
-    natural: { cls: "natural", tag: "✓ Natural" },
-    awkward: { cls: "awkward", tag: "~ A bit awkward" },
-    wrong:   { cls: "wrong",   tag: "✗ Classic mistake" }
+    en: { friendly: "friendly", neutral: "neutral", confused: "confused…", amused: "amused", awkward: "awkward…", worried: "worried!" },
+    pt: { friendly: "simpático", neutral: "neutro", confused: "confuso…", amused: "achando graça", awkward: "sem graça…", worried: "preocupada!" }
   };
   const WORD_MS = 260;
   const MATCH_THRESHOLD = 0.42;
+  const isPT = () => window.RT_LANG === "pt";
+  const moodLabel = (m) => (MOOD_LABELS[isPT() ? "pt" : "en"][m]) || m;
+  const qualityTag = (q) => q === "natural" ? L("fbNatural") : q === "awkward" ? L("fbAwkward") : L("fbWrong");
 
   // ---------- speech synthesis ----------
   const speech = {
@@ -3065,7 +3445,6 @@ window.SCENARIOS_C = [
     stop() { if (this.active) { try { this.active.abort(); } catch {} this.active = null; } }
   };
 
-  // Token-set similarity (Dice coefficient) for matching what you said to a choice.
   function normalize(s) {
     return (s || "").toLowerCase().replace(/\(.*?\)/g, "").replace(/[^a-z0-9'\s]/g, " ").split(/\s+/).filter(Boolean);
   }
@@ -3087,6 +3466,7 @@ window.SCENARIOS_C = [
       this.root = container;
       this.sc = scenario;
       this.scene = scenario.scene;
+      this.pt = (window.PT_SCENES && window.PT_SCENES[scenario.id]) || null;
       this.mode = mode;
       this.onComplete = onComplete;
       this.counts = { natural: 0, awkward: 0, wrong: 0 };
@@ -3097,6 +3477,8 @@ window.SCENARIOS_C = [
       if (mode === "watch") this.renderWatchIntro();
       else this.goto(this.scene.start);
     }
+
+    ptNode(id) { return (this.pt && this.pt.nodes && this.pt.nodes[id]) || null; }
 
     destroy() {
       this.destroyed = true;
@@ -3109,10 +3491,12 @@ window.SCENARIOS_C = [
 
     renderShell() {
       const [c1, c2] = this.sc.bg || ["#333", "#666"];
-      const modeLabel = this.mode === "watch" ? "POV · full conversation" : this.mode === "speak" ? "POV · speaking practice" : "POV · you choose";
+      const modeLabel = this.mode === "watch" ? L("modeWatch") : this.mode === "speak" ? L("modeSpeak") : L("modeTap");
+      const setting = T(this.scene.setting);
+      const ptSetting = isPT() && this.pt && this.pt.setting;
       this.root.innerHTML = `
         <div class="player-wrap">
-          <p class="page-blurb" style="margin-bottom:14px">🎬 <em>${T(this.scene.setting)}</em></p>
+          <p class="page-blurb" style="margin-bottom:14px">🎬 <em>${ptSetting || setting}</em>${ptSetting ? `<span class="sub-en">${setting}</span>` : ""}</p>
           <div class="viewport">
             <div class="vp-scene" style="background:radial-gradient(ellipse at 60% 35%, ${c2}, ${c1})">
               <div class="vp-avatar" id="vp-avatar">🙂</div>
@@ -3124,9 +3508,10 @@ window.SCENARIOS_C = [
             <div class="vp-caption">
               <div class="vp-speaker" id="vp-speaker"></div>
               <div class="vp-line" id="vp-line"></div>
+              <div class="vp-line-pt" id="vp-line-pt"></div>
             </div>
           </div>
-          <div class="swap-note" id="voice-note">placeholder scene — drop real Meta-glasses clips into <code>clips/</code> and add <code>video:</code> to any node</div>
+          <div class="swap-note" id="voice-note">${L("swapNote")}</div>
           <div class="choice-area" id="choice-area"></div>
           <div id="clip-rack"></div>
         </div>`;
@@ -3135,6 +3520,7 @@ window.SCENARIOS_C = [
       this.$mood = this.root.querySelector("#vp-mood");
       this.$speaker = this.root.querySelector("#vp-speaker");
       this.$line = this.root.querySelector("#vp-line");
+      this.$linePt = this.root.querySelector("#vp-line-pt");
       this.$choices = this.root.querySelector("#choice-area");
       this.$rack = this.root.querySelector("#clip-rack");
 
@@ -3144,13 +3530,15 @@ window.SCENARIOS_C = [
         const v = speech.pick();
         const noteEl = this.root.querySelector("#voice-note");
         if (noteEl && acc && v && !acc.voices.some(l => v.lang.toLowerCase().startsWith(l.slice(0, 5).toLowerCase()))) {
-          noteEl.innerHTML +=
-            ` · no ${acc.name} voice installed — using closest English voice (add voices in Windows Settings → Speech, or open in Chrome)`;
+          noteEl.innerHTML += isPT()
+            ? ` · voz ${acc.name} não instalada — usando a voz em inglês mais próxima (instale vozes em Configurações do Windows → Fala, ou use o Chrome)`
+            : ` · no ${acc.name} voice installed — using closest English voice`;
         }
       }, 700);
     }
 
-    playLine({ speaker, text, isYou, mood }, cb) {
+    // pt = optional Portuguese subtitle shown under the English caption
+    playLine({ speaker, text, isYou, mood, pt }, cb) {
       speech.stop();
       this.timers.forEach(clearTimeout);
       this.timers = [];
@@ -3158,10 +3546,11 @@ window.SCENARIOS_C = [
       this.$speaker.textContent = speaker;
       this.$speaker.className = "vp-speaker" + (isYou ? " you" : "");
       this.$line.textContent = "";
+      this.$linePt.textContent = "";
 
       if (mood && !isYou) {
         this.$avatar.textContent = MOOD_AVATARS[mood] || "🙂";
-        this.$mood.textContent = MOOD_LABELS[mood] || mood;
+        this.$mood.textContent = moodLabel(mood);
         this.$mood.style.display = "block";
       } else if (isYou) {
         this.$mood.style.display = "none";
@@ -3176,6 +3565,9 @@ window.SCENARIOS_C = [
         if (i < words.length) this.later(reveal, WORD_MS);
       };
       reveal();
+
+      // the PT subtitle fades in shortly after the line starts
+      if (isPT() && pt) this.later(() => { this.$linePt.textContent = pt; }, Math.min(900, words.length * WORD_MS));
 
       let captionDone = false, voiceDone = false, called = false;
       const maybeDone = () => {
@@ -3194,6 +3586,7 @@ window.SCENARIOS_C = [
       const node = this.scene.nodes[id];
       if (!node) { console.error("Missing node:", id); return; }
       this.node = node;
+      this.nodeId = id;
       this.$choices.innerHTML = "";
 
       if (node.video) {
@@ -3205,19 +3598,27 @@ window.SCENARIOS_C = [
       }
 
       const isNarr = node.who === "narrator";
+      const ptn = this.ptNode(id);
       this.playLine({
         speaker: isNarr ? "· scene ·" : T(node.name),
         text: T(node.line),
         isYou: false,
-        mood: isNarr ? null : (node.mood || "friendly")
+        mood: isNarr ? null : (node.mood || "friendly"),
+        pt: ptn && ptn.line
       }, () => this.afterLine(node));
     }
 
     afterLine(node) {
+      const ptn = this.ptNode(this.nodeId);
       if (node.note) {
         const tip = document.createElement("div");
         tip.className = "tip-note";
-        tip.textContent = T(node.note);
+        const en = T(node.note);
+        if (isPT() && ptn && ptn.note) {
+          tip.innerHTML = `${ptn.note}<span class="sub-en">${en}</span>`;
+        } else {
+          tip.textContent = en;
+        }
         this.$choices.appendChild(tip);
       }
       if (node.end) return this.showEnd(node);
@@ -3227,48 +3628,60 @@ window.SCENARIOS_C = [
       if (node.next) {
         const btn = document.createElement("button");
         btn.className = "btn continue-btn";
-        btn.textContent = "Continue ▸";
+        btn.textContent = L("cont");
         btn.onclick = () => this.goto(node.next);
         this.$choices.appendChild(btn);
       }
     }
 
+    choicePt(idx) {
+      const ptn = this.ptNode(this.nodeId);
+      return (ptn && ptn.choices && ptn.choices[idx]) || null;
+    }
+    choiceFbPt(idx) {
+      const ptn = this.ptNode(this.nodeId);
+      return (ptn && ptn.fbs && ptn.fbs[idx]) || null;
+    }
+
     showChoices(node) {
       const prompt = document.createElement("div");
       prompt.className = "choice-prompt";
-      prompt.textContent = "What do you say?";
+      prompt.textContent = L("whatSay");
       this.$choices.appendChild(prompt);
 
       node.choices.forEach((ch, idx) => {
+        const pt = isPT() && this.choicePt(idx);
         const b = document.createElement("button");
         b.className = "choice-btn";
-        b.innerHTML = `<span class="choice-letter">${"ABC"[idx] || "•"}</span><span>${T(ch.say)}</span>`;
-        b.onclick = () => this.pick(node, ch);
+        b.innerHTML = `<span class="choice-letter">${"ABC"[idx] || "•"}</span><span>${T(ch.say)}${pt ? `<span class="say-pt">${pt}</span>` : ""}</span>`;
+        b.onclick = () => this.pick(node, ch, idx);
         this.$choices.appendChild(b);
       });
     }
 
     // ---------- speak mode ----------
-    showSpeakPrompt(node, retryMsg) {
+    showSpeakPrompt(node) {
       this.$choices.querySelector(".speak-box")?.remove();
       const box = document.createElement("div");
       box.className = "speak-box";
       box.innerHTML = `
-        <div class="choice-prompt">🎙️ Your turn — say one of these out loud</div>
-        ${node.choices.map((ch, i) => `
+        <div class="choice-prompt">${L("speakPrompt")}</div>
+        ${node.choices.map((ch, i) => {
+          const pt = isPT() && this.choicePt(i);
+          return `
           <div class="speak-option" data-i="${i}">
             <span class="choice-letter">${"ABC"[i] || "•"}</span>
-            <span>${T(ch.say)}</span>
-          </div>`).join("")}
+            <span>${T(ch.say)}${pt ? `<span class="say-pt">${pt}</span>` : ""}</span>
+          </div>`;
+        }).join("")}
         <div class="mic-row">
-          <button class="mic-btn" id="mic-btn" title="Tap, then speak">🎙️</button>
-          <div class="mic-hint" id="mic-hint">${retryMsg || "Tap the mic, then say your line"}</div>
+          <button class="mic-btn" id="mic-btn" title="${L("micHint")}">🎙️</button>
+          <div class="mic-hint" id="mic-hint">${L("micHint")}</div>
         </div>`;
       this.$choices.appendChild(box);
 
-      // tapping an option is always allowed — speaking is practice, not a wall
       box.querySelectorAll(".speak-option").forEach(el => {
-        el.onclick = () => { recognition.stop(); this.pick(node, node.choices[+el.dataset.i]); };
+        el.onclick = () => { recognition.stop(); this.pick(node, node.choices[+el.dataset.i], +el.dataset.i); };
       });
 
       const micBtn = box.querySelector("#mic-btn");
@@ -3277,13 +3690,13 @@ window.SCENARIOS_C = [
       if (!recognition.supported) {
         micBtn.disabled = true;
         micBtn.style.opacity = ".4";
-        hint.textContent = "Speech recognition isn't available in this browser (try Chrome or Edge) — tap your line instead.";
+        hint.textContent = L("micUnsupported");
         return;
       }
 
       micBtn.onclick = () => {
         micBtn.classList.add("listening");
-        hint.textContent = "Listening… speak now";
+        hint.textContent = L("micListening");
         recognition.listen({
           onResult: (alts) => {
             if (this.destroyed) return;
@@ -3293,56 +3706,55 @@ window.SCENARIOS_C = [
           onError: (err) => {
             if (this.destroyed) return;
             micBtn.classList.remove("listening");
-            hint.textContent = err === "not-allowed"
-              ? "Microphone blocked — allow mic access in the browser, or tap your line instead."
-              : err === "no-speech"
-                ? "Didn't hear anything — tap the mic and try again, a bit louder."
-                : "Mic hiccup — try again, or tap your line instead.";
+            hint.textContent = err === "not-allowed" ? L("micBlocked")
+              : err === "no-speech" ? L("micNoSpeech") : L("micErr");
           }
         });
       };
     }
 
     handleSpeech(node, alts, box) {
-      // best match across all recognition alternatives × all choices
-      let best = { score: 0, choice: null, heard: alts[0] || "" };
+      let best = { score: 0, choice: null, idx: -1, heard: alts[0] || "" };
       for (const alt of alts) {
-        for (const ch of node.choices) {
+        node.choices.forEach((ch, idx) => {
           const s = similarity(alt, T(ch.say));
-          if (s > best.score) best = { score: s, choice: ch, heard: alt };
-        }
+          if (s > best.score) best = { score: s, choice: ch, idx, heard: alt };
+        });
       }
       const hint = box.querySelector("#mic-hint");
       if (best.choice && best.score >= MATCH_THRESHOLD) {
         const pct = Math.round(best.score * 100);
         const heard = document.createElement("div");
         heard.className = "heard-box match";
-        heard.innerHTML = `We heard: <em>"${best.heard}"</em> — <b>${pct}% match</b> ✓`;
+        heard.innerHTML = `${L("weHeard")} <em>"${best.heard}"</em> — <b>${pct}% ${L("match")}</b> ✓`;
         box.appendChild(heard);
         recognition.stop();
-        this.later(() => this.pick(node, best.choice, { spoken: true, heard: best.heard, pct }), 900);
+        this.later(() => this.pick(node, best.choice, best.idx, { spoken: true, heard: best.heard, pct }), 900);
       } else {
         const heard = document.createElement("div");
         heard.className = "heard-box miss";
         heard.innerHTML = best.heard
-          ? `We heard: <em>"${best.heard}"</em> — didn't match any line. In real life you'd hear:`
-          : "Couldn't make that out. In real life you'd hear:";
+          ? `${L("weHeard")} <em>"${best.heard}"</em> — ${L("noMatch")}`
+          : L("noMatchEmpty");
         box.appendChild(heard);
         hint.textContent = "";
         this.playLine({
           speaker: T(node.name) || "Them", mood: "confused",
-          text: "Sorry — what was that?", isYou: false
+          text: "Sorry — what was that?", isYou: false,
+          pt: isPT() ? "Desculpa — o que foi que você disse?" : null
         }, () => {
           if (this.destroyed) return;
-          box.querySelector("#mic-hint").textContent = "Perfect practice for real life! Tap the mic and try again — slower is fine.";
+          box.querySelector("#mic-hint").textContent = L("tryAgainMic");
         });
       }
     }
 
-    pick(node, ch, spoken) {
+    pick(node, ch, idx, spoken) {
+      if (idx === undefined || idx < 0) idx = node.choices.indexOf(ch);
       const say = T(ch.say), fbText = T(ch.fb);
+      const fbPt = isPT() && this.choiceFbPt(idx);
       this.counts[ch.quality] = (this.counts[ch.quality] || 0) + 1;
-      if (ch.quality !== "natural") this.missed.push({ said: say, fb: fbText });
+      if (ch.quality !== "natural") this.missed.push({ said: say, fb: fbPt || fbText });
 
       this.$choices.querySelectorAll(".choice-btn").forEach(b => {
         b.disabled = true;
@@ -3355,17 +3767,17 @@ window.SCENARIOS_C = [
       const micRow = this.$choices.querySelector(".mic-row");
       if (micRow) micRow.style.display = "none";
 
-      this.playLine({ speaker: "You", text: say, isYou: true }, () => {
-        const meta = QUALITY_META[ch.quality];
+      this.playLine({ speaker: isPT() ? "Você" : "You", text: say, isYou: true, pt: isPT() && this.choicePt(idx) }, () => {
         const fb = document.createElement("div");
-        fb.className = `feedback ${meta.cls}`;
-        const spokeNote = spoken && spoken.spoken ? `<div class="spoke-note">🎙️ You said it out loud — ${spoken.pct}% match. That sentence is yours now.</div>` : "";
-        fb.innerHTML = `<span class="fb-tag">${meta.tag}</span>${fbText}${spokeNote}`;
+        fb.className = `feedback ${ch.quality === "natural" ? "natural" : ch.quality === "awkward" ? "awkward" : "wrong"}`;
+        const spokeNote = spoken && spoken.spoken ? `<div class="spoke-note">${L("spokeNote", { pct: spoken.pct })}</div>` : "";
+        const body = fbPt ? `${fbPt}<span class="sub-en">${fbText}</span>` : fbText;
+        fb.innerHTML = `<span class="fb-tag">${qualityTag(ch.quality)}</span>${body}${spokeNote}`;
         this.$choices.appendChild(fb);
 
         const btn = document.createElement("button");
         btn.className = "btn continue-btn";
-        btn.textContent = "Continue ▸";
+        btn.textContent = L("cont");
         btn.onclick = () => this.goto(ch.next);
         this.$choices.appendChild(btn);
         btn.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -3380,25 +3792,25 @@ window.SCENARIOS_C = [
       wrap.style.marginTop = "16px";
 
       let verdict;
-      if (c.wrong === 0 && c.awkward === 0) verdict = "Flawless. You'd fool a local. 🏆";
-      else if (c.wrong === 0) verdict = "Solid — a few rough edges, zero disasters. 💪";
-      else if (c.wrong <= 2) verdict = "You survived — and the mistakes you made here, you'll never make out there. That's the point. 🎯";
-      else verdict = "Chaotic — but every one of those reactions just became a memory. Replay and feel the difference. 🔁";
-      if (this.mode === "speak") verdict += " And you did it with your actual voice — that's the real training.";
+      if (c.wrong === 0 && c.awkward === 0) verdict = L("vFlawless");
+      else if (c.wrong === 0) verdict = L("vSolid");
+      else if (c.wrong <= 2) verdict = L("vSurvived");
+      else verdict = L("vChaotic");
+      if (this.mode === "speak") verdict += " " + L("vSpoke");
 
       wrap.innerHTML = `
-        <h3 style="font-size:19px">Scene complete — ${this.sc.title} ${this.sc.emoji}</h3>
+        <h3 style="font-size:19px">${L("sceneComplete")} — ${this.sc.title} ${this.sc.emoji}</h3>
         <p style="color:var(--ink-soft);margin-top:4px">${verdict}</p>
         <div class="end-counts">
-          <div class="end-count natural"><div class="n">${c.natural}</div>natural</div>
-          <div class="end-count awkward"><div class="n">${c.awkward}</div>awkward</div>
-          <div class="end-count wrong"><div class="n">${c.wrong}</div>classic mistakes</div>
+          <div class="end-count natural"><div class="n">${c.natural}</div>${L("natural")}</div>
+          <div class="end-count awkward"><div class="n">${c.awkward}</div>${L("awkward")}</div>
+          <div class="end-count wrong"><div class="n">${c.wrong}</div>${L("wrongs")}</div>
         </div>
-        ${this.missed.length ? `<h4 style="margin:14px 0 4px">Review your slips</h4>` +
-          this.missed.map(m => `<div class="review-item"><div class="review-said">"${m.said}"</div><div class="review-fix">${m.fb}</div></div>`).join("") : ""}
+        ${this.missed.length ? `<h4 style="margin:14px 0 4px">${L("reviewSlips")}</h4>` +
+          this.missed.map(m => `<div class="review-item"><div class="review-said"><span class="rs-label">${L("youSaid")}</span> "${m.said}"</div><div class="review-fix">${m.fb}</div></div>`).join("") : ""}
         <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn" id="replay-btn">↻ Replay scene</button>
-          <a class="btn ghost" href="#/home">Back to scenarios</a>
+          <button class="btn" id="replay-btn">${L("replay")}</button>
+          <a class="btn ghost" href="#/home">${L("backHome")}</a>
         </div>`;
       this.$choices.appendChild(wrap);
       wrap.querySelector("#replay-btn").onclick = () => {
@@ -3410,7 +3822,6 @@ window.SCENARIOS_C = [
 
     // ================= watch (POV) mode =================
     buildPath() {
-      // main path: always take the first natural choice (fallback: first choice)
       const steps = [];
       const seen = new Set();
       let id = this.scene.start;
@@ -3418,11 +3829,14 @@ window.SCENARIOS_C = [
         seen.add(id);
         const node = this.scene.nodes[id];
         if (!node) break;
-        steps.push({ kind: node.who === "narrator" ? "narrator" : "them", node });
+        const ptn = this.ptNode(id);
+        steps.push({ kind: node.who === "narrator" ? "narrator" : "them", node, pt: ptn && ptn.line });
         if (node.end) break;
         if (node.choices && node.choices.length) {
-          const ch = node.choices.find(c => c.quality === "natural") || node.choices[0];
-          steps.push({ kind: "you", say: T(ch.say), node });
+          let idx = node.choices.findIndex(c => c.quality === "natural");
+          if (idx < 0) idx = 0;
+          const ch = node.choices[idx];
+          steps.push({ kind: "you", say: T(ch.say), pt: ptn && ptn.choices && ptn.choices[idx], node });
           id = ch.next;
         } else {
           id = node.next;
@@ -3435,8 +3849,8 @@ window.SCENARIOS_C = [
       this.path = this.buildPath();
       this.$choices.innerHTML = `
         <div class="watch-intro">
-          <p class="page-blurb" style="margin-bottom:12px">This is the POV cut — the whole conversation at real speed, like standing there wearing the glasses. Watch it once before you play it. <b>${this.path.length} lines.</b></p>
-          <button class="btn" id="watch-btn">▶ Watch the conversation</button>
+          <p class="page-blurb" style="margin-bottom:12px">${L("watchIntro")} <b>${this.path.length} ${L("lines")}.</b></p>
+          <button class="btn" id="watch-btn">${L("watchBtn")}</button>
         </div>`;
       this.$choices.querySelector("#watch-btn").onclick = () => {
         this.$choices.innerHTML = "";
@@ -3449,12 +3863,12 @@ window.SCENARIOS_C = [
       if (this.destroyed) return;
       if (i >= this.path.length) return this.watchEnd();
       const step = this.path[i];
-      this.$choices.innerHTML = `<div class="watch-progress">▶ line ${i + 1} of ${this.path.length} · <a href="#" id="watch-skip">skip to end</a></div>`;
+      this.$choices.innerHTML = `<div class="watch-progress">▶ ${L("lineOf", { i: i + 1, n: this.path.length })} · <a href="#" id="watch-skip">${L("skipEnd")}</a></div>`;
       this.$choices.querySelector("#watch-skip").onclick = (e) => { e.preventDefault(); speech.stop(); this.watchEnd(); };
 
       this.rackHighlight(i);
       if (step.kind === "you") {
-        this.playLine({ speaker: "You", text: step.say, isYou: true }, () => this.later(() => this.playWatch(i + 1), 350));
+        this.playLine({ speaker: isPT() ? "Você" : "You", text: step.say, isYou: true, pt: step.pt }, () => this.later(() => this.playWatch(i + 1), 350));
       } else {
         const node = step.node;
         if (node.video) { this.$video.src = node.video; this.$video.style.display = "block"; this.$video.play().catch(() => {}); }
@@ -3463,7 +3877,8 @@ window.SCENARIOS_C = [
           speaker: step.kind === "narrator" ? "· scene ·" : T(node.name),
           text: T(node.line),
           isYou: false,
-          mood: step.kind === "narrator" ? null : (node.mood || "friendly")
+          mood: step.kind === "narrator" ? null : (node.mood || "friendly"),
+          pt: step.pt
         }, () => this.later(() => this.playWatch(i + 1), 350));
       }
     }
@@ -3471,12 +3886,12 @@ window.SCENARIOS_C = [
     watchEnd() {
       this.$choices.innerHTML = `
         <div class="watch-intro card" style="margin-top:14px">
-          <h3 style="margin-bottom:6px">That's the full conversation 🎬</h3>
-          <p style="color:var(--ink-soft)">You just watched it happen. Now step into the glasses yourself:</p>
+          <h3 style="margin-bottom:6px">${L("watchDone")}</h3>
+          <p style="color:var(--ink-soft)">${L("watchDoneP")}</p>
           <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="btn" href="#/scenario/${this.sc.id}/play">🎬 Play it — tap your lines</a>
-            <a class="btn ghost" href="#/scenario/${this.sc.id}/speak">🎙️ Speak it out loud</a>
-            <button class="btn ghost" id="rewatch-btn">↻ Watch again</button>
+            <a class="btn" href="#/scenario/${this.sc.id}/play">${L("playTap")}</a>
+            <a class="btn ghost" href="#/scenario/${this.sc.id}/speak">${L("speakLoud")}</a>
+            <button class="btn ghost" id="rewatch-btn">${L("rewatch")}</button>
           </div>
         </div>`;
       this.$choices.querySelector("#rewatch-btn").onclick = () => { this.$choices.innerHTML = ""; this.playWatch(0); };
@@ -3486,12 +3901,12 @@ window.SCENARIOS_C = [
     renderClipRack() {
       const [c1, c2] = this.sc.bg || ["#333", "#666"];
       this.$rack.innerHTML = `
-        <div class="section-title" style="margin-top:26px">📼 Clip rack — the real footage slots</div>
+        <div class="section-title" style="margin-top:26px">${L("clipRack")}</div>
         <div class="clip-grid">
           ${this.path.map((step, i) => {
             const isYou = step.kind === "you";
             const text = isYou ? step.say : T(step.node.line);
-            const speaker = isYou ? "You (POV)" : step.kind === "narrator" ? "Scene" : T(step.node.name);
+            const speaker = isYou ? (isPT() ? "Você (POV)" : "You (POV)") : step.kind === "narrator" ? (isPT() ? "Cena" : "Scene") : T(step.node.name);
             const hasVideo = !isYou && step.node.video;
             return `
               <div class="clip-card" data-i="${i}">
@@ -3501,12 +3916,12 @@ window.SCENARIOS_C = [
                 <div class="clip-meta">
                   <div class="clip-speaker">${speaker}</div>
                   <div class="clip-text">${text.length > 64 ? text.slice(0, 64) + "…" : text}</div>
-                  <span class="chip ${hasVideo ? "" : "gold"}" style="margin-top:5px">${hasVideo ? "🎥 footage ready" : "📼 awaiting footage"}</span>
+                  <span class="chip ${hasVideo ? "" : "gold"}" style="margin-top:5px">${hasVideo ? L("footageReady") : L("awaitingFootage")}</span>
                 </div>
               </div>`;
           }).join("")}
         </div>
-        <p class="swap-note" style="text-align:left;margin-top:10px">Each card is one clip to film with the glasses. Drop files in <code>clips/</code>, add <code>video: "clips/${this.sc.id}-&lt;node&gt;.mp4"</code> to the scene node, and the placeholder disappears.</p>`;
+        <p class="swap-note" style="text-align:left;margin-top:10px">${L("rackNote")}</p>`;
     }
 
     rackHighlight(activeIdx) {
@@ -3521,40 +3936,44 @@ window.SCENARIOS_C = [
 
 </script>
 <script>
-// RealTalk — app shell: accent system, routing, pages, quiz engine, progress.
+// RealTalk — app shell: language + accent systems, routing, pages, quiz engine, progress.
 (function () {
   const ALL = [...(window.SCENARIOS_A || []), ...(window.SCENARIOS_B || []), ...(window.SCENARIOS_C || [])];
   const GROUP_ORDER = ["Daily Life", "Settling In", "Social", "Work"];
+  const GROUP_KEYS = { "Daily Life": "g_daily", "Settling In": "g_settling", "Social": "g_social", "Work": "g_work" };
+  const LEVEL_PT = { Beginner: "Iniciante", Intermediate: "Intermediário", Advanced: "Avançado" };
   const SCENARIOS = [];
   GROUP_ORDER.forEach(g => ALL.forEach(s => { if ((s.group || "Daily Life") === g) SCENARIOS.push(s); }));
   ALL.forEach(s => { if (!SCENARIOS.includes(s)) SCENARIOS.push(s); });
 
-  // Base grammar lessons minus the static slang one — slang is accent-dynamic now.
   const GRAMMAR_BASE = (window.GRAMMAR || []).filter(l => l.id !== "aussie-slang");
   const EXERCISES = window.EXERCISES || [];
   const $main = document.getElementById("main");
   let activePlayer = null;
 
   const accentMeta = () => window.ACCENTS[window.RT_ACCENT];
+  const isPT = () => window.RT_LANG === "pt";
+  const ptMeta = (id) => (isPT() && window.PT_META && window.PT_META[id]) || null;
+  const levelLabel = (lv) => isPT() ? (LEVEL_PT[lv] || lv) : lv;
+  const groupLabel = (g) => L(GROUP_KEYS[g] || g);
 
-  // Build the dynamic slang lesson for the current accent.
   function slangLesson() {
     const p = window.SLANG_PACKS[window.RT_ACCENT];
     return {
       id: "local-slang",
       emoji: accentMeta().flag,
       title: p.title,
-      sub: "The words standing between you and understanding anyone",
+      sub: isPT() ? "As palavras entre você e entender qualquer pessoa" : "The words standing between you and understanding anyone",
       sections: [
-        { h: "Why everything sounds like that", p: p.intro },
-        { h: "The starter pack", rows: p.rows },
-        { h: "Decoder tips", list: p.tips }
+        { h: isPT() ? "Por que tudo soa assim" : "Why everything sounds like that", p: p.intro },
+        { h: isPT() ? "Kit inicial" : "The starter pack", rows: p.rows },
+        { h: isPT() ? "Dicas de decodificação" : "Decoder tips", list: p.tips }
       ]
     };
   }
   const grammarList = () => [...GRAMMAR_BASE, slangLesson()];
 
-  // ---------- progress (localStorage) ----------
+  // ---------- progress ----------
   const store = {
     key: "realtalk-progress",
     data: null,
@@ -3577,7 +3996,7 @@ window.SCENARIOS_C = [
   };
   store.load();
 
-  // ---------- accent bar ----------
+  // ---------- theme + top bar ----------
   function applyTheme() {
     document.documentElement.dataset.accent = window.RT_ACCENT;
   }
@@ -3585,11 +4004,15 @@ window.SCENARIOS_C = [
   function renderAccentBar() {
     const bar = document.getElementById("accent-bar");
     bar.innerHTML = `
-      <span class="accent-label">Accent</span>
+      <span class="accent-label">${L("accent")}</span>
       ${Object.entries(window.ACCENTS).map(([code, a]) => `
         <button class="accent-btn ${code === window.RT_ACCENT ? "active" : ""}" data-accent="${code}" title="${a.name} English">
           <span class="accent-flag">${a.flag}</span><span class="accent-name">${a.name}</span>
         </button>`).join("")}
+      <span class="lang-switch">
+        <button class="lang-btn ${isPT() ? "active" : ""}" data-lang="pt" title="Interface em português">🇧🇷 PT</button>
+        <button class="lang-btn ${!isPT() ? "active" : ""}" data-lang="en" title="Interface in English">EN</button>
+      </span>
       <span class="accent-tagline">${accentMeta().motif} ${accentMeta().tagline}</span>`;
     bar.querySelectorAll(".accent-btn").forEach(btn => {
       btn.onclick = () => {
@@ -3597,9 +4020,30 @@ window.SCENARIOS_C = [
         localStorage.setItem("realtalk-accent", window.RT_ACCENT);
         applyTheme();
         renderAccentBar();
-        route(); // re-render everything in the new accent
+        renderNav();
+        route();
       };
     });
+    bar.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.onclick = () => {
+        window.RT_LANG = btn.dataset.lang;
+        localStorage.setItem("realtalk-lang", window.RT_LANG);
+        renderChrome();
+        route();
+      };
+    });
+  }
+
+  function renderChrome() {
+    document.querySelector('.nav-item[data-route="home"]').innerHTML = `<span class="nav-emoji">🏠</span> ${L("home")}`;
+    document.querySelector('.nav-item[data-route="grammar"]').innerHTML = `<span class="nav-emoji">📚</span> ${L("grammar")}`;
+    document.querySelector('.nav-item[data-route="exercises"]').innerHTML = `<span class="nav-emoji">✏️</span> ${L("exercises")}`;
+    document.getElementById("study-label").textContent = L("study");
+    document.getElementById("rle-label").textContent = isPT() ? "Inglês da Vida Real" : "Real Life English";
+    const soundBtn = document.getElementById("sound-toggle");
+    soundBtn.textContent = RealTalkPlayer.speech.enabled ? L("voiceOn") : L("voiceOff");
+    renderAccentBar();
+    renderNav();
   }
 
   // ---------- nav ----------
@@ -3609,7 +4053,7 @@ window.SCENARIOS_C = [
     GROUP_ORDER.forEach(g => {
       const items = SCENARIOS.filter(s => (s.group || "Daily Life") === g);
       if (!items.length) return;
-      html += `<div class="nav-label sub">${g}</div>`;
+      html += `<div class="nav-label sub">${groupLabel(g)}</div>`;
       html += items.map(s => `
         <a class="nav-item" href="#/scenario/${s.id}" data-route="scenario/${s.id}">
           <span class="nav-emoji">${s.emoji}</span> ${s.title}
@@ -3639,46 +4083,49 @@ window.SCENARIOS_C = [
     $main.innerHTML = `
       <div class="hero">
         <div class="hero-emoji">${a.motif}</div>
-        <h1>${a.greeting}, Matheus 👋</h1>
-        <p>This isn't school English. Every scene here is a real conversation from your first months abroad — in your point of view, with real choices, real mistakes and real reactions. You're currently training your ear for <strong>${a.name} English</strong> ${a.flag} — switch accents up top and watch every scene change.</p>
-        <a class="btn" href="#/scenario/coffee">▶ Start with Ordering Coffee</a>
+        <h1>${a.greeting}! 👋</h1>
+        <p>${L("heroP", { accent: a.name, flag: a.flag })}</p>
+        <a class="btn" href="#/scenario/coffee">${L("heroCta")}</a>
         <div class="hero-postcards">${a.postcards}</div>
       </div>
 
       <div class="grid grid-3 stat-row">
-        <div class="card stat"><div class="stat-num">${scenesDone}/${SCENARIOS.length}</div><div class="stat-cap">scenes completed</div></div>
-        <div class="card stat"><div class="stat-num">${lessonsRead}/${grammarList().length}</div><div class="stat-cap">grammar lessons read</div></div>
-        <div class="card stat"><div class="stat-num">${quizzesDone}/${EXERCISES.length}</div><div class="stat-cap">quizzes attempted</div></div>
+        <div class="card stat"><div class="stat-num">${scenesDone}/${SCENARIOS.length}</div><div class="stat-cap">${L("stScenes")}</div></div>
+        <div class="card stat"><div class="stat-num">${lessonsRead}/${grammarList().length}</div><div class="stat-cap">${L("stLessons")}</div></div>
+        <div class="card stat"><div class="stat-num">${quizzesDone}/${EXERCISES.length}</div><div class="stat-cap">${L("stQuizzes")}</div></div>
       </div>
 
       ${GROUP_ORDER.map(g => {
         const items = SCENARIOS.filter(s => (s.group || "Daily Life") === g);
         if (!items.length) return "";
         return `
-          <div class="section-title">${g}</div>
+          <div class="section-title">${groupLabel(g)}</div>
           <div class="grid grid-4">
-            ${items.map(s => `
+            ${items.map(s => {
+              const pm = ptMeta(s.id);
+              return `
               <a class="card scenario-card" href="#/scenario/${s.id}">
                 <span class="sc-head" style="background:linear-gradient(135deg, ${s.bg ? s.bg[1] : "#666"}, ${s.bg ? s.bg[0] : "#333"})">${s.emoji}</span>
-                <span class="sc-title">${s.title}</span>
-                <span class="sc-blurb">${T(s.blurb)}</span>
+                <span class="sc-title">${s.title}${pm ? `<span class="sc-title-pt">${pm.title}</span>` : ""}</span>
+                <span class="sc-blurb">${pm ? pm.blurb : T(s.blurb)}</span>
                 <span class="sc-meta">
-                  <span class="chip ${s.level === "Beginner" ? "" : s.level === "Intermediate" ? "gold" : "coral"}">${s.level}</span>
-                  ${store.data.scenes[s.id] ? '<span class="chip">✓ done</span>' : ""}
+                  <span class="chip ${s.level === "Beginner" ? "" : s.level === "Intermediate" ? "gold" : "coral"}">${levelLabel(s.level)}</span>
+                  ${store.data.scenes[s.id] ? `<span class="chip">${L("done")}</span>` : ""}
                 </span>
-              </a>`).join("")}
+              </a>`;
+            }).join("")}
           </div>`;
       }).join("")}
 
-      <div class="section-title">Study</div>
+      <div class="section-title">${L("study")}</div>
       <div class="grid grid-2">
         <a class="card scenario-card" href="#/grammar">
-          <span class="sc-emoji">📚</span><span class="sc-title">Grammar</span>
-          <span class="sc-blurb">Lessons built entirely around the mistakes Brazilians actually make — have vs be, prepositions, false friends, plus the ${accentMeta().name.toLowerCase()} slang decoder.</span>
+          <span class="sc-emoji">📚</span><span class="sc-title">${L("grammar")}</span>
+          <span class="sc-blurb">${L("grammarBlurb")}</span>
         </a>
         <a class="card scenario-card" href="#/exercises">
-          <span class="sc-emoji">✏️</span><span class="sc-title">Exercises</span>
-          <span class="sc-blurb">Quick quizzes with instant explanations. Best scores are saved — beat yourself.</span>
+          <span class="sc-emoji">✏️</span><span class="sc-title">${L("exercises")}</span>
+          <span class="sc-blurb">${L("exercisesBlurb")}</span>
         </a>
       </div>`;
   }
@@ -3686,9 +4133,9 @@ window.SCENARIOS_C = [
   function pageGrammar() {
     $main.innerHTML = `
       <div class="page-head">
-        <div class="page-kicker">Study</div>
-        <div class="page-title">📚 Grammar</div>
-        <p class="page-blurb">Not a textbook — a trap map. Each lesson targets mistakes Portuguese speakers actually make, with the exact fix.</p>
+        <div class="page-kicker">${L("study")}</div>
+        <div class="page-title">📚 ${L("grammar")}</div>
+        <p class="page-blurb">${L("grammarPageBlurb")}</p>
       </div>
       <div class="lesson-list">
         ${grammarList().map(l => `
@@ -3696,7 +4143,7 @@ window.SCENARIOS_C = [
             <div class="lesson-row">
               <span class="l-emoji">${l.emoji}</span>
               <div><div class="l-title">${l.title}</div><div class="l-sub">${l.sub}</div></div>
-              ${store.data.lessons[l.id] ? '<span class="chip l-done">✓ read</span>' : ""}
+              ${store.data.lessons[l.id] ? `<span class="chip l-done">${L("read")}</span>` : ""}
             </div>
           </div>`).join("")}
       </div>`;
@@ -3707,9 +4154,9 @@ window.SCENARIOS_C = [
     if (!l) return pageGrammar();
     store.lessonRead(id);
     $main.innerHTML = `
-      <a class="back-link" href="#/grammar">← All lessons</a>
+      <a class="back-link" href="#/grammar">${L("backLessons")}</a>
       <div class="page-head">
-        <div class="page-kicker">Grammar</div>
+        <div class="page-kicker">${L("grammar")}</div>
         <div class="page-title">${l.emoji} ${l.title}</div>
         <p class="page-blurb">${l.sub}</p>
       </div>
@@ -3718,9 +4165,9 @@ window.SCENARIOS_C = [
           ${s.h ? `<h3>${s.h}</h3>` : ""}
           ${s.p ? `<p>${s.p}</p>` : ""}
           ${s.rows ? `<table class="compare-table">
-              <tr>${s.rows[0].length === 3 && id === "local-slang"
-                ? "<th>Word</th><th>Meaning</th><th>Example</th>"
-                : "<th>Don't say</th><th>Say</th><th>Why</th>"}</tr>
+              <tr>${id === "local-slang"
+                ? `<th>${isPT() ? "Palavra" : "Word"}</th><th>${isPT() ? "Significado" : "Meaning"}</th><th>${isPT() ? "Exemplo" : "Example"}</th>`
+                : `<th>${L("dontSay")}</th><th>${L("say")}</th><th>${L("why")}</th>`}</tr>
               ${s.rows.map(r => id === "local-slang"
                 ? `<tr><td class="right">${r[0]}</td><td>${r[1]}</td><td style="color:var(--ink-faint)">${r[2] || ""}</td></tr>`
                 : `<tr><td class="wrong">${r[0]}</td><td class="right">${r[1]}</td><td>${r[2]}</td></tr>`).join("")}
@@ -3729,7 +4176,7 @@ window.SCENARIOS_C = [
           ${s.list ? `<ul style="padding-left:22px;color:var(--ink-soft)">${s.list.map(i => `<li style="margin:5px 0">${i}</li>`).join("")}</ul>` : ""}
         `).join("")}
         <div style="margin-top:24px">
-          <a class="btn" href="#/exercises">Practice this in Exercises →</a>
+          <a class="btn" href="#/exercises">${L("practiceCta")}</a>
         </div>
       </div>`;
   }
@@ -3737,9 +4184,9 @@ window.SCENARIOS_C = [
   function pageExercises() {
     $main.innerHTML = `
       <div class="page-head">
-        <div class="page-kicker">Study</div>
-        <div class="page-title">✏️ Exercises</div>
-        <p class="page-blurb">Short quizzes, instant explanations. Wrong answers teach more than right ones — that's the whole philosophy here.</p>
+        <div class="page-kicker">${L("study")}</div>
+        <div class="page-title">✏️ ${L("exercises")}</div>
+        <p class="page-blurb">${L("exercisesPageBlurb")}</p>
       </div>
       <div class="grid grid-2">
         ${EXERCISES.map(q => {
@@ -3748,8 +4195,8 @@ window.SCENARIOS_C = [
           <a class="card scenario-card" href="#/exercises/${q.id}">
             <span class="sc-emoji">${q.emoji}</span>
             <span class="sc-title">${q.title}</span>
-            <span class="sc-blurb">${q.sub} · ${q.questions.length} questions</span>
-            <span class="sc-meta">${best ? `<span class="chip">best: ${best.score}/${best.total}</span>` : '<span class="chip gold">not attempted</span>'}</span>
+            <span class="sc-blurb">${q.sub} · ${q.questions.length} ${L("questions")}</span>
+            <span class="sc-meta">${best ? `<span class="chip">${L("best")} ${best.score}/${best.total}</span>` : `<span class="chip gold">${L("notAttempted")}</span>`}</span>
           </a>`;
         }).join("")}
       </div>`;
@@ -3764,14 +4211,14 @@ window.SCENARIOS_C = [
       if (i >= quiz.questions.length) return renderScore();
       const q = quiz.questions[i];
       $main.innerHTML = `
-        <a class="back-link" href="#/exercises">← All exercises</a>
+        <a class="back-link" href="#/exercises">${L("backExercises")}</a>
         <div class="page-head">
-          <div class="page-kicker">Exercise</div>
+          <div class="page-kicker">${L("exercises")}</div>
           <div class="page-title">${quiz.emoji} ${quiz.title}</div>
         </div>
         <div class="progress-bar"><div style="width:${(i / quiz.questions.length) * 100}%"></div></div>
         <div class="card">
-          <div class="quiz-progress">Question ${i + 1} of ${quiz.questions.length} · score ${score}</div>
+          <div class="quiz-progress">${L("question")} ${i + 1} ${L("of")} ${quiz.questions.length} · ${L("score")} ${score}</div>
           <div class="quiz-q">${q.q}</div>
           <div id="quiz-opts">
             ${q.options.map((o, idx) => `<button class="quiz-option" data-i="${idx}">${o}</button>`).join("")}
@@ -3790,9 +4237,9 @@ window.SCENARIOS_C = [
           });
           document.getElementById("quiz-fb").innerHTML = `
             <div class="quiz-explain ${right ? "" : "bad"}">
-              <strong>${right ? "✓ Correct!" : "✗ Not quite."}</strong> ${q.explain}
+              <strong>${right ? L("correct") : L("notQuite")}</strong> ${q.explain}
             </div>
-            <button class="btn continue-btn" id="next-q">${i + 1 < quiz.questions.length ? "Next question ▸" : "See result ▸"}</button>`;
+            <button class="btn continue-btn" id="next-q">${i + 1 < quiz.questions.length ? L("nextQ") : L("seeResult")}</button>`;
           document.getElementById("next-q").onclick = () => { i++; render(); };
         };
       });
@@ -3801,18 +4248,16 @@ window.SCENARIOS_C = [
     const renderScore = () => {
       store.quizScore(id, score, quiz.questions.length);
       const pct = Math.round((score / quiz.questions.length) * 100);
-      const msg = pct === 100 ? "Perfect. Nothing to teach you here. 🏆"
-        : pct >= 70 ? "Strong — reread the ones you missed and it's yours. 💪"
-        : "The misses are the lesson. Read the explanations, then run it back. 🔁";
+      const msg = pct === 100 ? L("quizPerfect") : pct >= 70 ? L("quizStrong") : L("quizWeak");
       $main.innerHTML = `
-        <a class="back-link" href="#/exercises">← All exercises</a>
+        <a class="back-link" href="#/exercises">${L("backExercises")}</a>
         <div class="card quiz-score">
           <div style="font-size:40px">${quiz.emoji}</div>
           <div class="big">${score}/${quiz.questions.length}</div>
           <p style="color:var(--ink-soft);margin:8px 0 20px">${msg}</p>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="btn" onclick="location.reload()">↻ Try again</button>
-            <a class="btn ghost" href="#/exercises">All exercises</a>
+            <button class="btn" onclick="location.reload()">${L("tryAgain")}</button>
+            <a class="btn ghost" href="#/exercises">${L("exercises")}</a>
           </div>
         </div>`;
     };
@@ -3824,17 +4269,19 @@ window.SCENARIOS_C = [
     if (!s) return pageHome();
     tab = tab || "learn";
     const a = accentMeta();
+    const pm = ptMeta(id);
     const TABS = [
-      ["learn", "📖 Learn"],
-      ["pov", "📹 POV"],
-      ["play", "🎬 Play"],
-      ["speak", "🎙️ Speak"]
+      ["learn", L("tLearn")],
+      ["pov", L("tPov")],
+      ["play", L("tPlay")],
+      ["speak", L("tSpeak")]
     ];
     $main.innerHTML = `
       <div class="page-head">
-        <div class="page-kicker">${s.group || "Real Life English"} · ${s.level} · ${a.flag} ${a.name} English</div>
+        <div class="page-kicker">${groupLabel(s.group || "Daily Life")} · ${levelLabel(s.level)} · ${a.flag} ${isPT() ? "Inglês " + a.name : a.name + " English"}</div>
         <div class="page-title">${s.emoji} ${s.title}</div>
-        <p class="page-blurb">${T(s.blurb)}</p>
+        ${pm ? `<div class="page-title-pt">${pm.title}</div>` : ""}
+        <p class="page-blurb">${pm ? pm.blurb : T(s.blurb)}</p>
       </div>
       <div class="tab-row">
         ${TABS.map(([key, label]) => `<button class="tab-btn ${tab === key ? "active" : ""}" data-tab="${key}">${label}</button>`).join("")}
@@ -3857,39 +4304,39 @@ window.SCENARIOS_C = [
   }
 
   function renderLearn(s) {
-    const L = s.learn;
+    const L2 = s.learn;
     const a = accentMeta();
-    const slang = T(L.slang) || [];
+    const slang = T(L2.slang) || [];
     return `
       <div class="card" style="margin-bottom:14px">
-        <p style="color:var(--ink-soft)">${T(L.intro)}</p>
+        <p style="color:var(--ink-soft)">${T(L2.intro)}</p>
       </div>
       <div class="grid grid-2" style="align-items:start">
         <div class="card">
-          <h3 style="margin-bottom:8px">🗝️ Key phrases</h3>
-          ${L.phrases.map(p => `<div class="phrase-row"><span class="phrase-en">${T(p.en)}</span><span class="phrase-note">${T(p.note)}</span></div>`).join("")}
+          <h3 style="margin-bottom:8px">${L("keyPhrases")}</h3>
+          ${L2.phrases.map(p => `<div class="phrase-row"><span class="phrase-en">${T(p.en)}</span><span class="phrase-note">${T(p.note)}</span></div>`).join("")}
         </div>
         <div>
           <div class="card" style="margin-bottom:14px">
-            <h3 style="margin-bottom:10px">${a.flag} Slang you'll hear</h3>
+            <h3 style="margin-bottom:10px">${a.flag} ${L("slangTitle")}</h3>
             ${slang.map(x => `<span class="slang-chip"><b>${T(x.term)}</b> — ${T(x.meaning)}</span>`).join("")}
           </div>
           <div class="card">
-            <h3 style="margin-bottom:8px">💡 Insider tips</h3>
-            <ul style="padding-left:20px;color:var(--ink-soft)">${L.tips.map(t => `<li style="margin:6px 0">${T(t)}</li>`).join("")}</ul>
+            <h3 style="margin-bottom:8px">${L("tips")}</h3>
+            <ul style="padding-left:20px;color:var(--ink-soft)">${L2.tips.map(t => `<li style="margin:6px 0">${T(t)}</li>`).join("")}</ul>
           </div>
         </div>
       </div>
       <div class="card" style="margin-top:14px">
-        <h3 style="margin-bottom:6px">🇧🇷 Brazilian traps in this situation</h3>
+        <h3 style="margin-bottom:6px">${L("traps")}</h3>
         <table class="compare-table">
-          <tr><th>Don't say</th><th>Say</th><th>Why</th></tr>
-          ${L.mistakes.map(m => `<tr><td class="wrong">${T(m.wrong)}</td><td class="right">${T(m.right)}</td><td>${T(m.why)}</td></tr>`).join("")}
+          <tr><th>${L("dontSay")}</th><th>${L("say")}</th><th>${L("why")}</th></tr>
+          ${L2.mistakes.map(m => `<tr><td class="wrong">${T(m.wrong)}</td><td class="right">${T(m.right)}</td><td>${T(m.why)}</td></tr>`).join("")}
         </table>
         <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn" href="#/scenario/${s.id}/pov">📹 Watch the POV first</a>
-          <a class="btn ghost" href="#/scenario/${s.id}/play">🎬 Play the scene</a>
-          <a class="btn ghost" href="#/scenario/${s.id}/speak">🎙️ Speak it</a>
+          <a class="btn" href="#/scenario/${s.id}/pov">${L("watchFirst")}</a>
+          <a class="btn ghost" href="#/scenario/${s.id}/play">${L("playScene")}</a>
+          <a class="btn ghost" href="#/scenario/${s.id}/speak">${L("speakIt")}</a>
         </div>
       </div>`;
   }
@@ -3913,13 +4360,12 @@ window.SCENARIOS_C = [
   soundBtn.onclick = () => {
     RealTalkPlayer.speech.enabled = !RealTalkPlayer.speech.enabled;
     if (!RealTalkPlayer.speech.enabled) RealTalkPlayer.speech.stop();
-    soundBtn.textContent = RealTalkPlayer.speech.enabled ? "🔊 Voice on" : "🔇 Voice off";
+    soundBtn.textContent = RealTalkPlayer.speech.enabled ? L("voiceOn") : L("voiceOff");
   };
 
   window.addEventListener("hashchange", route);
   applyTheme();
-  renderAccentBar();
-  renderNav();
+  renderChrome();
   route();
 })();
 
