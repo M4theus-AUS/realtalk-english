@@ -134,7 +134,9 @@ a { color: var(--green); }
 }
 .nav-item:hover { background: rgba(255, 255, 255, .07); }
 .nav-item.active { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .12); font-weight: 600; }
-.nav-emoji { width: 20px; text-align: center; font-size: 15px; }
+.nav-emoji { width: 20px; text-align: center; font-size: 15px; flex-shrink: 0; }
+.nav-text { display: flex; flex-direction: column; line-height: 1.2; }
+.nav-en { font-size: 10.5px; font-style: italic; font-weight: 400; color: var(--side-label); }
 .nav-done { margin-left: auto; font-size: 11px; color: var(--side-done); }
 
 .sidebar-foot { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,.1); }
@@ -4034,10 +4036,17 @@ window.SCENARIOS_C = [
     });
   }
 
+  function navLabelHtml(emoji, pt, en) {
+    if (isPT() && en && en !== pt) {
+      return `<span class="nav-emoji">${emoji}</span><span class="nav-text"><span>${pt}</span><span class="nav-en">${en}</span></span>`;
+    }
+    return `<span class="nav-emoji">${emoji}</span> ${pt}`;
+  }
+
   function renderChrome() {
-    document.querySelector('.nav-item[data-route="home"]').innerHTML = `<span class="nav-emoji">🏠</span> ${L("home")}`;
-    document.querySelector('.nav-item[data-route="grammar"]').innerHTML = `<span class="nav-emoji">📚</span> ${L("grammar")}`;
-    document.querySelector('.nav-item[data-route="exercises"]').innerHTML = `<span class="nav-emoji">✏️</span> ${L("exercises")}`;
+    document.querySelector('.nav-item[data-route="home"]').innerHTML = navLabelHtml("🏠", L("home"), "Home");
+    document.querySelector('.nav-item[data-route="grammar"]').innerHTML = navLabelHtml("📚", L("grammar"), "Grammar");
+    document.querySelector('.nav-item[data-route="exercises"]').innerHTML = navLabelHtml("✏️", L("exercises"), "Exercises");
     document.getElementById("study-label").textContent = L("study");
     document.getElementById("rle-label").textContent = isPT() ? "Inglês da Vida Real" : "Real Life English";
     const soundBtn = document.getElementById("sound-toggle");
@@ -4054,11 +4063,14 @@ window.SCENARIOS_C = [
       const items = SCENARIOS.filter(s => (s.group || "Daily Life") === g);
       if (!items.length) return;
       html += `<div class="nav-label sub">${groupLabel(g)}</div>`;
-      html += items.map(s => `
+      html += items.map(s => {
+        const pm = ptMeta(s.id);
+        return `
         <a class="nav-item" href="#/scenario/${s.id}" data-route="scenario/${s.id}">
-          <span class="nav-emoji">${s.emoji}</span> ${s.title}
+          ${pm ? navLabelHtml(s.emoji, pm.title, s.title) : `<span class="nav-emoji">${s.emoji}</span> ${s.title}`}
           ${store.data.scenes[s.id] ? '<span class="nav-done">✓</span>' : ""}
-        </a>`).join("");
+        </a>`;
+      }).join("");
     });
     nav.innerHTML = html;
     highlightNav();
