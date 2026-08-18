@@ -8,82 +8,81 @@
 </head>
 <body>
 <style>
-/* ============ RealTalk English — warm light design system + motion ============
-   Warm cream grounds, country identity palettes, premium motion layer.
-   The POV viewport stays cinematic dark — it's a video player.
-   Semantic colors constant: green = natural, amber = awkward, coral = mistake. */
+/* ============ RealTalk English — soft playful design system ============
+   Reference: friendly learning-app style — airy pastel grounds, white rounded
+   cards, one bold colored hero panel, pill buttons, floating deco dots.
+   Country identity lives in soft tints (never harsh solids in the chrome).
+   Semantic colors constant: green=natural, amber=awkward, coral=mistake. */
 
 :root {
-  --bg: #faf6ef;
+  --bg: #eff5f0;
   --panel: #ffffff;
-  --ink: #221f1a;
-  --ink-soft: #5c564c;
-  --ink-faint: #857d70;
-  --line: #e8e1d4;
+  --ink: #24222b;
+  --ink-soft: #5b5866;
+  --ink-faint: #8b8794;
+  --line: #e7e4ef;
 
-  --green: #1e6f54;
-  --green-deep: #14483a;
-  --green-dark: #0f3229;
-  --green-wash: #e4f0ea;
+  --green: #2f8f6b;           /* country accent (bright) */
+  --green-deep: #14483a;      /* country accent (deep, for text) */
+  --green-dark: #0f3229;      /* darkest — player chrome */
+  --green-wash: #e2f1ea;      /* country accent (soft tint) */
 
-  --gold: #d99a2b;
-  --gold-wash: #faf0da;
+  --cta: #f4587a;             /* playful pink CTA, constant */
+  --cta-deep: #d63e63;
 
-  --coral: #cf4f33;
-  --coral-wash: #fbe8e2;
+  --gold: #f0a52e;
+  --gold-wash: #fdf1dc;
 
-  --cream-text: #f4efe3;
-  --side-label: #7fa892;
-  --side-label-sub: #6a9280;
-  --side-done: #8fd4ae;
-  --flag-strip: linear-gradient(90deg, #12432f 0 50%, #d99a2b 50%);
-  --hero-end: #1d5f47;
+  --coral: #e05a3a;
+  --coral-wash: #fde9e2;
 
-  --wrong-text: #b83f26;
+  --wrong-text: #c04326;
+  --cream-text: #ffffff;
 
-  --radius: 16px;
-  --radius-sm: 11px;
-  --shadow: 0 1px 2px rgba(34, 31, 26, .05), 0 6px 18px rgba(34, 31, 26, .06);
+  --dot1: rgba(244, 88, 122, .55);
+  --dot2: rgba(240, 165, 46, .55);
+  --dot3: rgba(47, 143, 107, .45);
+
+  --flag-strip: linear-gradient(90deg, #2f8f6b 0 50%, #f0a52e 50%);
+
+  --radius: 22px;
+  --radius-sm: 14px;
+  --shadow: 0 2px 6px rgba(60, 56, 80, .04), 0 12px 28px rgba(60, 56, 80, .07);
   --font: "Segoe UI Variable Text", "Segoe UI", -apple-system, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-display: "Baloo 2", "Segoe UI", sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ============ Country themes (data-accent on <html>) ============ */
+/* ============ Country tints (data-accent on <html>) ============ */
 html[data-accent="us"] {
-  --bg: #f7f6f2;
-  --green: #2b4f87; --green-deep: #1c3862; --green-dark: #101d33; --green-wash: #e3ebf5;
-  --side-label: #8298bf; --side-label-sub: #6f86ad; --side-done: #93b6e8;
-  --flag-strip: linear-gradient(90deg, #b22234 0 33.3%, #f2efe8 33.3% 66.6%, #3c3b6e 66.6%);
-  --hero-end: #2d4f8c;
+  --bg: #edeffb;
+  --green: #6d7ff2; --green-deep: #3b49b0; --green-dark: #232c66; --green-wash: #e6e9fd;
+  --dot3: rgba(109, 127, 242, .5);
+  --flag-strip: linear-gradient(90deg, #d55a6b 0 33.3%, #f4f2fb 33.3% 66.6%, #6d7ff2 66.6%);
 }
 html[data-accent="uk"] {
-  --bg: #f8f4ef;
-  --green: #7d2436; --green-deep: #571826; --green-dark: #23090f; --green-wash: #f2e2e6;
-  --side-label: #bf8f9b; --side-label-sub: #a67783; --side-done: #e0a3b0;
-  --flag-strip: linear-gradient(90deg, #012169 0 33.3%, #f2efe8 33.3% 66.6%, #C8102F 66.6%);
-  --hero-end: #6e2033;
+  --bg: #f8eff1;
+  --green: #b0526a; --green-deep: #7d2436; --green-dark: #40121e; --green-wash: #f6e3e8;
+  --dot3: rgba(176, 82, 106, .5);
+  --flag-strip: linear-gradient(90deg, #5a6bc0 0 33.3%, #f8f5fb 33.3% 66.6%, #d55a6b 66.6%);
 }
 html[data-accent="ca"] {
-  --bg: #faf5f0;
-  --green: #a32638; --green-deep: #7a1c2b; --green-dark: #350d13; --green-wash: #f7e3e6;
-  --side-label: #c09297; --side-label-sub: #a67a7f; --side-done: #e8a3ab;
-  --flag-strip: linear-gradient(90deg, #d52b1e 0 25%, #f5f1ea 25% 75%, #d52b1e 75%);
-  --hero-end: #93283a;
+  --bg: #faf0ee;
+  --green: #d95762; --green-deep: #99303c; --green-dark: #4d181e; --green-wash: #fae3e5;
+  --dot3: rgba(217, 87, 98, .5);
+  --flag-strip: linear-gradient(90deg, #d95762 0 25%, #faf5f2 25% 75%, #d95762 75%);
 }
 html[data-accent="ie"] {
-  --bg: #f6f8f3;
-  --green: #17805c; --green-deep: #0e5a40; --green-dark: #06281d; --green-wash: #ddf0e7;
-  --side-label: #7fbf9f; --side-label-sub: #67a687; --side-done: #8fdcb4;
-  --flag-strip: linear-gradient(90deg, #169b62 0 33.3%, #f2efe8 33.3% 66.6%, #ff883e 66.6%);
-  --hero-end: #14734f;
+  --bg: #edf6f0;
+  --green: #2fae74; --green-deep: #0e5a40; --green-dark: #093524; --green-wash: #def2e8;
+  --dot3: rgba(255, 136, 62, .5);
+  --flag-strip: linear-gradient(90deg, #2fae74 0 33.3%, #f4f8f2 33.3% 66.6%, #ff883e 66.6%);
 }
 html[data-accent="sco"] {
-  --bg: #f5f5f9;
-  --green: #35508f; --green-deep: #243763; --green-dark: #131b30; --green-wash: #e4e8f4;
-  --side-label: #8f9cc0; --side-label-sub: #7684a8; --side-done: #9db1e0;
-  --flag-strip: linear-gradient(90deg, #005EB8 0 40%, #f2efe8 40% 60%, #005EB8 60%);
-  --hero-end: #2c4278;
+  --bg: #f0f1fb;
+  --green: #7381d9; --green-deep: #3d4fa8; --green-dark: #1d2657; --green-wash: #e8eafa;
+  --dot3: rgba(115, 129, 217, .5);
+  --flag-strip: linear-gradient(90deg, #5a7fd9 0 40%, #f4f4fb 40% 60%, #5a7fd9 60%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -96,12 +95,25 @@ body {
   font-size: 15.5px;
   transition: background .5s;
 }
+/* floating deco dots, like the reference */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle 5px at 12% 18%, var(--dot1) 100%, transparent),
+    radial-gradient(circle 4px at 88% 12%, var(--dot2) 100%, transparent),
+    radial-gradient(circle 6px at 94% 55%, var(--dot3) 100%, transparent),
+    radial-gradient(circle 4px at 6% 72%, var(--dot2) 100%, transparent),
+    radial-gradient(circle 5px at 78% 88%, var(--dot1) 100%, transparent);
+}
+.app, .mobile-nav { position: relative; z-index: 1; }
 button { font-family: inherit; cursor: pointer; }
-a { color: var(--green); }
+a { color: var(--green-deep); }
 :focus-visible {
-  outline: 2px solid var(--green);
+  outline: 2.5px solid var(--green);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 ::selection { background: color-mix(in srgb, var(--green) 25%, transparent); }
 
@@ -109,10 +121,11 @@ a { color: var(--green); }
 .app { display: flex; min-height: 100vh; }
 
 .sidebar {
-  width: 250px;
+  width: 252px;
   flex-shrink: 0;
-  background: var(--green-dark);
-  color: var(--cream-text);
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  color: var(--ink);
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -120,68 +133,68 @@ a { color: var(--green); }
   height: 100vh;
   overflow-y: auto;
   scrollbar-width: thin;
-  transition: background .5s;
 }
 
 .brand {
   display: flex; align-items: center; gap: 10px;
-  padding: 22px 18px 14px;
+  padding: 22px 18px 12px;
 }
-.brand-mark { font-size: 26px; }
-.brand-name { display: block; font-weight: 700; font-size: 20px; letter-spacing: .2px; font-family: var(--font-display); }
-.brand-sub { display: block; font-size: 10.5px; letter-spacing: 2.4px; text-transform: uppercase; color: var(--side-label); }
+.brand-mark { font-size: 27px; }
+.brand-name { display: block; font-weight: 700; font-size: 21px; letter-spacing: .2px; font-family: var(--font-display); color: var(--ink); line-height: 1.1; }
+.brand-sub { display: block; font-size: 10.5px; letter-spacing: 2.2px; text-transform: uppercase; color: var(--green); font-weight: 700; }
 
-.nav { flex: 1; padding: 4px 10px 16px; }
+.nav { flex: 1; padding: 4px 12px 16px; }
 .nav-label {
   font-size: 10.5px; letter-spacing: 1.8px; text-transform: uppercase;
-  color: var(--side-label); padding: 16px 10px 6px;
+  color: var(--ink-faint); font-weight: 700; padding: 16px 10px 6px;
 }
-.nav-label.sub { padding-top: 12px; color: var(--side-label-sub); font-size: 10px; }
+.nav-label.sub { padding-top: 12px; color: var(--green-deep); font-size: 10px; }
 .nav-item {
   display: flex; align-items: center; gap: 9px;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
-  color: var(--cream-text);
+  padding: 8px 11px;
+  border-radius: 999px;
+  color: var(--ink-soft);
   text-decoration: none;
   font-size: 14px;
   margin-bottom: 2px;
-  border: 1px solid transparent;
-  transition: background .18s, border-color .18s, transform .18s;
+  transition: background .18s, color .18s, transform .18s;
 }
-.nav-item:hover { background: rgba(255, 255, 255, .07); transform: translateX(3px); }
-.nav-item.active { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .12); font-weight: 600; }
+.nav-item:hover { background: var(--green-wash); color: var(--green-deep); transform: translateX(3px); }
+.nav-item.active { background: var(--green-wash); color: var(--green-deep); font-weight: 700; }
 .nav-emoji { width: 20px; text-align: center; font-size: 15px; flex-shrink: 0; }
 .nav-text { display: flex; flex-direction: column; line-height: 1.2; }
-.nav-en { font-size: 10.5px; font-style: italic; font-weight: 400; color: var(--side-label); }
-.nav-done { margin-left: auto; font-size: 11px; color: var(--side-done); }
+.nav-en { font-size: 10.5px; font-style: italic; font-weight: 400; color: var(--ink-faint); }
+.nav-item.active .nav-en, .nav-item:hover .nav-en { color: color-mix(in srgb, var(--green-deep) 65%, transparent); }
+.nav-done { margin-left: auto; font-size: 11px; color: var(--green); font-weight: 700; }
 
-.sidebar-foot { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,.1); }
+.sidebar-foot { padding: 12px 16px; border-top: 1px solid var(--line); }
 .sound-toggle {
   width: 100%;
-  background: rgba(255,255,255,.08); color: var(--cream-text);
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: var(--radius-sm);
-  padding: 7px 10px; font-size: 13px;
-  transition: background .18s;
+  background: var(--green-wash); color: var(--green-deep);
+  border: none;
+  border-radius: 999px;
+  padding: 8px 10px; font-size: 13px; font-weight: 600;
+  transition: filter .18s;
 }
-.sound-toggle:hover { background: rgba(255,255,255,.14); }
+.sound-toggle:hover { filter: brightness(.97); }
 
 .content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.main { min-width: 0; padding: 28px 44px 90px; max-width: 1080px; width: 100%; }
+.main { min-width: 0; padding: 26px 44px 90px; max-width: 1080px; width: 100%; }
 
-/* ============ Accent topbar ============ */
+/* ============ Accent topbar — flags on soft washes, never solid ============ */
 .topbar {
   position: sticky; top: 0; z-index: 40;
   display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
   padding: 15px 44px 12px;
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
 }
 .topbar::before {
   content: "";
   position: absolute; top: 0; left: 0; right: 0; height: 4px;
   background: var(--flag-strip);
+  opacity: .8;
 }
 .accent-label {
   font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase;
@@ -189,17 +202,19 @@ a { color: var(--green); }
 }
 .accent-btn {
   display: inline-flex; align-items: center; gap: 7px;
-  background: var(--panel);
-  border: 1.5px solid var(--line);
-  border-radius: 99px;
+  background: rgba(255, 255, 255, .55);
+  border: 1.5px solid transparent;
+  border-radius: 999px;
   padding: 6px 13px;
   font-size: 13px; font-weight: 600; color: var(--ink-soft);
-  transition: border-color .2s, background .2s, color .2s, transform .2s, box-shadow .2s;
+  transition: background .2s, color .2s, transform .2s, border-color .2s;
 }
-.accent-btn:hover { border-color: var(--green); transform: translateY(-1px); }
+.accent-btn:hover { background: #fff; transform: translateY(-1px); }
 .accent-btn.active {
-  background: var(--green); border-color: var(--green); color: #fff;
-  box-shadow: 0 3px 12px color-mix(in srgb, var(--green) 35%, transparent);
+  background: var(--green-wash);
+  border-color: color-mix(in srgb, var(--green) 45%, transparent);
+  color: var(--green-deep);
+  font-weight: 700;
 }
 .accent-flag { font-size: 15px; }
 .accent-tagline {
@@ -208,16 +223,16 @@ a { color: var(--green); }
 }
 .lang-switch {
   display: inline-flex; gap: 3px; margin-left: 10px;
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: 99px; padding: 3px;
+  background: rgba(255,255,255,.55);
+  border-radius: 999px; padding: 3px;
 }
 .lang-btn {
   border: none; background: transparent;
-  border-radius: 99px; padding: 4px 11px;
+  border-radius: 999px; padding: 4px 11px;
   font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
   transition: background .18s, color .18s;
 }
-.lang-btn.active { background: var(--green); color: #fff; }
+.lang-btn.active { background: var(--green-wash); color: var(--green-deep); }
 
 /* ============ Shared elements ============ */
 .page-head { margin-bottom: 26px; }
@@ -225,13 +240,13 @@ a { color: var(--green); }
   font-size: 11.5px; letter-spacing: 2px; text-transform: uppercase;
   color: var(--green); font-weight: 700; margin-bottom: 4px;
 }
-.page-title { font-size: 32px; font-weight: 600; letter-spacing: -.3px; font-family: var(--font-display); text-wrap: balance; }
+.page-title { font-size: 31px; font-weight: 700; letter-spacing: -.2px; font-family: var(--font-display); line-height: 1.15; text-wrap: balance; }
 .page-title-pt { font-size: 15px; font-style: italic; color: var(--ink-faint); margin-top: 2px; }
 .page-blurb { color: var(--ink-soft); margin-top: 6px; max-width: 62ch; }
 
 .card {
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 20px 22px;
@@ -244,40 +259,48 @@ a { color: var(--green); }
 
 .chip {
   display: inline-block;
-  font-size: 12px; font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 99px;
+  font-size: 12px; font-weight: 700;
+  padding: 3px 11px;
+  border-radius: 999px;
   background: var(--green-wash); color: var(--green-deep);
 }
-.chip.gold { background: var(--gold-wash); color: #8a5e10; }
-.chip.coral { background: var(--coral-wash); color: #96351f; }
+.chip.gold { background: var(--gold-wash); color: #9c6410; }
+.chip.coral { background: var(--coral-wash); color: #a33a1e; }
 
 .btn {
   position: relative; overflow: hidden;
   display: inline-flex; align-items: center; gap: 8px;
-  background: linear-gradient(120deg, var(--green), color-mix(in srgb, var(--green) 78%, #fff));
+  background: var(--green);
   color: #fff;
-  border: none; border-radius: var(--radius-sm);
-  padding: 10px 18px;
-  font-size: 14.5px; font-weight: 600;
+  border: none; border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 14.5px; font-weight: 700;
+  font-family: var(--font-display);
   text-decoration: none;
-  transition: transform .2s var(--ease-out), box-shadow .2s;
+  transition: transform .2s var(--ease-out), box-shadow .2s, filter .2s;
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--green) 30%, transparent);
 }
-.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px color-mix(in srgb, var(--green) 35%, transparent); }
+.btn:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 10px 22px color-mix(in srgb, var(--green) 38%, transparent); }
 .btn::after {
   content: "";
   position: absolute; top: 0; left: -80%;
   width: 50%; height: 100%;
-  background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.3), transparent);
   transform: skewX(-20deg);
   transition: left .5s var(--ease-out);
 }
 .btn:hover::after { left: 130%; }
 .btn.ghost {
-  background: transparent; color: var(--green);
-  border: 1.5px solid var(--green);
+  background: rgba(255,255,255,.7); color: var(--green-deep);
+  box-shadow: none;
+  border: 1.5px solid color-mix(in srgb, var(--green) 35%, transparent);
 }
-.btn.ghost:hover { background: var(--green-wash); box-shadow: none; }
+.btn.ghost:hover { background: var(--green-wash); filter: none; }
+.btn.cta {
+  background: var(--cta);
+  box-shadow: 0 8px 20px rgba(244, 88, 122, .35);
+}
+.btn.cta:hover { box-shadow: 0 12px 26px rgba(244, 88, 122, .42); }
 
 /* ============ Reveal-on-scroll motion ============ */
 .reveal { opacity: 0; transform: translateY(18px); }
@@ -287,23 +310,24 @@ a { color: var(--green); }
   transition-delay: var(--reveal-delay, 0s);
 }
 
-/* ============ Home / hero ============ */
+/* ============ Home / hero — the one bold colored panel ============ */
 .hero {
-  background: linear-gradient(125deg, var(--green-dark), var(--green-deep) 65%, var(--hero-end));
-  color: var(--cream-text);
-  border-radius: 20px;
+  background: var(--green);
+  color: #fff;
+  border-radius: 26px;
   padding: 34px 36px 30px;
   margin-bottom: 26px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 14px 40px color-mix(in srgb, var(--green-dark) 30%, transparent);
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--green) 35%, transparent);
+  transition: background .5s;
 }
 .hero::before {
   content: "";
   position: absolute; inset: -40%;
   background:
-    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .10), transparent 45%),
-    radial-gradient(circle at 75% 70%, color-mix(in srgb, var(--gold) 26%, transparent), transparent 45%);
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .16), transparent 42%),
+    radial-gradient(circle at 78% 72%, rgba(255, 255, 255, .10), transparent 40%);
   animation: aurora 14s ease-in-out infinite alternate;
   z-index: 0;
 }
@@ -312,33 +336,33 @@ a { color: var(--green); }
   to   { transform: translate(4%, 3%) rotate(6deg) scale(1.08); }
 }
 .hero h1 {
-  font-size: 34px; letter-spacing: -.3px; margin-bottom: 8px;
-  font-family: var(--font-display); font-weight: 600;
+  font-size: 36px; margin-bottom: 8px;
+  font-family: var(--font-display); font-weight: 700; line-height: 1.1;
   position: relative; z-index: 2;
   animation: heroRise .8s var(--ease-out) both;
 }
-.hero p { color: color-mix(in srgb, var(--cream-text) 82%, transparent); max-width: 58ch; position: relative; z-index: 2; animation: heroRise .8s var(--ease-out) .12s both; }
-.hero .btn { margin-top: 16px; background: linear-gradient(120deg, var(--gold), #e7ab3e); color: #2b1d04; position: relative; z-index: 2; animation: heroRise .8s var(--ease-out) .22s both; }
-.hero .btn:hover { box-shadow: 0 6px 20px rgba(217, 154, 43, .4); }
+.hero p { color: rgba(255, 255, 255, .88); max-width: 58ch; position: relative; z-index: 2; animation: heroRise .8s var(--ease-out) .12s both; }
+.hero .btn { margin-top: 18px; background: var(--cta); color: #fff; position: relative; z-index: 2; animation: heroRise .8s var(--ease-out) .22s both; box-shadow: 0 8px 22px rgba(0, 0, 0, .22); }
+.hero .btn:hover { box-shadow: 0 12px 28px rgba(0, 0, 0, .28); }
 @keyframes heroRise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 .hero-emoji {
-  position: absolute; right: 30px; top: 20px; font-size: 76px;
-  filter: drop-shadow(0 8px 20px rgba(0,0,0,.35));
+  position: absolute; right: 30px; top: 20px; font-size: 78px;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.25));
   z-index: 2;
   animation: floaty 5.5s ease-in-out infinite;
 }
 @keyframes floaty { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
 .hero-postcards {
-  margin-top: 20px; font-size: 21px; letter-spacing: 12px; opacity: .85;
+  margin-top: 20px; font-size: 21px; letter-spacing: 12px; opacity: .9;
   position: relative; z-index: 2;
   animation: heroRise .8s var(--ease-out) .3s both;
 }
 .hero::after {
   content: "";
-  position: absolute; right: -10px; bottom: -30px;
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 105px; letter-spacing: 8px;
-  color: rgba(255, 255, 255, .055);
+  position: absolute; right: -10px; bottom: -28px;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 100px; letter-spacing: 6px;
+  color: rgba(255, 255, 255, .08);
   pointer-events: none; white-space: nowrap; z-index: 1;
 }
 html[data-accent="au"] .hero::after { content: "AUSTRALIA"; }
@@ -347,56 +371,40 @@ html[data-accent="uk"] .hero::after { content: "BRITAIN"; }
 html[data-accent="ca"] .hero::after { content: "CANADA"; }
 html[data-accent="ie"] .hero::after { content: "IRELAND"; }
 html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
-html[data-accent="sco"] .hero {
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,.04) 0 2px, transparent 2px 16px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0 2px, transparent 2px 16px),
-    linear-gradient(125deg, var(--green-dark), var(--green-deep) 65%, var(--hero-end));
-}
-html[data-accent="us"] .hero {
-  background:
-    radial-gradient(circle at 12% 22%, rgba(255,255,255,.14) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 28% 68%, rgba(255,255,255,.10) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 44% 30%, rgba(255,255,255,.12) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 62% 74%, rgba(255,255,255,.10) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 79% 26%, rgba(255,255,255,.13) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 91% 60%, rgba(255,255,255,.10) 0 1.5px, transparent 2.5px),
-    linear-gradient(125deg, var(--green-dark), var(--green-deep) 65%, var(--hero-end));
-}
 
 .stat-row { margin-bottom: 26px; }
 .stat { text-align: left; }
 .stat-num {
-  font-size: 28px; font-weight: 700; color: var(--green-deep);
+  font-size: 30px; font-weight: 700; color: var(--green-deep);
   font-family: var(--font-display);
   font-variant-numeric: tabular-nums;
+  line-height: 1.1;
 }
-.stat-cap { font-size: 12px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 1px; }
+.stat-cap { font-size: 12px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
 .scenario-card {
   display: flex; flex-direction: column; gap: 6px;
   text-decoration: none; color: var(--ink);
-  transition: transform .25s var(--ease-out), box-shadow .25s, border-color .25s;
+  transition: transform .25s var(--ease-out), box-shadow .25s;
   overflow: hidden;
-  padding: 0 0 16px;
+  padding: 14px 0 16px;
   will-change: transform;
 }
 .scenario-card:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--green) 45%, var(--line));
-  box-shadow: 0 6px 14px rgba(34,31,26,.08), 0 16px 34px rgba(34,31,26,.10);
+  box-shadow: 0 6px 12px rgba(60, 56, 80, .06), 0 18px 36px rgba(60, 56, 80, .12);
 }
 .scenario-card .sc-head {
-  height: 64px;
+  height: 74px;
+  margin: 0 16px 6px;
+  border-radius: 18px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 33px;
-  margin-bottom: 6px;
-  text-shadow: 0 3px 12px rgba(0,0,0,.35);
+  font-size: 36px;
   transition: transform .3s var(--ease-out);
 }
-.scenario-card:hover .sc-head { transform: scale(1.12); }
-.scenario-card .sc-emoji { font-size: 30px; padding: 14px 16px 0; }
-.scenario-card .sc-title { font-weight: 700; font-size: 16px; padding: 0 16px; font-family: var(--font-display); }
+.scenario-card:hover .sc-head { transform: scale(1.08) rotate(-2deg); }
+.scenario-card .sc-emoji { font-size: 30px; padding: 0 16px; }
+.scenario-card .sc-title { font-weight: 700; font-size: 16.5px; padding: 0 16px; font-family: var(--font-display); line-height: 1.2; }
 .sc-title-pt {
   display: block; font-family: var(--font);
   font-size: 12px; font-weight: 500; font-style: italic;
@@ -406,19 +414,19 @@ html[data-accent="us"] .hero {
 .scenario-card .sc-meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; padding: 0 16px; }
 
 .section-title {
-  font-size: 19px; font-weight: 600; margin: 32px 0 14px;
+  font-size: 20px; font-weight: 700; margin: 32px 0 14px;
   font-family: var(--font-display);
   display: flex; align-items: center; gap: 10px;
 }
 .section-title::before {
   content: "";
-  width: 24px; height: 4px; border-radius: 99px;
-  background: linear-gradient(90deg, var(--green), var(--gold));
+  width: 22px; height: 6px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--green), var(--cta));
 }
 
 /* ============ Grammar ============ */
-.lesson-list .card { margin-bottom: 12px; cursor: pointer; transition: border-color .2s, transform .2s; }
-.lesson-list .card:hover { border-color: var(--green); transform: translateX(4px); }
+.lesson-list .card { margin-bottom: 12px; cursor: pointer; transition: box-shadow .2s, transform .2s; }
+.lesson-list .card:hover { transform: translateX(4px); box-shadow: 0 6px 12px rgba(60,56,80,.06), 0 14px 30px rgba(60,56,80,.1); }
 .lesson-row { display: flex; align-items: center; gap: 14px; }
 .lesson-row .l-emoji { font-size: 24px; }
 .lesson-row .l-title { font-weight: 700; font-family: var(--font-display); }
@@ -446,12 +454,12 @@ html[data-accent="us"] .hero {
 }
 .callout.br::before { content: "🇧🇷 "; font-weight: 700; }
 
-.lesson-body h3 { margin: 22px 0 8px; font-size: 16.5px; font-family: var(--font-display); }
+.lesson-body h3 { margin: 22px 0 8px; font-size: 17px; font-family: var(--font-display); }
 .lesson-body p { margin-bottom: 10px; color: var(--ink-soft); }
 .lesson-body p strong { color: var(--ink); }
 .back-link {
   display: inline-block; margin-bottom: 16px;
-  color: var(--green); text-decoration: none; font-weight: 600; font-size: 14px;
+  color: var(--green-deep); text-decoration: none; font-weight: 700; font-size: 14px;
 }
 
 /* ============ Exercises / quiz ============ */
@@ -472,7 +480,7 @@ html[data-accent="us"] .hero {
 .quiz-option.incorrect { border-color: var(--coral); background: var(--coral-wash); }
 
 .quiz-progress { font-size: 13px; color: var(--ink-faint); margin-bottom: 8px; font-variant-numeric: tabular-nums; }
-.quiz-q { font-size: 18px; font-weight: 700; margin-bottom: 16px; font-family: var(--font-display); }
+.quiz-q { font-size: 18px; font-weight: 700; margin-bottom: 16px; font-family: var(--font-display); line-height: 1.3; }
 .quiz-explain {
   background: var(--green-wash); border-radius: var(--radius-sm);
   padding: 12px 16px; margin-top: 12px; font-size: 14px;
@@ -481,36 +489,36 @@ html[data-accent="us"] .hero {
 .quiz-explain.bad { background: var(--coral-wash); }
 .quiz-score { text-align: center; padding: 30px 0; }
 .quiz-score .big {
-  font-size: 48px; font-weight: 700; color: var(--green-deep);
-  font-family: var(--font-display);
+  font-size: 50px; font-weight: 700; color: var(--green-deep);
+  font-family: var(--font-display); line-height: 1;
 }
 
-.progress-bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin-bottom: 18px; }
+.progress-bar { height: 8px; background: rgba(255,255,255,.8); border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
 .progress-bar > div {
   height: 100%;
-  background: linear-gradient(90deg, var(--green), var(--gold));
-  border-radius: 99px;
+  background: linear-gradient(90deg, var(--green), var(--cta));
+  border-radius: 999px;
   transition: width .5s var(--ease-out);
 }
 
 /* ============ Scenario page ============ */
 .tab-row {
   display: inline-flex; gap: 4px; margin-bottom: 22px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 99px;
-  padding: 4px;
+  background: rgba(255, 255, 255, .75);
+  border-radius: 999px;
+  padding: 5px;
   box-shadow: var(--shadow);
   flex-wrap: wrap;
 }
 .tab-btn {
   background: transparent; border: none;
-  border-radius: 99px; padding: 8px 16px;
-  font-size: 14px; font-weight: 600; color: var(--ink-soft);
+  border-radius: 999px; padding: 8px 16px;
+  font-size: 14px; font-weight: 700; color: var(--ink-soft);
+  font-family: var(--font-display);
   transition: background .18s, color .18s;
 }
 .tab-btn:hover { background: var(--green-wash); color: var(--green-deep); }
-.tab-btn.active { background: var(--green); color: #fff; }
+.tab-btn.active { background: var(--green); color: #fff; box-shadow: 0 4px 12px color-mix(in srgb, var(--green) 35%, transparent); }
 
 .phrase-row { display: flex; justify-content: space-between; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .phrase-row:last-child { border-bottom: none; }
@@ -519,23 +527,60 @@ html[data-accent="us"] .hero {
 
 .slang-chip {
   display: inline-block; margin: 0 8px 8px 0;
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: 99px; padding: 6px 14px; font-size: 13.5px;
-  transition: border-color .18s, transform .18s;
+  background: var(--bg); border: none;
+  border-radius: 999px; padding: 7px 15px; font-size: 13.5px;
+  transition: transform .18s, background .18s;
 }
-.slang-chip:hover { border-color: var(--green); transform: translateY(-2px); }
+.slang-chip:hover { background: var(--green-wash); transform: translateY(-2px); }
 .slang-chip b { color: var(--green-deep); }
 
-/* ============ POV player (stays cinematic dark — it's a video player) ============ */
+/* ============ Vocab tab ============ */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+.vocab-card {
+  background: var(--panel);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 13px 15px;
+  transition: transform .2s var(--ease-out), box-shadow .2s;
+}
+.vocab-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(60,56,80,.06), 0 14px 28px rgba(60,56,80,.11); }
+.vocab-en { font-weight: 700; font-family: var(--font-display); font-size: 15.5px; color: var(--green-deep); }
+.vocab-pt { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.vocab-ex { font-size: 12.5px; color: var(--ink-faint); margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--line); }
+.vocab-ex::before { content: "💬 "; }
+.vocab-say {
+  float: right;
+  border: none; background: var(--green-wash); color: var(--green-deep);
+  width: 28px; height: 28px; border-radius: 50%;
+  font-size: 13px;
+  transition: transform .15s;
+}
+.vocab-say:hover { transform: scale(1.12); }
+
+/* ============ Learn extras ============ */
+.dialogue-line { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+.dialogue-line:last-child { border: none; }
+.dialogue-who { flex-shrink: 0; font-weight: 700; font-size: 12px; color: var(--green-deep); text-transform: uppercase; letter-spacing: .8px; padding-top: 2px; width: 74px; }
+.dialogue-text { font-size: 14.5px; }
+.dialogue-pt { display: block; font-size: 12.5px; color: var(--ink-faint); font-style: italic; }
+.culture-item { padding: 9px 0 9px 4px; border-bottom: 1px dashed var(--line); font-size: 14px; color: var(--ink-soft); }
+.culture-item:last-child { border: none; }
+.culture-item::before { content: "😲 "; }
+
+/* ============ POV player (cinematic dark — it's a video screen) ============ */
 .player-wrap { max-width: 780px; }
 
 .viewport {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
   background: #17150f;
-  box-shadow: 0 14px 40px rgba(20, 18, 12, .38);
+  box-shadow: 0 16px 44px rgba(40, 36, 30, .35);
 }
 .viewport video { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 
@@ -588,7 +633,7 @@ html[data-accent="us"] .hero {
 .vp-mood {
   position: absolute; top: 40px; right: 16px; z-index: 3;
   font-size: 12px; background: rgba(0,0,0,.5); color: #fff;
-  padding: 4px 10px; border-radius: 99px; backdrop-filter: blur(4px);
+  padding: 4px 10px; border-radius: 999px; backdrop-filter: blur(4px);
   border: 1px solid rgba(255,255,255,.14);
 }
 
@@ -601,8 +646,9 @@ html[data-accent="us"] .hero {
   display: flex; align-items: flex-start; gap: 12px;
   width: 100%; text-align: left;
   background: var(--panel);
-  border: 1.5px solid var(--line);
+  border: 1.5px solid transparent;
   border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
   padding: 13px 16px;
   font-size: 15px;
   color: var(--ink);
@@ -617,7 +663,7 @@ html[data-accent="us"] .hero {
 .choice-btn:disabled { opacity: .45; cursor: default; }
 .choice-letter {
   flex-shrink: 0;
-  width: 24px; height: 24px; border-radius: 7px;
+  width: 26px; height: 26px; border-radius: 9px;
   background: var(--green-wash); color: var(--green-deep);
   font-size: 13px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
@@ -650,9 +696,9 @@ html[data-accent="us"] .hero {
 .feedback.natural { background: var(--green-wash); }
 .feedback.natural .fb-tag { color: var(--green-deep); }
 .feedback.awkward { background: var(--gold-wash); }
-.feedback.awkward .fb-tag { color: #8a5e10; }
+.feedback.awkward .fb-tag { color: #9c6410; }
 .feedback.wrong { background: var(--coral-wash); }
-.feedback.wrong .fb-tag { color: #96351f; }
+.feedback.wrong .fb-tag { color: #a33a1e; }
 
 .tip-note {
   background: var(--gold-wash);
@@ -684,22 +730,22 @@ html[data-accent="us"] .hero {
   margin-top: 14px;
 }
 .mic-btn {
-  width: 64px; height: 64px; flex-shrink: 0;
+  width: 66px; height: 66px; flex-shrink: 0;
   border-radius: 50%;
   border: none;
-  background: linear-gradient(135deg, var(--green), color-mix(in srgb, var(--green) 75%, #fff));
+  background: var(--cta);
   color: #fff; font-size: 26px;
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--green) 40%, transparent);
+  box-shadow: 0 6px 18px rgba(244, 88, 122, .4);
   transition: transform .15s, background .2s;
 }
 .mic-btn:hover:not(:disabled) { transform: scale(1.08); }
 .mic-btn.listening {
-  background: linear-gradient(135deg, var(--coral), #e07a5c);
+  background: var(--coral);
   animation: micpulse 1.1s ease-in-out infinite;
 }
 @keyframes micpulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(207, 79, 51, .45); }
-  50% { box-shadow: 0 0 0 18px rgba(207, 79, 51, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(224, 90, 58, .45); }
+  50% { box-shadow: 0 0 0 18px rgba(224, 90, 58, 0); }
 }
 .mic-hint { font-size: 13.5px; color: var(--ink-soft); }
 .heard-box {
@@ -716,7 +762,7 @@ html[data-accent="us"] .hero {
 /* ============ Watch (POV) mode ============ */
 .watch-intro { animation: rise .3s var(--ease-out) both; }
 .watch-progress { font-size: 13px; color: var(--ink-faint); padding: 8px 2px; font-variant-numeric: tabular-nums; }
-.watch-progress a { color: var(--green); font-weight: 600; }
+.watch-progress a { color: var(--green-deep); font-weight: 700; }
 .clip-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
@@ -725,16 +771,16 @@ html[data-accent="us"] .hero {
 .clip-card {
   display: flex; gap: 10px; align-items: flex-start;
   background: var(--panel);
-  border: 1px solid var(--line);
   border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
   padding: 9px;
-  transition: border-color .2s, box-shadow .2s, transform .2s;
+  transition: box-shadow .2s, transform .2s;
 }
 .clip-card:hover { transform: translateY(-2px); }
-.clip-card.playing { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-wash); }
+.clip-card.playing { box-shadow: 0 0 0 2.5px var(--green), var(--shadow); }
 .clip-thumb {
   width: 58px; height: 44px; flex-shrink: 0;
-  border-radius: 7px;
+  border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
   font-size: 21px;
 }
@@ -750,10 +796,10 @@ html[data-accent="us"] .hero {
   border-radius: var(--radius-sm);
   padding: 14px 8px;
 }
-.end-count .n { font-size: 27px; font-weight: 700; font-family: var(--font-display); }
+.end-count .n { font-size: 28px; font-weight: 700; font-family: var(--font-display); line-height: 1.1; }
 .end-count.natural { background: var(--green-wash); color: var(--green-deep); }
-.end-count.awkward { background: var(--gold-wash); color: #8a5e10; }
-.end-count.wrong { background: var(--coral-wash); color: #96351f; }
+.end-count.awkward { background: var(--gold-wash); color: #9c6410; }
+.end-count.wrong { background: var(--coral-wash); color: #a33a1e; }
 .review-item { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
 .review-item:last-child { border: none; }
 .review-said { color: var(--wrong-text); }
@@ -764,22 +810,22 @@ html[data-accent="us"] .hero {
 .mobile-nav {
   display: none;
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
-  background: var(--green-dark);
+  background: var(--panel);
+  border-top: 1px solid var(--line);
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   justify-content: space-around;
-  box-shadow: 0 -4px 18px rgba(0,0,0,.18);
+  box-shadow: 0 -6px 22px rgba(60, 56, 80, .1);
 }
 .mnav-item {
   display: flex; flex-direction: column; align-items: center; gap: 1px;
   background: none; border: none;
-  color: var(--cream-text); text-decoration: none;
-  font-size: 10.5px; font-weight: 600;
-  padding: 5px 12px; border-radius: 10px;
-  opacity: .75;
-  transition: opacity .18s, background .18s;
+  color: var(--ink-faint); text-decoration: none;
+  font-size: 10.5px; font-weight: 700;
+  padding: 5px 12px; border-radius: 12px;
+  transition: color .18s, background .18s;
 }
 .mnav-item .mn-emoji { font-size: 19px; }
-.mnav-item.active { opacity: 1; background: rgba(255,255,255,.13); }
+.mnav-item.active { color: var(--green-deep); background: var(--green-wash); }
 
 /* ============ Reduced motion ============ */
 @media (prefers-reduced-motion: reduce) {
@@ -795,11 +841,11 @@ html[data-accent="us"] .hero {
 /* ============ Responsive ============ */
 @media (max-width: 900px) {
   .app { flex-direction: column; }
-  .sidebar { width: 100%; height: auto; position: static; overflow: visible; }
+  .sidebar { width: 100%; height: auto; position: static; overflow: visible; border-right: none; border-bottom: 1px solid var(--line); }
   .sidebar .nav, .sidebar-foot { display: none; }
   .brand { padding: 12px 16px 10px; }
   .brand-mark { font-size: 22px; }
-  .brand-name { font-size: 17px; }
+  .brand-name { font-size: 18px; }
   .mobile-nav { display: flex; }
   body { padding-bottom: 74px; }
 
@@ -814,13 +860,13 @@ html[data-accent="us"] .hero {
   .grid-2, .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
   .stat { padding: 12px 10px; }
-  .stat-num { font-size: 20px; }
+  .stat-num { font-size: 21px; }
   .stat-cap { font-size: 10px; letter-spacing: .4px; }
 
-  .hero { padding: 22px 20px; }
-  .hero h1 { font-size: 25px; }
-  .hero-emoji { font-size: 44px; right: 16px; top: 12px; }
-  .hero::after { font-size: 46px; bottom: -12px; letter-spacing: 3px; }
+  .hero { padding: 24px 20px; border-radius: 22px; }
+  .hero h1 { font-size: 26px; }
+  .hero-emoji { font-size: 46px; right: 16px; top: 12px; }
+  .hero::after { font-size: 44px; bottom: -10px; letter-spacing: 3px; }
   .hero-postcards { font-size: 17px; letter-spacing: 7px; }
 
   .tab-row { display: flex; width: 100%; overflow-x: auto; flex-wrap: nowrap; }
@@ -840,13 +886,14 @@ html[data-accent="us"] .hero {
   .phrase-row { flex-direction: column; gap: 2px; }
   .phrase-note { max-width: 100%; text-align: left; }
   .compare-table { display: block; overflow-x: auto; }
-  .clip-grid { grid-template-columns: 1fr; }
-  .end-count .n { font-size: 21px; }
-  .mic-btn { width: 56px; height: 56px; font-size: 22px; }
+  .clip-grid, .vocab-grid { grid-template-columns: 1fr; }
+  .end-count .n { font-size: 22px; }
+  .mic-btn { width: 58px; height: 58px; font-size: 22px; }
+  .dialogue-who { width: 58px; font-size: 11px; }
 }
 @media (max-width: 560px) {
   .grid-2, .grid-4 { grid-template-columns: 1fr; }
-  .page-title { font-size: 23px; }
+  .page-title { font-size: 24px; }
   .quiz-q { font-size: 16px; }
 }
 
@@ -1082,7 +1129,10 @@ window.UI = {
     quizPerfect: "Perfect. Nothing to teach you here. 🏆",
     quizStrong: "Strong — reread the ones you missed and it's yours. 💪",
     quizWeak: "The misses are the lesson. Read the explanations, then run it back. 🔁",
-    tLearn: "📖 Learn", tPov: "📹 POV", tPlay: "🎬 Play", tSpeak: "🎙️ Speak",
+    tLearn: "📖 Learn", tVocab: "🔤 Vocab", tPov: "📹 POV", tPlay: "🎬 Play", tSpeak: "🎙️ Speak",
+    vocabIntro: "{n} words and expressions you'll actually hear in this situation. Tap 🔊 to hear each one in your chosen accent.",
+    phrases2Title: "✨ Next-level phrases",
+    cultureTitle: "🌏 Culture shocks",
     keyPhrases: "🗝️ Key phrases", slangTitle: "Slang you'll hear", tips: "💡 Insider tips",
     traps: "🇧🇷 Brazilian traps in this situation",
     dontSay: "Don't say", say: "Say", why: "Why",
@@ -1140,7 +1190,10 @@ window.UI = {
     quizPerfect: "Perfeito. Nada mais a ensinar aqui. 🏆",
     quizStrong: "Muito bom — releia as que errou e é sua. 💪",
     quizWeak: "Os erros são a lição. Leia as explicações e faça de novo. 🔁",
-    tLearn: "📖 Aprender", tPov: "📹 POV", tPlay: "🎬 Jogar", tSpeak: "🎙️ Falar",
+    tLearn: "📖 Aprender", tVocab: "🔤 Vocab", tPov: "📹 POV", tPlay: "🎬 Jogar", tSpeak: "🎙️ Falar",
+    vocabIntro: "{n} palavras e expressões que você vai realmente ouvir nessa situação. Toque no 🔊 para ouvir cada uma no sotaque escolhido.",
+    phrases2Title: "✨ Frases nível 2",
+    cultureTitle: "🌏 Choques culturais",
     keyPhrases: "🗝️ Frases-chave", slangTitle: "Gírias que você vai ouvir", tips: "💡 Dicas de quem vive lá",
     traps: "🇧🇷 Armadilhas brasileiras nessa situação",
     dontSay: "Não fale", say: "Fale", why: "Por quê",
@@ -3519,6 +3572,1103 @@ window.SCENARIOS_C = [
 
 </script>
 <script>
+// RealTalk — scenario vocab banks. Real words for real situations, Brazilian-translated.
+// Shape: window.VOCAB = { <scenarioId>: { words: [{ en, pt, ex }] } }
+// en = the actual English word/expression used in that situation
+// pt = natural Brazilian Portuguese (how a Brazilian would actually say it, not a dictionary entry)
+// ex = short natural English example sentence
+
+window.VOCAB = {
+  coffee: {
+    words: [
+      { en: "flat white", pt: "espresso com leite vaporizado", ex: "Can I get a flat white, please?" },
+      { en: "long black", pt: "espresso comprido com água quente", ex: "I'll have a long black, thanks." },
+      { en: "takeaway", pt: "para levar", ex: "Takeaway, please." },
+      { en: "have here", pt: "para consumir aqui", ex: "Have here, thanks." },
+      { en: "no sugar", pt: "sem açúcar", ex: "No sugar, thanks." },
+      { en: "two sugars", pt: "duas colheres de açúcar", ex: "Two sugars, please." },
+      { en: "cup", pt: "copo", ex: "Small cup, please." },
+      { en: "tap (to pay)", pt: "aproximar o cartão", ex: "Just tap when you're ready." },
+      { en: "name for the cup", pt: "nome pro copo", ex: "Can I get a name?" },
+      { en: "extra shot", pt: "uma dose extra de café", ex: "Can I get an extra shot?" },
+      { en: "decaf", pt: "descafeinado", ex: "Decaf flat white, please." },
+      { en: "iced coffee", pt: "café gelado", ex: "One iced coffee, please." },
+      { en: "refill", pt: "encher de novo, de graça", ex: "Is the refill free?" },
+      { en: "barista", pt: "quem prepara o café no balcão", ex: "The barista knows my order." },
+      { en: "medium (size)", pt: "tamanho médio", ex: "Medium, please." },
+      { en: "skim milk", pt: "leite desnatado", ex: "Flat white with skim milk." },
+      { en: "to go", pt: "para levar (versão americana)", ex: "Coffee to go, please." },
+      { en: "tip jar", pt: "potinho de gorjeta", ex: "There's no tip jar here." },
+      { en: "queue", pt: "fila", ex: "The queue moves fast here." },
+      { en: "sweet as", pt: "gíria australiana pra 'beleza'", ex: "Sweet as, thanks mate." }
+    ]
+  },
+  food: {
+    words: [
+      { en: "order", pt: "pedido", ex: "Can I get the burger, please?" },
+      { en: "table number", pt: "número da mesa", ex: "Table twelve, thanks." },
+      { en: "chips", pt: "batata frita quente", ex: "Does that come with chips?" },
+      { en: "mains", pt: "prato principal", ex: "I'll have the mains, please." },
+      { en: "entrée", pt: "entrada (cuidado, muda de país)", ex: "What's today's entrée?" },
+      { en: "sides", pt: "acompanhamentos", ex: "Fries or salad as sides?" },
+      { en: "tap water", pt: "água da torneira, de graça", ex: "Just tap water, thanks." },
+      { en: "the bill", pt: "a conta", ex: "Could we get the bill?" },
+      { en: "to-go box", pt: "marmitinha pra levar sobras", ex: "Can I get a to-go box?" },
+      { en: "medium (doneness)", pt: "ao ponto", ex: "I'll take it medium, thanks." },
+      { en: "starter", pt: "entrada (nome britânico)", ex: "We'll skip the starter." },
+      { en: "dessert", pt: "sobremesa", ex: "Any dessert menu tonight?" },
+      { en: "counter", pt: "balcão", ex: "Order at the counter first." },
+      { en: "server", pt: "garçom, garçonete", ex: "Ask the server for napkins." },
+      { en: "tip", pt: "gorjeta", ex: "Is the tip included?" },
+      { en: "menu", pt: "cardápio", ex: "Could I see the menu?" },
+      { en: "book a table", pt: "reservar uma mesa", ex: "I'd like to book a table." },
+      { en: "split the bill", pt: "dividir a conta", ex: "Can we split the bill?" },
+      { en: "allergic to", pt: "alérgico a", ex: "I'm allergic to peanuts." },
+      { en: "recommend", pt: "recomendar", ex: "What do you recommend here?" }
+    ]
+  },
+  directions: {
+    words: [
+      { en: "directions", pt: "instruções de como chegar", ex: "Could you give me directions?" },
+      { en: "straight ahead", pt: "sempre em frente", ex: "Go straight ahead for two blocks." },
+      { en: "turn left", pt: "vira à esquerda", ex: "Turn left at the lights." },
+      { en: "turn right", pt: "vira à direita", ex: "Turn right after the bridge." },
+      { en: "traffic lights", pt: "sinal, semáforo", ex: "Left at the traffic lights." },
+      { en: "block", pt: "quarteirão", ex: "It's two blocks from here." },
+      { en: "landmark", pt: "ponto de referência", ex: "Use the gas station as a landmark." },
+      { en: "corner", pt: "esquina", ex: "It's right on the corner." },
+      { en: "crossing", pt: "faixa de pedestre", ex: "Use the crossing, it's safer." },
+      { en: "how far", pt: "qual a distância", ex: "How far is it, roughly?" },
+      { en: "on foot", pt: "a pé", ex: "It's ten minutes on foot." },
+      { en: "nearby", pt: "por perto", ex: "Is there a pharmacy nearby?" },
+      { en: "past the", pt: "depois de, passando", ex: "Past the servo, on your right." },
+      { en: "can't miss it", pt: "impossível não ver", ex: "It's huge, can't miss it." },
+      { en: "lost", pt: "perdido", ex: "Sorry, I'm a bit lost." },
+      { en: "get to", pt: "chegar até, ir para", ex: "How do I get there?" },
+      { en: "next to", pt: "do lado de", ex: "It's next to the bank." },
+      { en: "opposite", pt: "em frente a", ex: "The café is opposite the park." },
+      { en: "roundabout", pt: "rotatória", ex: "Take the second exit at the roundabout." },
+      { en: "which way", pt: "qual caminho", ex: "Sorry, which way is it?" }
+    ]
+  },
+  smalltalk: {
+    words: [
+      { en: "how's it going", pt: "e aí, tudo bem?", ex: "Hey, how's it going?" },
+      { en: "good weekend?", pt: "curtiu o fim de semana?", ex: "Morning! Good weekend?" },
+      { en: "quiet one", pt: "fim de semana tranquilo", ex: "Yeah, pretty quiet one." },
+      { en: "hectic", pt: "corrido, uma loucura", ex: "It's been pretty hectic lately." },
+      { en: "catch up", pt: "colocar o papo em dia", ex: "We should catch up soon." },
+      { en: "how are you finding it", pt: "o que você tá achando daqui", ex: "How are you finding Australia?" },
+      { en: "anyway", pt: "enfim, pra encerrar o papo", ex: "Anyway, better get back to it." },
+      { en: "weather", pt: "clima, tempo", ex: "Crazy weather today, right?" },
+      { en: "chill", pt: "tranquilo, de boa", ex: "It was pretty chill, honestly." },
+      { en: "catch you later", pt: "até mais, falo depois", ex: "Catch you later, have a good one!" },
+      { en: "mate", pt: "amigo, parceiro (chamamento genérico)", ex: "Cheers, mate!" },
+      { en: "coworker", pt: "colega de trabalho", ex: "My coworker asked about my weekend." },
+      { en: "return question", pt: "devolver a pergunta", ex: "Good, thanks — and you?" },
+      { en: "stand-up", pt: "reunião rápida em pé", ex: "See you at the stand-up." },
+      { en: "get used to it", pt: "se acostumar com algo", ex: "You'll get used to it." },
+      { en: "loving it", pt: "adorando", ex: "Honestly, loving it so far." },
+      { en: "big weekend?", pt: "fim de semana agitado?", ex: "Not bad — big weekend?" },
+      { en: "originally", pt: "originalmente, de origem", ex: "You're from Brazil originally, right?" },
+      { en: "honestly", pt: "sinceramente", ex: "Honestly, the coffee is amazing." },
+      { en: "no way", pt: "sério? não acredito", ex: "No way — my brother did Rio!" }
+    ]
+  },
+  phone: {
+    words: [
+      { en: "book an appointment", pt: "marcar uma consulta, um horário", ex: "I'm calling to book an appointment." },
+      { en: "it's [name]", pt: "aqui é o, a [nome]", ex: "It's Matheus, calling about the booking." },
+      { en: "hold on", pt: "espera um pouco", ex: "Hold on, let me check." },
+      { en: "bear with me", pt: "só um minutinho", ex: "Bear with me one second." },
+      { en: "you're breaking up", pt: "a ligação tá cortando", ex: "Sorry, you're breaking up." },
+      { en: "spell it out", pt: "soletrar", ex: "M for Mike, A for Apple." },
+      { en: "read that back", pt: "repetir pra confirmar", ex: "Let me read that back to you." },
+      { en: "voicemail", pt: "caixa postal", ex: "Leave a message on voicemail." },
+      { en: "extension", pt: "ramal", ex: "Could you transfer me to extension twelve?" },
+      { en: "the line", pt: "a linha", ex: "The line's not great, sorry." },
+      { en: "pop you on hold", pt: "colocar em espera", ex: "I'll pop you on hold." },
+      { en: "put you through", pt: "transferir a ligação", ex: "I'll put you through now." },
+      { en: "busy signal", pt: "sinal de ocupado", ex: "I keep getting a busy signal." },
+      { en: "dial", pt: "discar", ex: "Just dial this number." },
+      { en: "hang up", pt: "desligar", ex: "Sorry, I have to hang up." },
+      { en: "missed call", pt: "chamada perdida", ex: "You have a missed call." },
+      { en: "reschedule", pt: "remarcar", ex: "Can I reschedule for Friday?" },
+      { en: "confirm", pt: "confirmar", ex: "Just confirming your appointment time." },
+      { en: "give you a buzz", pt: "te dar uma ligadinha", ex: "I'll give you a buzz later." },
+      { en: "what was that, sorry?", pt: "como foi mesmo, desculpa?", ex: "What was that, sorry?" }
+    ]
+  },
+  haircut: {
+    words: [
+      { en: "trim", pt: "aparar", ex: "Just a trim, please." },
+      { en: "fade", pt: "degradê", ex: "A skin fade on the sides." },
+      { en: "taper", pt: "degradê suave, discreto", ex: "A taper, nothing too dramatic." },
+      { en: "buzz cut", pt: "cabelo raspado na máquina", ex: "I don't want a buzz cut." },
+      { en: "thin it out", pt: "desbastar", ex: "Can you thin it out a bit?" },
+      { en: "the back and sides", pt: "nuca e laterais", ex: "Short on the back and sides." },
+      { en: "clipper guard number", pt: "número da máquina", ex: "A number three on the sides." },
+      { en: "scissors on top", pt: "tesoura em cima", ex: "Scissors on top, please." },
+      { en: "take some length off", pt: "tirar um pouco do comprimento", ex: "I'd like to take some length off." },
+      { en: "shorter all over", pt: "mais curto por igual", ex: "A bit shorter all over, please." },
+      { en: "keep the shape", pt: "manter a forma", ex: "Just a trim, keep the shape." },
+      { en: "part", pt: "risco, repartição", ex: "Keep the part on this side." },
+      { en: "sideburns", pt: "costeletas", ex: "Leave the sideburns as they are." },
+      { en: "blend", pt: "misturar, esfumar", ex: "Blend it into the beard." },
+      { en: "razor", pt: "navalha", ex: "No razor on the neck, please." },
+      { en: "a bit more off the top", pt: "um pouco mais em cima", ex: "A bit more off the top, please." },
+      { en: "wash", pt: "lavar", ex: "Would you like a wash first?" },
+      { en: "blow dry", pt: "escovar, secar", ex: "Just a quick blow dry, thanks." },
+      { en: "show you a photo", pt: "mostrar uma foto de referência", ex: "Can I show you a photo?" },
+      { en: "mirror", pt: "espelho", ex: "Take a look in the mirror." }
+    ]
+  },
+  doctor: {
+    words: [
+      { en: "sore throat", pt: "dor de garganta", ex: "I've had a sore throat all week." },
+      { en: "blocked nose", pt: "nariz entupido", ex: "I have a blocked nose too." },
+      { en: "a cold", pt: "resfriado (não é constipado!)", ex: "I think I have a cold." },
+      { en: "prescription", pt: "receita médica", ex: "Do I need a prescription for this?" },
+      { en: "dosage", pt: "dosagem", ex: "What's the dosage for adults?" },
+      { en: "over the counter", pt: "vendido sem receita", ex: "Is this over the counter?" },
+      { en: "chemist", pt: "farmácia", ex: "Pop to the chemist for that." },
+      { en: "GP", pt: "clínico geral", ex: "Book with your GP first." },
+      { en: "symptoms", pt: "sintomas", ex: "Describe your symptoms, please." },
+      { en: "fever", pt: "febre", ex: "I've had a fever since yesterday." },
+      { en: "headache", pt: "dor de cabeça", ex: "I have a bad headache." },
+      { en: "cough", pt: "tosse", ex: "I've got a dry cough." },
+      { en: "painkiller", pt: "analgésico", ex: "Something paracetamol-based, please." },
+      { en: "appointment", pt: "consulta", ex: "I'd like to book an appointment." },
+      { en: "side effects", pt: "efeitos colaterais", ex: "Are there any side effects?" },
+      { en: "rash", pt: "vermelhidão, alergia na pele", ex: "I've got a rash on my arm." },
+      { en: "get tested", pt: "fazer um exame", ex: "I need to get tested." },
+      { en: "it hurts here", pt: "dói aqui", ex: "It hurts here when I breathe." },
+      { en: "sick note", pt: "atestado médico", ex: "Can I get a sick note?" },
+      { en: "blood test", pt: "exame de sangue", ex: "You'll need a blood test." }
+    ]
+  },
+  renting: {
+    words: [
+      { en: "lease", pt: "contrato de aluguel", ex: "The lease is twelve months." },
+      { en: "bond", pt: "caução", ex: "The bond is four weeks' rent." },
+      { en: "landlord", pt: "proprietário, senhorio", ex: "The landlord approved my application." },
+      { en: "utilities", pt: "contas de água, luz etc.", ex: "Are utilities included in rent?" },
+      { en: "inspection", pt: "visita ao imóvel", ex: "The inspection is on Saturday." },
+      { en: "payslips", pt: "holerite, comprovante de renda", ex: "I can send payslips today." },
+      { en: "references", pt: "referências", ex: "I have two references ready." },
+      { en: "apply", pt: "se candidatar ao imóvel", ex: "I'd love to apply for this place." },
+      { en: "still available", pt: "ainda disponível", ex: "Is it still available?" },
+      { en: "move in", pt: "se mudar para o imóvel", ex: "When could I move in?" },
+      { en: "rent", pt: "aluguel", ex: "How much is the weekly rent?" },
+      { en: "deposit", pt: "depósito, sinal", ex: "The deposit secures the property." },
+      { en: "property manager", pt: "gerente do imóvel, imobiliária", ex: "Email the property manager directly." },
+      { en: "real estate agent", pt: "corretor de imóveis", ex: "The agent showed us around." },
+      { en: "furnished", pt: "mobiliado", ex: "Is the apartment fully furnished?" },
+      { en: "condition report", pt: "relatório de vistoria", ex: "Sign the condition report carefully." },
+      { en: "notice period", pt: "prazo de aviso prévio", ex: "The notice period is four weeks." },
+      { en: "no lock-in contract", pt: "sem contrato fixo", ex: "It's a no lock-in lease." },
+      { en: "listing", pt: "anúncio do imóvel", ex: "I saw your listing online." },
+      { en: "proof of income", pt: "comprovante de renda", ex: "They asked for proof of income." }
+    ]
+  },
+  setup: {
+    words: [
+      { en: "SIM card", pt: "chip do celular", ex: "I need a SIM card, please." },
+      { en: "prepaid", pt: "pré-pago", ex: "Prepaid for now, thanks." },
+      { en: "top up", pt: "colocar crédito", ex: "Can I top up online?" },
+      { en: "mobile", pt: "celular", ex: "Is your mobile working now?" },
+      { en: "everyday account", pt: "conta corrente", ex: "I'd like an everyday account." },
+      { en: "monthly fee", pt: "taxa mensal", ex: "Is there a monthly fee?" },
+      { en: "credit check", pt: "análise de crédito", ex: "Plans need a credit check first." },
+      { en: "proof of address", pt: "comprovante de endereço", ex: "Bring proof of address with you." },
+      { en: "two forms of ID", pt: "dois documentos de identificação", ex: "Bring two forms of ID." },
+      { en: "direct debit", pt: "débito automático", ex: "Set up a direct debit for bills." },
+      { en: "bank statement", pt: "extrato bancário", ex: "They asked for a bank statement." },
+      { en: "port your number", pt: "portar seu número", ex: "Can I port my old number?" },
+      { en: "plan", pt: "plano de celular", ex: "I'll look at plans later." },
+      { en: "open an account", pt: "abrir uma conta", ex: "I'd like to open an account." },
+      { en: "no lock-in contract", pt: "sem fidelidade, sem contrato", ex: "It's a no lock-in plan." },
+      { en: "welcome pack", pt: "kit de boas-vindas", ex: "You'll get a welcome pack." },
+      { en: "driver's licence", pt: "carteira de motorista", ex: "A driver's licence works as ID." },
+      { en: "sign up", pt: "se cadastrar", ex: "Sign up online or in-store." },
+      { en: "local credit history", pt: "histórico de crédito local", ex: "I don't have local credit history." },
+      { en: "branch", pt: "agência do banco", ex: "Visit any branch with your ID." }
+    ]
+  },
+  interview: {
+    words: [
+      { en: "tell me about yourself", pt: "fale um pouco sobre você", ex: "So, tell me about yourself." },
+      { en: "strength", pt: "ponto forte", ex: "What's your biggest strength?" },
+      { en: "weakness", pt: "ponto fraco", ex: "Describe a weakness of yours." },
+      { en: "experience", pt: "experiência", ex: "Five years' experience in fintech." },
+      { en: "referee", pt: "pessoa de referência (não é futebol!)", ex: "Can you provide a referee?" },
+      { en: "salary expectations", pt: "pretensão salarial", ex: "What are your salary expectations?" },
+      { en: "we'll be in touch", pt: "entraremos em contato", ex: "We'll be in touch by Friday." },
+      { en: "casual (employment)", pt: "trabalho sem vínculo fixo", ex: "Is this role casual or permanent?" },
+      { en: "working holiday visa", pt: "visto de intercâmbio de trabalho", ex: "I'm on a working holiday visa." },
+      { en: "hardworking", pt: "esforçado, dedicado", ex: "I'm very hardworking." },
+      { en: "rephrase", pt: "reformular a pergunta", ex: "Could you rephrase that, please?" },
+      { en: "intend", pt: "pretender (não é 'pretend'!)", ex: "I intend to grow with you." },
+      { en: "currently", pt: "atualmente", ex: "Currently, I work as a barista." },
+      { en: "background", pt: "trajetória profissional", ex: "Tell me about your background." },
+      { en: "notice period", pt: "prazo de aviso prévio", ex: "My notice period is two weeks." },
+      { en: "follow up", pt: "dar um retorno depois", ex: "I'll follow up by email tonight." },
+      { en: "cover letter", pt: "carta de apresentação", ex: "I attached a short cover letter." },
+      { en: "resume", pt: "currículo", ex: "My resume is attached below." },
+      { en: "typical day", pt: "rotina típica", ex: "What does a typical day look like?" },
+      { en: "onboarding", pt: "processo de integração", ex: "How long is the onboarding process?" }
+    ]
+  },
+  flirting: {
+    words: [
+      { en: "keen on someone", pt: "a fim de alguém", ex: "I think he's keen on you." },
+      { en: "have a crack", pt: "dar uma chance, tentar", ex: "Just have a crack, why not." },
+      { en: "banter", pt: "climinha de gracejo e provocação", ex: "There's good banter between them." },
+      { en: "no worries if not", pt: "sem problema se não puder", ex: "No worries if not, honestly." },
+      { en: "cheeky", pt: "safado no bom sentido, malandro", ex: "That was a cheeky comment." },
+      { en: "hit it off", pt: "se dar bem de cara", ex: "We really hit it off tonight." },
+      { en: "chat someone up", pt: "dar uma cantada", ex: "He tried to chat her up." },
+      { en: "ask someone out", pt: "chamar pra sair", ex: "I want to ask her out." },
+      { en: "exchange numbers", pt: "trocar número", ex: "Should we exchange numbers?" },
+      { en: "warm", pt: "caloroso, gente boa (não é 'hot'!)", ex: "Brazilians are very warm." },
+      { en: "how do you know the host", pt: "como você conhece o anfitrião", ex: "How do you know the host?" },
+      { en: "single", pt: "solteiro, solteira", ex: "Are you single, by the way?" },
+      { en: "taken", pt: "comprometido, comprometida", ex: "Sorry, I'm taken already." },
+      { en: "spark", pt: "química, conexão", ex: "There's definitely a spark here." },
+      { en: "awkward silence", pt: "silêncio constrangedor", ex: "There was an awkward silence." },
+      { en: "compliment", pt: "elogio", ex: "That's a lovely compliment, thanks." },
+      { en: "text back", pt: "responder a mensagem", ex: "She texted back within minutes." },
+      { en: "crush", pt: "paquera, crush", ex: "I have a bit of a crush." },
+      { en: "mind if I follow you", pt: "posso te seguir?", ex: "Mind if I follow you?" },
+      { en: "opener", pt: "frase de abertura pra puxar papo", ex: "That's a solid opener, honestly." }
+    ]
+  },
+  casual: {
+    words: [
+      { en: "snag", pt: "salsicha, estrela do churrasco", ex: "Grab a snag off the barbie." },
+      { en: "barbie", pt: "churrasco (o evento em si)", ex: "See you at the barbie, mate." },
+      { en: "esky", pt: "caixa térmica com bebidas", ex: "Grab a drink from the esky." },
+      { en: "slab", pt: "engradado de vinte e quatro cervejas", ex: "He brought a slab of beer." },
+      { en: "bring a plate", pt: "trazer comida pra dividir", ex: "Don't forget to bring a plate." },
+      { en: "good on ya", pt: "mandou bem, que bom", ex: "Good on ya for coming!" },
+      { en: "arvo", pt: "tarde, gíria australiana", ex: "Come round this arvo." },
+      { en: "long story short", pt: "resumindo a história", ex: "Long story short, I stayed." },
+      { en: "unreal", pt: "surreal, incrível", ex: "These snags smell unreal." },
+      { en: "mates", pt: "amigos, a galera", ex: "All my mates are here." },
+      { en: "chuck it on the barbie", pt: "jogar na churrasqueira", ex: "Chuck another snag on the barbie." },
+      { en: "ripper", pt: "sensacional", ex: "That was a ripper of a party." },
+      { en: "no drama", pt: "sem problema", ex: "No drama, grab whatever you want." },
+      { en: "sunnies", pt: "óculos de sol", ex: "Where'd you leave your sunnies?" },
+      { en: "thongs", pt: "chinelo (não é roupa íntima!)", ex: "I wore thongs to the barbie." },
+      { en: "heaps", pt: "muito, bastante", ex: "Thanks heaps for having me." },
+      { en: "keen", pt: "animado, a fim", ex: "So keen for this arvo!" },
+      { en: "reckon", pt: "achar, acreditar que", ex: "I reckon it'll rain later." },
+      { en: "servo", pt: "posto de gasolina", ex: "Grab ice from the servo." },
+      { en: "a what, sorry?", pt: "um o quê, desculpa?", ex: "A what, sorry? Didn't catch that." }
+    ]
+  },
+  worktalk: {
+    words: [
+      { en: "stand-up", pt: "reunião diária rápida em pé", ex: "See you at the stand-up." },
+      { en: "ping me", pt: "me chama por mensagem", ex: "Ping me if anything's unclear." },
+      { en: "flat out", pt: "muito ocupado, sem parar", ex: "I'm flat out today, sorry." },
+      { en: "across it", pt: "por dentro do assunto", ex: "Don't worry, I'm across it." },
+      { en: "EOD", pt: "até o fim do dia", ex: "Send it over by EOD." },
+      { en: "WFH", pt: "trabalhando de casa", ex: "I'm WFH tomorrow, heads up." },
+      { en: "blocked", pt: "travado, sem conseguir avançar", ex: "I'm blocked on the login issue." },
+      { en: "walk me through", pt: "explicar passo a passo", ex: "Can you walk me through this?" },
+      { en: "flick it over", pt: "mandar rapidinho", ex: "I'll flick it over by two." },
+      { en: "questions (not doubts)", pt: "dúvidas (nunca 'doubts' em inglês!)", ex: "I have a couple of questions." },
+      { en: "deadline", pt: "prazo", ex: "The deadline is Friday, right?" },
+      { en: "in progress", pt: "em andamento", ex: "It's still in progress, sorry." },
+      { en: "sync", pt: "alinhar, colocar em dia", ex: "Let's sync before the call." },
+      { en: "follow up", pt: "retomar o assunto depois", ex: "I'll follow up tomorrow morning." },
+      { en: "heads up", pt: "aviso rápido, avisar antes", ex: "Just a heads up — I'm late." },
+      { en: "loop in", pt: "incluir alguém no assunto", ex: "Can you loop in the manager?" },
+      { en: "action items", pt: "próximos passos definidos", ex: "Let's list the action items." },
+      { en: "catch up (work)", pt: "colocar o trabalho em dia", ex: "Let's catch up on the numbers." },
+      { en: "got a sec", pt: "tem um minutinho?", ex: "I'm blocked — got a sec?" },
+      { en: "confirm", pt: "confirmar", ex: "Just to confirm, by Friday right?" }
+    ]
+  }
+};
+
+</script>
+<script>
+// RealTalk — more grammar lessons, same rule: real Brazilian-learner traps only.
+// Lesson schema: { id, emoji, title, sub, sections: [{ h, p, rows:[[wrong, right, why]], callout, list }] }
+
+window.GRAMMAR_EXTRA = [
+{
+  id: "make-do",
+  emoji: "🔨",
+  title: "Make vs Do — the Verb 'Fazer' Splits in Two",
+  sub: "Same Portuguese verb, two very different English jobs",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Portuguese hands almost every action to one verb: fazer. Fazer uma decisão, fazer as compras, fazer bagunça, fazer um favor — 'fazer' doesn't care. English splits that single verb into two: MAKE for producing or creating something (a decision, money, a mistake, a mess), and DO for performing an activity or task where nothing new comes out the other end (chores, exercise, homework, favors). Ask yourself: does something exist because of this verb? Yes → MAKE. No → DO."
+    },
+    {
+      h: "The trap list",
+      rows: [
+        ["I need to do a decision.", "I need to make a decision.", "Decisão = MAKE — you're creating a choice, not performing a chore."],
+        ["Can you make the dishes tonight?", "Can you do the dishes tonight?", "Washing dishes is DO — no new object exists afterward, you're just completing a task."],
+        ["I did a big mistake.", "I made a big mistake.", "Erro = MAKE. Mistakes get 'made', like anything else you accidentally produce."],
+        ["She makes yoga every morning.", "She does yoga every morning.", "Sport and exercise take DO — do yoga, do exercise, do sport — even though 'fazer exercício' feels like MAKE."],
+        ["He makes his homework after school.", "He does his homework after school.", "Homework is DO — you're completing an assignment, not producing a thing, despite the worksheet at the end."],
+        ["I need to do money this month.", "I need to make money this month.", "Dinheiro = MAKE. You make money or earn money — 'do money' doesn't exist in English."],
+        ["Could you make me a favor?", "Could you do me a favor?", "Favor is one of the rare exceptions that breaks the 'creation' logic — it just takes DO. Memorize it."],
+        ["I always do my bed in the morning.", "I always make my bed in the morning.", "Cama = MAKE. You're tidying it into a finished state each morning, so it's MAKE, not DO."]
+      ],
+      callout: "🇧🇷 The trap: because 'fazer' never splits in your head, both MAKE and DO feel equally 'right' for everything — your brain has no internal alarm to tell them apart. Native speakers don't reason through the rule in real time either; they've just memorized which bucket each verb-phrase falls into. So will you, eventually. Until then, use the creation test."
+    },
+    {
+      h: "Fixed expressions to just memorize",
+      list: [
+        "MAKE: make friends, make money, make a decision, make progress, make an effort, make a mistake, make noise, make the bed, make a mess.",
+        "DO: do the dishes, do the shopping/groceries, do homework, do a favor, do your best, do business, do exercise/sport/yoga, do damage.",
+        "'Do your best' is the sneakiest of all — it looks like it should be 'make your best' since effort feels productive. It isn't. It's DO."
+      ]
+    }
+  ]
+},
+{
+  id: "uncountables",
+  emoji: "📦",
+  title: "Informations, Advices, Furnitures — the Plural Trap",
+  sub: "Words English simply refuses to ever pluralize",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Portuguese pluralizes freely: informações, conselhos, móveis, deveres de casa, pães, softwares — if you can count it, you can put an 's' on it. English has a whole category of nouns, called uncountables, that never take a plural form and never pair with 'a/an' on their own. Adding an '-s' to these is one of the fastest ways to sound non-native, even with flawless grammar everywhere else."
+    },
+    {
+      h: "The usual suspects",
+      rows: [
+        ["I need some informations.", "I need some information.", "Informação has a plural (informações); information never does — treat it like water, not like a book."],
+        ["Can you give me some advices?", "Can you give me some advice.", "Conselhos are countable in Portuguese; advice never is in English. One item = 'a piece of advice.'"],
+        ["We bought new furnitures for the flat.", "We bought new furniture for the flat.", "Móveis is plural in Portuguese; furniture stays singular in English even for an entire houseful."],
+        ["I have three homeworks this week.", "I have a lot of homework this week.", "Homework is uncountable — measure it with 'a lot of' or 'a piece of', never a number plus '-s'."],
+        ["I bought two breads at the bakery.", "I bought two loaves of bread at the bakery.", "Bread itself is uncountable — you count the loaf, not the bread."],
+        ["This company sells softwares.", "This company sells software.", "Like hardware and equipment, software has no plural. Say 'programs' or 'apps' if you need to count units."],
+        ["She gave me good feedbacks.", "She gave me good feedback.", "Feedback is uncountable too — 'a lot of feedback' or 'some good feedback', never 'feedbacks'."],
+        ["I need to buy new equipments.", "I need to buy new equipment.", "Equipamentos is plural in Portuguese; equipment never takes an -s in English, no matter how many pieces there are."]
+      ]
+    },
+    {
+      h: "Why this hides so well",
+      p: "These words feel countable in Portuguese because you genuinely can count them — 'três informações', 'dois conselhos'. Your brain hears a number and reaches for '-s' on pure autopilot. English uncountables refuse that reflex: no plural, no 'a/an' by itself, and quantity gets measured with words like 'some', 'much', 'a lot of' or a container phrase like 'a piece of' instead.",
+      callout: "🇧🇷 The trap: 'news' is the ultimate troll of this category. It ends in 's', it LOOKS plural, and it is 100% singular — 'The news IS good today', never 'are'. If English can make its own native speakers argue about this one, don't feel bad about the others."
+    },
+    {
+      h: "Quick fixes",
+      list: [
+        "No plural -s, ever: information, advice, furniture, homework, software, feedback, equipment, news, luggage, traffic.",
+        "Need to count one? Use a container word: a piece of advice, a bit of information, an item of furniture, a loaf of bread.",
+        "Quantity words that work: some, much, a lot of, plenty of. 'Many' needs a real plural noun, so it can't pair with these.",
+        "If it's uncountable, the verb stays singular too: 'The information IS wrong', not 'are'."
+      ]
+    }
+  ]
+},
+{
+  id: "little-words",
+  emoji: "🧩",
+  title: "The Little Words You Drop (and Add)",
+  sub: "Articles and prepositions Portuguese just doesn't bother with",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Portuguese and English don't attach the same tiny grammar words to the same verbs. Brazilians drop the dummy subject 'it' because Portuguese drops subjects constantly ('chove' needs no subject at all), drop prepositions where English demands one ('depend on'), and add prepositions where English wants none ('like music', not 'like OF music'). These words carry almost no meaning by themselves, which is exactly why they're so easy to get wrong and so quick to give you away."
+    },
+    {
+      h: "The greatest hits",
+      rows: [
+        ["I like of music.", "I like music.", "Gostar DE takes 'de'; English 'like' is direct — no preposition attaches to it at all."],
+        ["Is raining today.", "IT is raining today.", "Portuguese drops the subject ('chove'); English sentences always need one, even a meaningless 'it'."],
+        ["I have 20 years old.", "I'm 20 years old.", "Two mistakes stacked at once — ter→have, plus the leftover 'have'. The fix is BE + years old, no 'have' anywhere."],
+        ["It depends of the weather.", "It depends ON the weather.", "Depender DE takes 'de'; English pairs depend with ON, never 'of'."],
+        ["I'm married with a doctor.", "I'm married TO a doctor.", "Casado COM takes 'com' (with); English marriage takes TO — you're married to a person, not with them."],
+        ["Can you explain me the rules?", "Can you explain the rules TO me?", "Explicar takes a direct object in Portuguese; English 'explain' needs 'to' before a person — you explain something TO someone."],
+        ["Listen the music, it's great.", "Listen TO the music, it's great.", "Ouvir takes no preposition; English 'listen' always needs 'to' before whatever you're listening to."],
+        ["I'm waiting you outside.", "I'm waiting FOR you outside.", "Esperar takes no preposition; English 'wait' needs 'for' before the person or thing you're waiting on."]
+      ]
+    },
+    {
+      h: "Why these are so sneaky",
+      p: "'It', 'to', 'on', 'for' carry zero meaning of their own, so your brain never flags them as vocabulary worth studying — you learned 'depend' and moved on. But English grammar leans hard on exactly these connectors to hold sentences together.",
+      callout: "🇧🇷 The trap: you can nail every big word in a sentence — perfect vocabulary, perfect tense, perfect pronunciation — and still make a native speaker wince because you said 'married with' instead of 'married to'. The small words are where fluency actually lives."
+    },
+    {
+      h: "The verbs that secretly need a preposition",
+      list: [
+        "depend ON, listen TO, wait FOR, look AT, arrive AT/IN (never 'arrive to'), married TO, afraid OF, good AT, interested IN.",
+        "Explain/describe/say something TO someone — the person needs 'to' when they follow the thing being explained.",
+        "The ones that secretly need NO preposition: like, discuss, enter, marry ('I married her', not 'with her'), phone, call.",
+        "Dummy subjects fill the gap Portuguese leaves empty: it's raining, it's cold, it's 9am, it's far from here."
+      ]
+    }
+  ]
+},
+{
+  id: "questions",
+  emoji: "❓",
+  title: "\"You Like Coffee?\" — Why That's Not a Question",
+  sub: "Rising your voice at the end doesn't build a question in English",
+  sections: [
+    {
+      h: "The core problem",
+      p: "In spoken Portuguese, a statement becomes a question just by rising your voice — 'Você gosta de café?' and 'Você gosta de café.' are literally the same words. English can't do that for ordinary verbs. Most questions need an auxiliary (do/does/did) pulled to the front, and questions with be, have, or a modal (can/will/should) flip the verb and subject instead. Skip that step and you've written a statement with a question mark glued on."
+    },
+    {
+      h: "The classic fixes",
+      rows: [
+        ["You like coffee?", "Do you like coffee?", "Statement order plus a question mark still isn't a question in English — ordinary verbs need DO up front."],
+        ["She likes coffee?", "Does she like coffee?", "DOES carries the 's' for third person, so once DOES appears, the main verb drops back to base form: 'like', not 'likes'."],
+        ["You went to the party?", "Did you go to the party?", "Past questions use DID + base verb — 'went' becomes 'go' because DID already carries the past tense."],
+        ["What means this word?", "What does this word mean?", "You can't question a verb directly the way Portuguese 'o que significa' does — DOES has to show up, and 'mean' stays base form."],
+        ["How I do this?", "How do I do this?", "The auxiliary DO goes before the subject 'I' — question order flips subject and auxiliary, not subject and main verb."],
+        ["Where you live?", "Where do you live?", "Missing auxiliary again — every wh-question on an ordinary verb needs a do/does/did somewhere in it."],
+        ["Why she didn't called me?", "Why didn't she call me?", "Once DIDN'T is there, 'call' goes back to base form — no extra '-ed', DIDN'T is already carrying the past."],
+        ["What time starts the movie?", "What time does the movie start?", "Portuguese lets the verb sit before the subject; English question order is wh-word + auxiliary + subject + verb."]
+      ]
+    },
+    {
+      h: "Why this trips up even advanced speakers",
+      p: "Vocabulary and pronunciation can be excellent and this mistake still slips through, because in fast conversation there's no time to consciously build the auxiliary — it has to be automatic.",
+      callout: "🇧🇷 The trap: Portuguese questions are mostly intonation — same words, rising pitch, done. English questions require actual grammar surgery: pull an auxiliary to the front, or invent DO/DOES/DID from nothing if there wasn't one. Skipping that surgery is the single fastest tell of a direct translation."
+    },
+    {
+      h: "The pattern to memorize",
+      list: [
+        "No auxiliary in the statement (like/live/want/need)? Add DO (present) or DID (past), and un-conjugate the main verb: she likes → does she like.",
+        "Already have BE, HAVE (as auxiliary), or a modal (can/will/should)? Just flip it with the subject — no DO needed: 'Is she coming?', 'Can you help?', 'Have you eaten?'",
+        "Wh-word always leads: What / Where / When / Why / How + auxiliary + subject + verb — never auxiliary before the wh-word.",
+        "Negative questions follow the same rule: 'didn't she call' — not 'she didn't call' with a question mark."
+      ]
+    }
+  ]
+},
+{
+  id: "say-tell",
+  emoji: "🗣️",
+  title: "Say, Tell, Speak, Talk — the 'Falar' Pile-up",
+  sub: "One Portuguese verb, four English ones, zero interchangeable",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Portuguese covers most communication with one verb — falar — plus dizer and contar for the rest: falar inglês, falar com alguém, falar que, dizer algo, contar uma história. English splits that job across four verbs with different grammar rules attached to each, and mixing them up is one of the most common Brazilian tells in spoken English."
+    },
+    {
+      h: "The mix-up list",
+      rows: [
+        ["She said me the news.", "She told me the news.", "SAY never takes a direct person object; TELL does. You TELL someone something, but you just SAY something."],
+        ["Can you tell to him about the meeting?", "Can you tell him about the meeting?", "TELL goes straight to the person, no 'to' in between — that's a Portuguese-shaped extra step English doesn't take."],
+        ["I need to say you something.", "I need to tell you something.", "Same trap in reverse — when a person follows directly, English wants TELL, not SAY."],
+        ["I can speak with my brother in Portuguese.", "I can talk to my brother in Portuguese.", "SPEAK pairs with a language (speak English); TALK pairs with a person (talk to/with someone) — swapping the pairing is the giveaway."],
+        ["He spoke a joke at the party.", "He told a joke at the party.", "Jokes, stories, lies, the truth — all TELL. SPEAK just doesn't take these as objects."],
+        ["She talked me that she was leaving.", "She told me that she was leaving.", "A that-clause aimed at a person needs TELL — 'talked me that' isn't a shape English sentences take."],
+        ["Let's speak about the budget tomorrow.", "Let's talk about the budget tomorrow.", "Speak about isn't wrong, but it sounds stiff and formal — native speakers default to TALK about in everyday conversation."],
+        ["He said a lie.", "He told a lie.", "Lies, like jokes and stories, are TOLD — 'contar uma mentira' maps to TELL, not SAY."]
+      ],
+      callout: "🇧🇷 The trap: ask yourself one question before picking a verb — is a PERSON coming right after it? 'I told HIM' (person right there, no 'to') vs 'I said something' (no person, or 'said TO him' if one shows up). SPEAK vs TALK works the same shortcut: SPEAK a language, TALK to a person. The moment you're about to write 'said me' or 'tell to', that's the false 'falar' pattern talking, not English."
+    },
+    {
+      h: "The four-verb cheat sheet",
+      list: [
+        "SAY + something, no person attached — 'She said hello.' Need a person? Add 'to': 'She said hello to me.'",
+        "TELL + person + something, no 'to' at all — 'She told me hello.' TELL also owns jokes, stories, lies, the truth, the time.",
+        "SPEAK — more formal, or paired with a LANGUAGE: 'Do you speak Portuguese?', 'May I speak with the manager?'",
+        "TALK — casual, paired with a PERSON or TOPIC: 'Let's talk.', 'We talked about work.'"
+      ]
+    }
+  ]
+}
+];
+
+</script>
+<script>
+// RealTalk — extra exercise banks. Same schema as exercises.js: { id, emoji, title, sub, questions: [{q, options, answer, explain}] }
+// answer = index into options.
+
+window.EXERCISES_EXTRA = [
+{
+  id: "make-do",
+  emoji: "🔨",
+  title: "Make or Do?",
+  sub: "'Fazer' splits into two verbs and English never warns you",
+  questions: [
+    { q: "Your flatmate points at the pile in the sink. You say:",
+      options: ["I'll make the dishes after dinner.", "I'll do the dishes after dinner.", "I'll do the wash of dishes."],
+      answer: 1,
+      explain: "'Fazer a louça' becomes DO the dishes in English — MAKE is for creating something (a cake, a mess), not cleaning up after it." },
+    { q: "Texting a friend who wants to hang out, but you have uni work:",
+      options: ["Can't tonight, I need to make my assignment.", "Can't tonight, I need to do my assignment.", "Can't tonight, I need to make my homework session."],
+      answer: 1,
+      explain: "'Fazer a lição de casa/trabalho' → DO your homework or assignment. MAKE is for building things from scratch, not completing tasks you were given." },
+    { q: "You spot an error in the report you already sent your boss:",
+      options: ["Sorry, I did a mistake in the numbers.", "Sorry, I made a mistake in the numbers.", "Sorry, I made an error of numbers."],
+      answer: 1,
+      explain: "'Fazer um erro' feels like DO, but English says MAKE a mistake. 'Do a mistake' is one of the most audible Brazilian tells in professional English." },
+    { q: "Your friend asks how the freelance gig is going:",
+      options: ["It's going well, I'm making good money.", "It's going well, I'm doing good money.", "It's going well, I'm making a good money."],
+      answer: 0,
+      explain: "'Fazer dinheiro' → MAKE money, not 'do money'. Money is something you MAKE, like a cake — a strange but useful way to remember it." },
+    { q: "In a meeting, your manager asks if the team picked a vendor:",
+      options: ["We haven't made a decision yet.", "We haven't done a decision yet.", "We haven't made an decision yet."],
+      answer: 0,
+      explain: "'Tomar/fazer uma decisão' → MAKE a decision. 'Do a decision' is a dead giveaway of a direct translation from Portuguese." },
+    { q: "You need your neighbour to grab your mail while you're away:",
+      options: ["Could you make me a favor?", "Could you do me a favor?", "Could you make a favor for me?"],
+      answer: 1,
+      explain: "'Fazer um favor' → DO a favor. This one trips up even advanced speakers because 'fazer' screams 'make' in your head." },
+    { q: "At the gym, a friend asks about your routine:",
+      options: ["I do exercise three times a week.", "I make exercise three times a week.", "I make exercises three times for week."],
+      answer: 0,
+      explain: "'Fazer exercício' → DO exercise / work out. Exercise isn't something you build, it's something you perform — DO it." },
+    { q: "Explaining a new partnership to a colleague:",
+      options: ["We're going to make business with that supplier.", "We're going to do business with that supplier.", "We're going to make businesses with that supplier."],
+      answer: 1,
+      explain: "'Fazer negócio' → DO business. 'Make business' quietly changes the meaning to starting a company — not what you meant." }
+  ]
+},
+{
+  id: "uncountables",
+  emoji: "🧺",
+  title: "Informations? Advices?",
+  sub: "Portuguese pluralizes everything. English quietly refuses.",
+  questions: [
+    { q: "Your manager asks for more detail on the project:",
+      options: ["Let me send you some informations.", "Let me send you some information.", "Let me send you an information."],
+      answer: 1,
+      explain: "'Informações' is plural in Portuguese, but English 'information' is uncountable — no plural, no 'an'. Say 'some information' or 'a piece of information'." },
+    { q: "A friend asks what you think they should do about a job offer:",
+      options: ["I have some advices for you.", "I have some advice for you.", "I have an advice for you."],
+      answer: 1,
+      explain: "'Conselhos' pluralizes in Portuguese; 'advice' never does in English. One piece of advice, some advice — 'advices' doesn't exist." },
+    { q: "You're describing your new, empty apartment:",
+      options: ["I still need to buy some furnitures.", "I still need to buy some furniture.", "I still need to buy a furniture."],
+      answer: 1,
+      explain: "'Móveis' is countable in Portuguese; 'furniture' is uncountable in English. If you need to count one item, it's 'a piece of furniture'." },
+    { q: "You just heard your friend got a new job. You text:",
+      options: ["That's a great news!", "That's great news!", "Those are great news!"],
+      answer: 1,
+      explain: "'Notícias' is plural in Portuguese, but 'news' is grammatically singular in English despite the 's'. It's 'good news', never 'a news' or 'news are'." },
+    { q: "At check-in, the airline agent asks about your bags:",
+      options: ["I have three luggages.", "I have three pieces of luggage.", "I have three baggages."],
+      answer: 1,
+      explain: "'Bagagens' pluralizes; 'luggage' and 'baggage' don't. Count them as 'a piece of luggage', 'two pieces of luggage'." },
+    { q: "Explaining what the new office studio needs:",
+      options: ["We need new equipments for the studio.", "We need new equipment for the studio.", "We need a new equipments for the studio."],
+      answer: 1,
+      explain: "'Equipamentos' is plural in Portuguese; 'equipment' stays singular in English no matter how many machines you mean." },
+    { q: "Your boss asks how the project is going:",
+      options: ["We're making good progresses.", "We're making good progress.", "We're doing good progresses."],
+      answer: 1,
+      explain: "'Progressos' pluralizes in Portuguese; 'progress' doesn't in English. And remember — it's MAKE progress, not 'do'." },
+    { q: "Explaining why you were late to work:",
+      options: ["The traffics were terrible this morning.", "The traffic was terrible this morning.", "The traffics was terrible this morning."],
+      answer: 1,
+      explain: "'Trânsito' can loosely pluralize in Portuguese; 'traffic' in English is uncountable and always takes a singular verb — 'the traffic was', never 'traffics'." }
+  ]
+},
+{
+  id: "little-words",
+  emoji: "🧩",
+  title: "The Little Words",
+  sub: "Articles and prepositions — tiny, silent, and everywhere you trip",
+  questions: [
+    { q: "Explaining your weekend plans are still uncertain:",
+      options: ["It depends of the weather.", "It depends on the weather.", "It depends the weather."],
+      answer: 1,
+      explain: "'Depende DE' tempts you to say 'depends of' — but English fixed the preposition as DEPEND ON. No 'of', no bare noun." },
+    { q: "Introducing your sister's husband to a coworker:",
+      options: ["She's married with him for five years.", "She's married to him for five years.", "She's married in him for five years."],
+      answer: 1,
+      explain: "'Casada COM' becomes MARRIED TO in English, not 'married with'. 'With' is one of the most over-used prepositions Brazilians default to." },
+    { q: "You're confused about a task at work:",
+      options: ["Can you explain me the process again?", "Can you explain to me the process again?", "Can you explain for me the process again?"],
+      answer: 1,
+      explain: "'Explicar para mim' skips straight to 'explain me' — but EXPLAIN always needs TO before a person: explain (something) TO (someone). 'Explain me' is never correct English." },
+    { q: "Recommending a podcast to a friend:",
+      options: ["You should listen this podcast.", "You should listen to this podcast.", "You should hear to this podcast."],
+      answer: 1,
+      explain: "'Ouvir' takes no preposition in Portuguese, so 'listen this' feels natural — but LISTEN always needs TO before the thing you're listening to. HEAR, meanwhile, takes no preposition at all." },
+    { q: "Looking out the window before leaving home:",
+      options: ["Is raining, take an umbrella.", "It's raining, take an umbrella.", "There is raining, take an umbrella."],
+      answer: 1,
+      explain: "Portuguese drops the subject — 'está chovendo' needs no 'it'. English sentences always need a subject, even a fake one: IT'S raining, IT'S cold, IT'S 9am." },
+    { q: "Texting a friend that you're running late to meet:",
+      options: ["Sorry, wait me 5 minutes!", "Sorry, wait for me 5 minutes!", "Sorry, wait to me 5 minutes!"],
+      answer: 1,
+      explain: "'Esperar' takes no preposition in Portuguese, so 'wait me' feels obvious — English needs WAIT FOR (someone)." },
+    { q: "You can't find your keys, telling your roommate:",
+      options: ["I'm looking my keys everywhere.", "I'm looking for my keys everywhere.", "I'm looking at my keys everywhere."],
+      answer: 1,
+      explain: "'Procurar' = LOOK FOR, not just 'look'. Drop the 'for' and it sounds like you're staring at your keys, not searching for them." },
+    { q: "Talking about your skills in a job interview:",
+      options: ["I'm good in Excel.", "I'm good at Excel.", "I'm good with in Excel."],
+      answer: 1,
+      explain: "'Bom EM' nudges you toward 'good in' — English fixed this one as GOOD AT (a skill). 'Good with' exists too, but for people and tools, not skills like this." }
+  ]
+},
+{
+  id: "questions",
+  emoji: "❓",
+  title: "Building Questions",
+  sub: "Do, does, did — the helpers Portuguese never needed",
+  questions: [
+    { q: "You hear an unfamiliar word in a meeting and want to ask about it:",
+      options: ["What means this word?", "What does this word mean?", "What this word means?"],
+      answer: 1,
+      explain: "'O que significa X' has no auxiliary in Portuguese. English questions with a main verb need DO/DOES: What DOES this word MEAN?" },
+    { q: "Small talk with a new coworker:",
+      options: ["Where you live?", "Where do you live?", "Where you do live?"],
+      answer: 1,
+      explain: "'Onde você mora?' is just subject plus verb — Portuguese inverts nothing. English needs the helper DO before the subject: Where DO you live?" },
+    { q: "You want to know the price of something at a market stall:",
+      options: ["How much cost this?", "How much does this cost?", "How much does cost this?"],
+      answer: 1,
+      explain: "'Quanto custa isso?' has no auxiliary in Portuguese. English needs DOES + subject + base verb: How much DOES this COST?" },
+    { q: "A friend didn't show up last night, and you ask them:",
+      options: ["Why you didn't come?", "Why didn't you come?", "Why you not came?"],
+      answer: 1,
+      explain: "Once DID appears, subject and verb flip: DIDN'T + you + come, not 'you didn't come' in a question. The verb also stays in base form — no 'came' after did." },
+    { q: "You want to know what time the meeting starts:",
+      options: ["What time it starts?", "What time does it start?", "What time is it starts?"],
+      answer: 1,
+      explain: "No auxiliary in Portuguese ('que horas começa?'), but English questions need DOES + base verb: What time DOES it START?" },
+    { q: "You're not sure how to translate a word, so you ask a native friend:",
+      options: ["How you say 'saudade' in English?", "How do you say 'saudade' in English?", "How say you 'saudade' in English?"],
+      answer: 1,
+      explain: "'Como se diz...' has no auxiliary. English inserts DO before the subject: How DO you say...?" },
+    { q: "Catching up with a friend, asking when they landed in Australia:",
+      options: ["When you arrived here?", "When did you arrive here?", "When you did arrive here?"],
+      answer: 1,
+      explain: "Past questions need DID + subject + base verb, not the past-tense form: When DID you ARRIVE — 'arrived' after did is a common double-marking mistake." },
+    { q: "You want to know a coworker's opinion, politely:",
+      options: ["You think this is a good idea?", "Do you think this is a good idea?", "Think you this is a good idea?"],
+      answer: 1,
+      explain: "Dropping DO makes it sound like a statement with rising intonation — fine casually, but written and professional English wants the auxiliary: DO you think...?" }
+  ]
+},
+{
+  id: "br-classics",
+  emoji: "🇧🇷",
+  title: "Brazilian Classics, Vol. 2",
+  sub: "More direct translations that betray you the second you open your mouth",
+  questions: [
+    { q: "In a meeting, you want to say you support the proposal:",
+      options: ["I am agree with the plan.", "I agree with the plan.", "I am agreed with the plan."],
+      answer: 1,
+      explain: "'Estou de acordo' tempts you into BE + agree, but AGREE is already a full verb in English — no 'am' needed. Just: I agree." },
+    { q: "A form at a doctor's appointment asks your age:",
+      options: ["I have 32 years.", "I'm 32.", "I have 32 years old."],
+      answer: 1,
+      explain: "'Tenho 32 anos' uses TER (have), but English age is a BE state: I'm 32 / I'm 32 years old — never 'I have'." },
+    { q: "Talking about your five-a-side football team:",
+      options: ["We don't want to loose the game tonight.", "We don't want to lose the game tonight.", "We don't want to looze the game tonight."],
+      answer: 1,
+      explain: "'Perder' = LOSE (one O, rhymes with 'choose'). LOOSE is a totally different word — an adjective for frouxo/solto, like loose clothes — and mixing them up is one of the most common Brazilian typos in English." },
+    { q: "Explaining your new job to your parents on a call:",
+      options: ["I win good money in this job.", "I earn good money in this job.", "I win a good money in this job."],
+      answer: 1,
+      explain: "'Ganhar' covers both winning a prize AND earning a salary in Portuguese — English splits it in two. You WIN a competition, you EARN a salary. Save 'win' for the lottery." },
+    { q: "Your friend is panicking before a big exam. You tell them:",
+      options: ["Stay calm down, you'll be fine!", "Calm down, you'll be fine!", "Stay calm down yourself, you'll be fine!"],
+      answer: 1,
+      explain: "Brazilians often blend 'ficar calmo' (stay calm) and 'se acalmar' (calm down) into one Frankenstein phrase. Pick one: STAY CALM is a state, CALM DOWN is an action — never staple both together." },
+    { q: "Telling a coworker about your old routine back in Brazil:",
+      options: ["I use to wake up at 6am back home.", "I used to wake up at 6am back home.", "I am used to wake up at 6am back home."],
+      answer: 1,
+      explain: "'Costumava' = USED TO, with a D, for a past habit that's over. Drop the D and 'I use to' isn't a real past-habit form — and 'I'm used to' means something else entirely (accustomed to, and it needs -ing)." },
+    { q: "Describing how friendly the city has been to you:",
+      options: ["The peoples here are so friendly.", "The people here are so friendly.", "The people's here are so friendly."],
+      answer: 1,
+      explain: "'Pessoas' pluralizes with an S, so 'peoples' feels natural — but PEOPLE is already the plural of 'person' in English. 'Peoples' only exists for distinct nations or ethnic groups, like 'the peoples of South America'." },
+    { q: "Describing a busy market you visited over the weekend:",
+      options: ["There was much people at the market.", "There were many people at the market.", "There was many people at the market."],
+      answer: 1,
+      explain: "People is countable (one person, two people), so it pairs with MANY, not MUCH — and needs the plural verb WERE, not 'was'. 'Muita gente' hides both of these traps in a single Portuguese phrase." }
+  ]
+}
+];
+
+</script>
+<script>
+// RealTalk — Learn tab extras. Adds a "next level" layer on top of each scenario's
+// existing learn tab: 5 more key phrases, 3 surprising culture facts, and one extra
+// mini-dialogue showing the situation going smoothly start to finish.
+// Schema: { phrases2: [{en, note}], culture: [string x3], dialogue: { title, lines: [{who, en, pt}] } }
+
+window.LEARN_EXTRA = {
+  coffee: {
+    phrases2: [
+      { en: "Actually, make that two.", note: "Self-correcting an order mid-sentence — and yes, this IS real 'actually' (correcting yourself), not the false friend 'atualmente'." },
+      { en: "Could I get that decaf?", note: "'Decaf' = descafeinado. Baristas hear this constantly, no explanation needed." },
+      { en: "Just a splash of milk, not too much.", note: "'A splash' = um pouquinho. Great for fine-tuning any order." },
+      { en: "Is this table taken?", note: "Café version of 'is this seat taken?' — the safest way to sit with strangers when it's packed." },
+      { en: "Could I get a lid for this?", note: "Ask before they hand it over — walking out with hot coffee and no lid is a rite of passage nobody needs." }
+    ],
+    culture: [
+      "Baristas will write 'Mateus', 'Matthews' or straight-up 'Bob' on your cup and never apologize — misspelling names is basically a national sport, not an insult.",
+      "In Australia there's no tipping-jar guilt at all — locals genuinely don't tip at cafés, so don't feel awkward walking away empty-handed.",
+      "A 'large' at an independent café might be smaller than a Starbucks 'tall' — sizes aren't standardized outside the chains, so always ask before assuming."
+    ],
+    dialogue: {
+      title: "The Regular",
+      lines: [
+        { who: "Jodie", en: "Morning! The usual — flat white, takeaway?", pt: "Bom dia! O de sempre — flat white, pra levar?" },
+        { who: "You", en: "You remembered! Yes please — actually, make that two today, my flatmate's coming.", pt: "Você lembrou! Isso mesmo — ah, na verdade pode ser dois hoje, meu colega de apê tá vindo." },
+        { who: "Jodie", en: "No worries. Same name on both?", pt: "Sem problema. Mesmo nome nos dois?" },
+        { who: "You", en: "Yeah, Matheus is fine. Oh, and could I get a lid for mine? I'm walking.", pt: "Pode ser, Matheus mesmo. Ah, e dá pra colocar uma tampinha no meu? Vou andando." },
+        { who: "Jodie", en: "Course. That's eleven bucks total — tap whenever.", pt: "Claro. Deu onze no total — pode passar o cartão quando quiser." },
+        { who: "You", en: "There you go. Thanks so much, Jodie — have a good one.", pt: "Aqui está. Muito obrigado, Jodie — tenha um bom dia." },
+        { who: "Jodie", en: "You too! See you tomorrow, same time?", pt: "Você também! Te vejo amanhã, mesmo horário?" },
+        { who: "You", en: "Wouldn't miss it.", pt: "Não perderia por nada." }
+      ]
+    }
+  },
+
+  food: {
+    phrases2: [
+      { en: "Could I get that without onion, please?", note: "Allergies or preferences — kitchens handle substitutions constantly, just ask." },
+      { en: "Actually, could we get an extra plate to share?", note: "Splitting a main is normal — just ask for the extra plate up front." },
+      { en: "Is this dish spicy?", note: "Worth asking before you commit — 'mild' overseas can still outrank Brazilian standards." },
+      { en: "Could we get the bill split, please?", note: "Splitting the bill (rachar a conta) is completely normal here — no need to pre-negotiate who pays." },
+      { en: "Could I get a doggy bag for this?", note: "Taking leftovers home is 100% normal, even at nicer restaurants — nobody blinks." }
+    ],
+    culture: [
+      "Asking for a 'doggy bag' at a fancy restaurant isn't tacky here — it's expected, and some places bring the container before you even ask.",
+      "In the US, servers genuinely rely on tips for their wage — skipping the 18-20% isn't 'optional', it's read as a real problem with the service.",
+      "Reservations for casual restaurants are rare — most places (especially pubs) are strictly first-come, first-seated, even on a Friday night."
+    ],
+    dialogue: {
+      title: "Splitting the Bill",
+      lines: [
+        { who: "Sam", en: "You right to order, or need a bit more time?", pt: "Já estão prontos pra pedir, ou precisam de mais um tempinho?" },
+        { who: "You", en: "We're good, thanks. Could I get the burger, no onion, please?", pt: "Estamos bem, obrigado. Posso pedir o burger, sem cebola, por favor?" },
+        { who: "Sam", en: "No worries. And for you?", pt: "Sem problema. E pra você?" },
+        { who: "You", en: "The pasta, thanks — and could we get an extra plate? We might share the garlic bread.", pt: "A massa, obrigado — e dá pra trazer um prato extra? A gente deve dividir o pão de alho." },
+        { who: "Sam", en: "Easy. I'll bring that out with the mains.", pt: "Numa boa. Eu trago junto com os pratos principais." },
+        { who: "You", en: "Perfect. Oh, and could we get the bill split at the end?", pt: "Perfeito. Ah, e dá pra dividir a conta no final?" },
+        { who: "Sam", en: "Sure thing, I'll bring two separate ones.", pt: "Claro, eu trago duas separadas." },
+        { who: "You", en: "Legend, thank you.", pt: "Você é fera, obrigado." }
+      ]
+    }
+  },
+
+  directions: {
+    phrases2: [
+      { en: "Sorry, I'm a bit turned around — is this the way to the station?", note: "'Turned around' = perdido, desorientado. Softer than announcing you're completely lost." },
+      { en: "Is it a five-minute walk, or more like fifteen?", note: "Locals lowball distances constantly — pin them to an actual number." },
+      { en: "Just to double check — this street, not the next one?", note: "Confirming the exact street beats confidently walking one block too far." },
+      { en: "Is there a shortcut through here?", note: "Parks, arcades and car parks often hide faster routes locals use daily." },
+      { en: "Would it be faster to grab a bus, or is it walkable?", note: "Locals will happily talk you out of a 40-minute walk if you just ask." }
+    ],
+    culture: [
+      "Strangers will often walk part of the way WITH you rather than just point — giving up mid-explanation and personally escorting you is genuinely common.",
+      "Street numbering can jump wildly — odd numbers on one side, even on the other, with gaps of hundreds between buildings — so trust the app over 'it should be right here'.",
+      "Locals frequently give directions using shops that no longer exist ('past where the old servo used to be') — everyone still uses the ghost landmark anyway."
+    ],
+    dialogue: {
+      title: "Second Time Lucky",
+      lines: [
+        { who: "Liam", en: "You look a bit lost, mate — you right?", pt: "Você parece meio perdido, cara — tá tudo bem?" },
+        { who: "You", en: "Honestly, yeah — I'm a bit turned around. Is this the way to the library?", pt: "Sinceramente, tô sim — meio desorientado. É por aqui pra biblioteca?" },
+        { who: "Liam", en: "Almost — you want the next street, then left at the corner shop.", pt: "Quase — é na próxima rua, aí vira à esquerda na lojinha da esquina." },
+        { who: "You", en: "Got it — next street, left at the corner shop. Is that a five-minute walk?", pt: "Entendi — próxima rua, esquerda na lojinha da esquina. Isso dá uns cinco minutos andando?" },
+        { who: "Liam", en: "Yeah, five easy. You'll see the sign once you turn.", pt: "É, cinco tranquilo. Você vai ver a placa assim que virar." },
+        { who: "You", en: "Perfect, thanks heaps for that.", pt: "Perfeito, muito obrigado por isso." },
+        { who: "Liam", en: "No worries at all. Good luck!", pt: "De nada, imagina. Boa sorte!" },
+        { who: "You", en: "Cheers, have a good one!", pt: "Valeu, tenha um bom dia!" }
+      ]
+    }
+  },
+
+  smalltalk: {
+    phrases2: [
+      { en: "Small world!", note: "Said when you discover a surprising connection — 'que mundo pequeno!', works identically." },
+      { en: "Is this seat taken?", note: "The classic opener on a bus, train or crowded café — always followed by a bit of chat." },
+      { en: "Long time no see!", note: "For someone you haven't run into in a while — casual, warm, zero explanation needed." },
+      { en: "Anyway, I'll let you get back to it.", note: "The graceful exit line — releases both of you without awkwardness." },
+      { en: "Sorry, I didn't catch your name earlier.", note: "Totally normal to ask again — nobody remembers names the first time, in any language." }
+    ],
+    culture: [
+      "Complaining about the weather together isn't small talk filler — it's genuinely how strangers bond, and skipping it can feel oddly cold.",
+      "People say 'we should catch up sometime!' as a warm goodbye, not a literal invitation — nobody's offended if it never actually happens.",
+      "Bumping into someone's trolley, chair or shoulder gets a 'sorry' from BOTH people, regardless of whose fault it was — it's reflex, not an apology."
+    ],
+    dialogue: {
+      title: "Kitchen Rematch",
+      lines: [
+        { who: "Nadia", en: "Oh hey, small world! Didn't know you worked here too.", pt: "Ah, oi, que mundo pequeno! Não sabia que você também trabalhava aqui." },
+        { who: "You", en: "Ha, right? Long time no see — how've you been?", pt: "Haha, né? Quanto tempo — como você tá?" },
+        { who: "Nadia", en: "Good, good, flat out with a new project. You?", pt: "Bem, bem, super corrida com um projeto novo. E você?" },
+        { who: "You", en: "Same, honestly. Weather's been wild lately though, hasn't it?", pt: "Mesma coisa, sinceramente. Mas esse tempo tá maluco ultimamente, né?" },
+        { who: "Nadia", en: "Tell me about it — four seasons in one day yesterday.", pt: "Nem me fala — ontem teve quatro estações no mesmo dia." },
+        { who: "You", en: "Anyway, I'll let you get back to it — good to see you!", pt: "Enfim, vou te deixar seguir — que bom te ver!" },
+        { who: "Nadia", en: "You too! Let's catch up properly sometime.", pt: "Você também! Vamos marcar de nos ver com calma um dia desses." }
+      ]
+    }
+  },
+
+  phone: {
+    phrases2: [
+      { en: "I'll just pop you on hold for a second.", note: "You'll hear this said TO you constantly — now you can say it back if you're ever the one transferring a call." },
+      { en: "Could you bear with me one moment?", note: "'Bear with me' = aguenta aí um segundo. Buys you time to find a pen, a date, anything." },
+      { en: "I think we got cut off — can you hear me now?", note: "Bad reception happens everywhere — this phrase resets the call without any awkwardness." },
+      { en: "Could you also email me those details, just to confirm?", note: "Getting it in writing means a misheard word can never hurt you." },
+      { en: "No worries, I'll call back at a better time.", note: "If they sound swamped, offering to reschedule instantly makes you the easiest caller of their day." }
+    ],
+    culture: [
+      "Voicemail is basically dead among locals under 40 — a missed call gets a text back ('sorry, missed this, what's up?') far more often than a returned call.",
+      "Receptionists and call-centre staff genuinely say 'no worries' even when there IS a problem — it's a politeness reflex, not a status update, so listen for the actual content.",
+      "Robocalls and scam calls are so common that many people simply don't answer unknown numbers at all — texting first to say 'hey, it's [name], can I call you?' gets a much better response."
+    ],
+    dialogue: {
+      title: "The Callback",
+      lines: [
+        { who: "Amir", en: "Hi, City Vet, Amir speaking — how can I help?", pt: "Oi, City Vet, aqui é o Amir — como posso ajudar?" },
+        { who: "You", en: "Hi Amir, it's Matheus — I'm calling to confirm my dog's appointment for Friday.", pt: "Oi Amir, aqui é o Matheus — tô ligando pra confirmar a consulta do meu cachorro na sexta." },
+        { who: "Amir", en: "Let me just check — bear with me one moment.", pt: "Deixa eu conferir — aguenta aí um segundinho." },
+        { who: "You", en: "No worries, take your time.", pt: "Sem problema, fica à vontade." },
+        { who: "Amir", en: "Sorry — you're breaking up a little, can you say the surname again?", pt: "Desculpa — você tá cortando um pouco, pode repetir o sobrenome?" },
+        { who: "You", en: "Sure — Silva, S-I-L-V-A. Friday at ten.", pt: "Claro — Silva, S-I-L-V-A. Sexta às dez." },
+        { who: "Amir", en: "Got it, all confirmed. We'll send a text reminder too.", pt: "Encontrei, tudo confirmado. A gente também manda um lembrete por SMS." },
+        { who: "You", en: "Perfect, thanks so much — see you Friday.", pt: "Perfeito, muito obrigado — até sexta." }
+      ]
+    }
+  },
+
+  haircut: {
+    phrases2: [
+      { en: "Nothing too short around the ears, please.", note: "Specific instructions during the cut cost nothing and save weeks of regret." },
+      { en: "Could you tidy up the beard while you're at it?", note: "'Tidy up' = aparar, dar uma arrumada — great low-commitment word for small adjustments." },
+      { en: "I'm not in a rush, take your time.", note: "Barbers relax (and cut better) when they're not being watched at the mirror anxiously." },
+      { en: "Could I see the back with a mirror?", note: "Standard request at the end of any cut — always check before you leave the chair." },
+      { en: "That's perfect, thank you.", note: "Simple, warm, and the exact phrase to end the appointment once you're actually happy." }
+    ],
+    culture: [
+      "Most barbershops for men don't take bookings at all — you just walk in, add your name to a list on a tablet, and wait, even on a busy Saturday.",
+      "Small talk during a haircut is basically mandatory — a silent 20 minutes in the chair is considered unusually awkward, not peaceful.",
+      "Many barbers offer a hot towel and a quick neck-and-shoulder rub as standard at the end of a cut — not an upsell, just part of the service."
+    ],
+    dialogue: {
+      title: "The Regular Trim",
+      lines: [
+        { who: "Jay", en: "Back again! Same as last time, or mixing it up?", pt: "De volta! O mesmo de sempre, ou vamos mudar algo?" },
+        { who: "You", en: "Same as last time, thanks — and could you tidy up the beard while you're at it?", pt: "O mesmo de sempre, obrigado — e dá pra dar uma aparada na barba também?" },
+        { who: "Jay", en: "Easy. Nothing too short around the ears, right? Like always.", pt: "Numa boa. Nada muito curto do lado das orelhas, né? Como sempre." },
+        { who: "You", en: "Exactly, you remember. I'm not in a rush today either.", pt: "Exatamente, você lembrou. E hoje eu também não tô com pressa." },
+        { who: "Jay", en: "Good, we'll do it properly then. How's work been?", pt: "Ótimo, então vamos capricha. Como andam as coisas no trabalho?" },
+        { who: "You", en: "Busy, but good. Could I see the back before we finish?", pt: "Corrido, mas bom. Dá pra eu ver a parte de trás antes de terminar?" },
+        { who: "Jay", en: "Course — here, take a look.", pt: "Claro — aqui, dá uma olhada." },
+        { who: "You", en: "That's perfect, thank you. See you next month.", pt: "Ficou perfeito, obrigado. Te vejo mês que vem." }
+      ]
+    }
+  },
+
+  doctor: {
+    phrases2: [
+      { en: "Is this covered, or will I need to pay out of pocket?", note: "'Out of pocket' = do próprio bolso. Ask this BEFORE any test or procedure, always." },
+      { en: "How long should I expect to wait for results?", note: "Setting a timeframe stops you refreshing your inbox anxiously for two weeks." },
+      { en: "Should I avoid alcohol or driving with this medication?", note: "Worth asking outright — labels don't always spell it out clearly." },
+      { en: "Is there a generic brand that's cheaper?", note: "Generics (the same molecule, no brand name) are usually 30-50% cheaper — always worth asking." },
+      { en: "Do I need to book a follow-up, or only if it doesn't improve?", note: "Clarifies whether silence means 'all good' or 'you forgot to book'." }
+    ],
+    culture: [
+      "Pharmacists can diagnose and treat a surprising range of minor issues (UTIs, cold sores, mild rashes) on the spot, without a doctor's visit at all — a much bigger role than in Brazil.",
+      "In the US, an ER visit can cost thousands of dollars even for something minor — always ask about urgent care first, it's a fraction of the price.",
+      "Telehealth (a video call with a doctor from your couch) became completely normal, and is often faster to book than an in-person appointment."
+    ],
+    dialogue: {
+      title: "The Follow-Up",
+      lines: [
+        { who: "Grace", en: "Hi again! How's the cold going — any better?", pt: "Oi de novo! Como tá o resfriado — melhorou?" },
+        { who: "You", en: "Much better, thanks. Actually, is there a generic version of what you gave me last time? It's a bit pricey.", pt: "Bem melhor, obrigado. Na verdade, tem uma versão genérica do que você me deu da última vez? Tá meio caro." },
+        { who: "Grace", en: "Definitely — same active ingredient, half the price. I'll grab it for you.", pt: "Com certeza — mesmo princípio ativo, metade do preço. Já vou pegar pra você." },
+        { who: "You", en: "Perfect. And should I avoid anything while taking it?", pt: "Perfeito. E tem algo que eu devo evitar enquanto tomo?" },
+        { who: "Grace", en: "Just go easy on alcohol — otherwise you're fine to drive and work as normal.", pt: "Só maneirar no álcool — fora isso pode dirigir e trabalhar normalmente." },
+        { who: "You", en: "Great, that's easy. Do I need a follow-up, or only if it gets worse?", pt: "Ótimo, isso é fácil. Preciso voltar pra um retorno, ou só se piorar?" },
+        { who: "Grace", en: "Only if it gets worse or doesn't clear up in a week.", pt: "Só se piorar ou não melhorar em uma semana." },
+        { who: "You", en: "Perfect, thank you so much.", pt: "Perfeito, muito obrigado." }
+      ]
+    }
+  },
+
+  renting: {
+    phrases2: [
+      { en: "Would you consider a longer lease if I paid extra bond upfront?", note: "Showing flexibility on YOUR end sometimes buys flexibility on theirs." },
+      { en: "Are pets allowed, by any chance?", note: "'By any chance' = por acaso — a soft way to ask for something that might be a no." },
+      { en: "Is the property furnished, or would I need to bring everything?", note: "Furnished rentals are rarer than in Brazil — always confirm before picturing your future couch." },
+      { en: "Who do I contact for maintenance issues once I move in?", note: "Get this answer BEFORE you move in, not during your first leaking-tap emergency." },
+      { en: "Could I get that in writing, just for my records?", note: "Verbal promises from agents are nice; emailed ones are the ones that count." }
+    ],
+    culture: [
+      "In hot rental markets, some applicants offer MORE than the asking rent to win a property — it's legal, common, and genuinely stressful for everyone involved.",
+      "Landlords can schedule routine inspections every few months even while you're living there — with notice, they walk through checking the property's condition.",
+      "Getting your bond back can hinge on things like professional carpet-cleaning receipts — read the lease closely, because 'reasonably clean' has a very specific legal definition."
+    ],
+    dialogue: {
+      title: "Signing Day",
+      lines: [
+        { who: "Noah", en: "Great news — your application was approved! Congrats.", pt: "Boa notícia — sua aplicação foi aprovada! Parabéns." },
+        { who: "You", en: "That's amazing, thank you! When could I move in?", pt: "Que ótimo, obrigado! Quando eu poderia me mudar?" },
+        { who: "Noah", en: "As early as next Monday, if that works for you.", pt: "Já na próxima segunda, se funcionar pra você." },
+        { who: "You", en: "Perfect. Quick question — who do I contact for maintenance once I'm in?", pt: "Perfeito. Uma pergunta rápida — com quem eu falo pra manutenção depois que eu me mudar?" },
+        { who: "Noah", en: "Me directly, or the after-hours line for anything urgent.", pt: "Comigo diretamente, ou o telefone de plantão pra coisas urgentes." },
+        { who: "You", en: "Great, could you send that in writing along with the lease?", pt: "Ótimo, você pode mandar isso por escrito junto com o contrato?" },
+        { who: "Noah", en: "Of course, I'll email everything today.", pt: "Claro, eu mando tudo por e-mail hoje." },
+        { who: "You", en: "Thanks so much, Noah — really appreciate it.", pt: "Muito obrigado, Noah — de verdade, agradeço bastante." }
+      ]
+    }
+  },
+
+  setup: {
+    phrases2: [
+      { en: "Do you need my passport, or is a driver's licence enough?", note: "Always ask which ID counts — requirements differ bank to bank, shop to shop." },
+      { en: "Is there a monthly fee, or can that be waived?", note: "Many banks waive fees for newcomers or students automatically — but only if you ask." },
+      { en: "Can I set this up online instead of in branch?", note: "Half the setup maze can now be skipped entirely from your phone." },
+      { en: "How long until the card actually arrives?", note: "Get a real number — 'soon' can mean anywhere from two days to three weeks." },
+      { en: "Is there a local number I should use for verification texts?", note: "Some services won't send verification codes to a Brazilian number — sort your SIM first." }
+    ],
+    culture: [
+      "Some banks still occasionally use paper cheques for things like bond refunds — a payment method most Brazilians under 40 have genuinely never held in their hands.",
+      "Bank branches often close by 4pm on weekdays and aren't open at all on Sundays — a completely different rhythm from Brazil's more flexible hours.",
+      "SIM cards are sold at supermarkets and petrol stations, not just phone shops — you can restart your phone plan while buying groceries."
+    ],
+    dialogue: {
+      title: "Opening the Account",
+      lines: [
+        { who: "Mia", en: "Hi there, what can I help you with today?", pt: "Oi, o que eu posso te ajudar hoje?" },
+        { who: "You", en: "Hi, I just moved here — I'd like to open an everyday account. Do you need my passport, or is my driver's licence enough?", pt: "Oi, acabei de me mudar pra cá — eu queria abrir uma conta corrente. Vocês precisam do meu passaporte, ou minha carteira de motorista já basta?" },
+        { who: "Mia", en: "Passport's perfect for newcomers. Is there a fee you're wondering about too?", pt: "Passaporte é perfeito pra quem chegou. Você também tá em dúvida sobre alguma taxa?" },
+        { who: "You", en: "Yeah, actually — is there a monthly fee, or can that be waived?", pt: "É, na verdade sim — tem alguma taxa mensal, ou dá pra isentar?" },
+        { who: "Mia", en: "We waive it for the first year for new arrivals, no worries.", pt: "A gente isenta no primeiro ano pra quem acabou de chegar, sem problema." },
+        { who: "You", en: "Perfect. How long until the card actually arrives?", pt: "Perfeito. Quanto tempo até o cartão chegar de verdade?" },
+        { who: "Mia", en: "About five business days, straight to your address.", pt: "Uns cinco dias úteis, direto pro seu endereço." },
+        { who: "You", en: "Brilliant, thank you so much for your help.", pt: "Maravilha, muito obrigado pela ajuda." }
+      ]
+    }
+  },
+
+  interview: {
+    phrases2: [
+      { en: "Could you tell me more about the team I'd be working with?", note: "Shows genuine interest beyond the role itself — interviewers remember this question." },
+      { en: "What does success look like in this role after six months?", note: "A sharper version of 'any questions?' — signals you're already thinking ahead." },
+      { en: "Just to confirm, is this role remote, hybrid, or fully in-office?", note: "Nail down logistics before you get emotionally attached to the job." },
+      { en: "I'd love to follow up — what's the best way to do that?", note: "Ending on a concrete next step reads far better than a vague 'hope to hear from you.'" },
+      { en: "Thank you for your time today, I really enjoyed our conversation.", note: "The closing line — warm, professional, and true even if you're nervous." }
+    ],
+    culture: [
+      "Negotiating the salary offer is expected, not rude — companies often build in room for it, and simply accepting the first number can leave real money on the table.",
+      "Interviewers legally can't ask your age, marital status, or whether you plan to have kids — questions that are completely normal small talk in Brazil can actually get a company in trouble here.",
+      "Some companies offer 'unlimited' paid leave, and studies show employees on unlimited policies often take LESS time off than those with a fixed number, out of quiet uncertainty about what's 'too much'."
+    ],
+    dialogue: {
+      title: "The Follow-Up Question",
+      lines: [
+        { who: "Rebecca", en: "That's everything from my side. Any questions for me?", pt: "É isso da minha parte. Alguma pergunta pra mim?" },
+        { who: "You", en: "Yes, actually — what does success look like in this role after six months?", pt: "Sim, na verdade — como seria o sucesso nessa função depois de seis meses?" },
+        { who: "Rebecca", en: "Great question. Honestly, owning the onboarding project end to end.", pt: "Ótima pergunta. Sinceramente, tocar o projeto de onboarding do início ao fim." },
+        { who: "You", en: "That's really helpful, thank you. Could you also tell me more about the team I'd be working with?", pt: "Isso ajuda bastante, obrigado. Você também pode me contar mais sobre o time com quem eu trabalharia?" },
+        { who: "Rebecca", en: "Sure — five of you, pretty close-knit, mostly remote with a Tuesday office day.", pt: "Claro — vocês seriam cinco, um time bem unido, majoritariamente remoto com um dia de escritório na terça." },
+        { who: "You", en: "Perfect, that answers my question about remote versus in-office too.", pt: "Perfeito, isso já responde minha dúvida sobre remoto ou presencial também." },
+        { who: "Rebecca", en: "Ha, efficient! We'll be in touch by Friday either way.", pt: "Haha, eficiente! De qualquer forma, a gente entra em contato até sexta." },
+        { who: "You", en: "Thank you for your time today — I really enjoyed our conversation.", pt: "Obrigado pelo seu tempo hoje — eu gostei bastante da nossa conversa." }
+      ]
+    }
+  },
+
+  flirting: {
+    phrases2: [
+      { en: "Is this seat taken?", note: "The classic low-pressure opener — works at bars, parties, cafés, anywhere with a spare chair." },
+      { en: "You come here often?", note: "A cliché on purpose — saying it with a knowing smile turns it into a joke, not a pickup line." },
+      { en: "I promise I'm more interesting than this small talk suggests.", note: "Self-aware humor about the awkwardness of small talk is very on-brand here." },
+      { en: "Can I steal you for a sec?", note: "Pulling someone away from a group conversation, casually — 'roubar' works the same way in both languages." },
+      { en: "Text me when you get home safe?", note: "A genuinely sweet, low-pressure way to end a night and open the door to talking again." }
+    ],
+    culture: [
+      "Buying someone a drink outright can actually feel old-fashioned or presumptuous now — splitting the bill or just chatting without gifts is more common.",
+      "Ghosting (disappearing without explanation after a date or two) is common enough that it's barely considered rude — it stings less here than it would in Brazil.",
+      "Most people meet partners through dating apps now, so a confident cold approach in person — like a stranger asking for your number at a bar — can genuinely catch someone pleasantly off guard."
+    ],
+    dialogue: {
+      title: "Second Chances",
+      lines: [
+        { who: "Jordan", en: "Hey, is this seat taken? I promise I'm more interesting than the guy who was just here.", pt: "Oi, esse lugar tá ocupado? Prometo que sou mais interessante que o cara que tava aqui." },
+        { who: "You", en: "Ha, low bar, but sure — go for it.", pt: "Haha, meta baixa, mas tá, pode vir." },
+        { who: "Jordan", en: "I'm Jordan. You come here often, or is tonight a special occasion?", pt: "Eu sou Jordan. Você vem sempre aqui, ou hoje é uma ocasião especial?" },
+        { who: "You", en: "First time, actually — my friend dragged me out.", pt: "Primeira vez, na verdade — minha amiga me arrastou pra sair." },
+        { who: "Jordan", en: "Smart friend. Can I steal you for the next song?", pt: "Amiga esperta. Posso te roubar pra próxima música?" },
+        { who: "You", en: "Depends — are you any good?", pt: "Depende — você é bom mesmo?" },
+        { who: "Jordan", en: "Absolutely not, but I commit fully.", pt: "Com certeza não, mas eu me dedico de verdade." },
+        { who: "You", en: "Good enough for me. Lead the way.", pt: "Já me convenceu. Pode ir na frente." }
+      ]
+    }
+  },
+
+  casual: {
+    phrases2: [
+      { en: "Mind if I put some music on?", note: "'Mind if' = um favor cordial em forma de pergunta — the answer 'not at all' means yes, go ahead." },
+      { en: "I'm easy, whatever everyone else wants.", note: "'I'm easy' = 'tanto faz pra mim' — going with the group without seeming disengaged." },
+      { en: "Shall we shout for pizza later?", note: "'Shout' here = a round bought for everyone, not actual yelling." },
+      { en: "I might head off soon, early start tomorrow.", note: "The standard graceful early-exit line — nobody questions it." },
+      { en: "Same again?", note: "Offering to buy the next round of whatever everyone's already drinking." }
+    ],
+    culture: [
+      "Bringing your own drinks (BYO) to a backyard party is completely standard, not stingy — showing up empty-handed to someone's BBQ is the actual faux pas.",
+      "'Shouting' a round means one person covers everyone's drinks that round, then it rotates — nobody's tracking who owes what on a spreadsheet.",
+      "Leaving a party without a big round of goodbyes ('ducking out', sometimes jokingly called an 'Irish exit') is totally accepted — a text the next day says thanks just fine."
+    ],
+    dialogue: {
+      title: "Bring a Plate, Round Two",
+      lines: [
+        { who: "Ben", en: "Mate, you actually brought a plate this time! Legend.", pt: "Cara, dessa vez você realmente trouxe comida! Você é fera." },
+        { who: "You", en: "Learned my lesson last time. Mind if I put some music on while it's out?", pt: "Aprendi a lição da última vez. Posso colocar uma música enquanto tá aí fora?" },
+        { who: "Ben", en: "Go for it, aux cord's on the table.", pt: "Pode ir, o cabo tá em cima da mesa." },
+        { who: "You", en: "Nice. Shall we shout for pizza later too, once the snags run out?", pt: "Boa. A gente pode juntar uma grana pra pizza depois, quando acabar a salsicha?" },
+        { who: "Ben", en: "Deadset — I'll grab everyone's orders in a bit.", pt: "Com certeza — eu pego o pedido de todo mundo daqui a pouco." },
+        { who: "You", en: "Sounds good. Same again on the drinks?", pt: "Boa ideia. Mais uma rodada da mesma bebida?" },
+        { who: "Ben", en: "Yeah, go on then — cheers, mate.", pt: "Bora lá então — valeu, cara." },
+        { who: "You", en: "I might head off after this one though, early start tomorrow.", pt: "Mas eu devo ir embora depois dessa, amanhã começo cedo." }
+      ]
+    }
+  },
+
+  worktalk: {
+    phrases2: [
+      { en: "Can we take this offline?", note: "'Offline' = fora da reunião, num chat ou call separado — used constantly to end a derailing discussion politely." },
+      { en: "I'll circle back on that.", note: "'Circle back' = voltar a esse assunto depois. The polite way to say 'not now, but noted.'" },
+      { en: "Let's park that for now.", note: "'Park' = colocar de lado temporariamente — parking an idea, not abandoning it." },
+      { en: "Happy to jump on a call if that's easier.", note: "Offering a quick call instead of a long email thread — often genuinely faster." },
+      { en: "I'll loop you in on the email.", note: "'Loop in' = incluir alguém numa conversa ou e-mail. You'll both send and receive this constantly." }
+    ],
+    culture: [
+      "Taking your FULL lunch break, away from your desk, is genuinely expected — eating at your desk while working through lunch can actually raise eyebrows, not earn points.",
+      "A growing number of workplaces have an unspoken (or literal) 'right to disconnect' — replying to emails at 9pm or on weekends can read as a red flag about boundaries, not dedication.",
+      "'How are you?' at the start of a work Slack message is almost always just a greeting — launching into how you're actually doing can genuinely catch a colleague off guard."
+    ],
+    dialogue: {
+      title: "The Stand-up",
+      lines: [
+        { who: "Owen", en: "Morning! Quick one before stand-up — are we still good for the demo Thursday?", pt: "Bom dia! Uma coisa rápida antes do stand-up — ainda tá de pé a demonstração de quinta?" },
+        { who: "You", en: "Yeah, all good. I'll loop you in on the email with the final slides tonight.", pt: "Sim, tudo certo. Eu te incluo no e-mail com os slides finais hoje à noite." },
+        { who: "Owen", en: "Perfect. One more thing — the pricing question from yesterday?", pt: "Perfeito. Mais uma coisa — aquela pergunta sobre preço de ontem?" },
+        { who: "You", en: "Honestly, let's park that for now — it needs finance's input first.", pt: "Sinceramente, vamos deixar isso de lado por enquanto — precisa da opinião do financeiro antes." },
+        { who: "Owen", en: "Fair call. Can we take this offline after stand-up, just the two of us?", pt: "Faz sentido. A gente pode conversar fora da reunião depois do stand-up, só nós dois?" },
+        { who: "You", en: "Sure — happy to jump on a call if that's easier than typing it all out.", pt: "Claro — topo fazer uma chamada se for mais fácil do que digitar tudo." },
+        { who: "Owen", en: "Sounds good. I'll circle back after lunch then.", pt: "Combinado. Eu retorno o assunto depois do almoço então." },
+        { who: "You", en: "Perfect, talk then.", pt: "Perfeito, a gente se fala então." }
+      ]
+    }
+  }
+};
+
+</script>
+<script>
 // RealTalk — POV scene engine. Modes: tap / watch / speak.
 // Dialogue is always English (voice + main caption); when the app language is PT,
 // a Portuguese subtitle renders under the English line, and teaching text
@@ -3526,6 +4676,12 @@ window.SCENARIOS_C = [
 (function () {
   const MOOD_AVATARS = {
     friendly: "🙂", neutral: "😐", confused: "🤨", amused: "😄", awkward: "😬", worried: "😟"
+  };
+  // A real person per scene — the character you're actually talking to.
+  const CAST = {
+    coffee: "👩🏻‍🦱", food: "🧔🏽", directions: "👨🏼‍🦳", smalltalk: "👨🏽",
+    phone: "👩🏼‍💼", haircut: "🧔🏻", doctor: "👩🏽‍⚕️", renting: "👨🏻‍💼",
+    setup: "🧑🏾", interview: "👩🏼‍💼", flirting: "🧑🏻‍🦰", casual: "🧔🏼", worktalk: "👩🏾‍💼"
   };
   const MOOD_LABELS = {
     en: { friendly: "friendly", neutral: "neutral", confused: "confused…", amused: "amused", awkward: "awkward…", worried: "worried!" },
@@ -3663,7 +4819,7 @@ window.SCENARIOS_C = [
           <p class="page-blurb" style="margin-bottom:14px">🎬 <em>${ptSetting || setting}</em>${ptSetting ? `<span class="sub-en">${setting}</span>` : ""}</p>
           <div class="viewport">
             <div class="vp-scene" style="background:radial-gradient(ellipse at 60% 35%, ${c2}, ${c1})">
-              <div class="vp-avatar" id="vp-avatar">🙂</div>
+              <div class="vp-avatar" id="vp-avatar">${CAST[this.sc.id] || "🙂"}</div>
             </div>
             <video id="vp-video" style="display:none" playsinline></video>
             <div class="vp-rec"><span class="dot"></span> REC</div>
@@ -3713,8 +4869,8 @@ window.SCENARIOS_C = [
       this.$linePt.textContent = "";
 
       if (mood && !isYou) {
-        this.$avatar.textContent = MOOD_AVATARS[mood] || "🙂";
-        this.$mood.textContent = moodLabel(mood);
+        this.$avatar.textContent = CAST[this.sc.id] || MOOD_AVATARS[mood] || "🙂";
+        this.$mood.textContent = (MOOD_AVATARS[mood] || "") + " " + moodLabel(mood);
         this.$mood.style.display = "block";
       } else if (isYou) {
         this.$mood.style.display = "none";
@@ -4170,8 +5326,11 @@ window.SCENARIOS_C = [
   GROUP_ORDER.forEach(g => ALL.forEach(s => { if ((s.group || "Daily Life") === g) SCENARIOS.push(s); }));
   ALL.forEach(s => { if (!SCENARIOS.includes(s)) SCENARIOS.push(s); });
 
-  const GRAMMAR_BASE = (window.GRAMMAR || []).filter(l => l.id !== "aussie-slang");
-  const EXERCISES = window.EXERCISES || [];
+  const GRAMMAR_BASE = [
+    ...(window.GRAMMAR || []).filter(l => l.id !== "aussie-slang"),
+    ...(window.GRAMMAR_EXTRA || [])
+  ];
+  const EXERCISES = [...(window.EXERCISES || []), ...(window.EXERCISES_EXTRA || [])];
   const $main = document.getElementById("main");
   let activePlayer = null;
 
@@ -4363,7 +5522,7 @@ window.SCENARIOS_C = [
               const pm = ptMeta(s.id);
               return `
               <a class="card scenario-card" href="#/scenario/${s.id}">
-                <span class="sc-head" style="background:linear-gradient(135deg, ${s.bg ? s.bg[1] : "#666"}, ${s.bg ? s.bg[0] : "#333"})">${s.emoji}</span>
+                <span class="sc-head" style="background:linear-gradient(135deg, color-mix(in srgb, ${s.bg ? s.bg[1] : "#888"} 26%, white), color-mix(in srgb, ${s.bg ? s.bg[0] : "#666"} 18%, white))">${s.emoji}</span>
                 <span class="sc-title">${s.title}${pm ? `<span class="sc-title-pt">${pm.title}</span>` : ""}</span>
                 <span class="sc-blurb">${pm ? pm.blurb : T(s.blurb)}</span>
                 <span class="sc-meta">
@@ -4530,6 +5689,7 @@ window.SCENARIOS_C = [
     const pm = ptMeta(id);
     const TABS = [
       ["learn", L("tLearn")],
+      ["vocab", L("tVocab")],
       ["pov", L("tPov")],
       ["play", L("tPlay")],
       ["speak", L("tSpeak")]
@@ -4549,7 +5709,12 @@ window.SCENARIOS_C = [
       btn.onclick = () => { location.hash = `#/scenario/${id}/${btn.dataset.tab}`; };
     });
     const body = document.getElementById("scenario-body");
-    if (tab === "pov") {
+    if (tab === "vocab") {
+      body.innerHTML = renderVocab(s);
+      body.querySelectorAll(".vocab-say").forEach(btn => {
+        btn.onclick = () => RealTalkPlayer.speech.speak(btn.dataset.say, { isYou: false });
+      });
+    } else if (tab === "pov") {
       activePlayer = new RealTalkPlayer.ScenePlayer(body, s, { mode: "watch" });
     } else if (tab === "play" || tab === "speak") {
       activePlayer = new RealTalkPlayer.ScenePlayer(body, s, {
@@ -4559,6 +5724,58 @@ window.SCENARIOS_C = [
     } else {
       body.innerHTML = renderLearn(s);
     }
+  }
+
+  function renderVocab(s) {
+    const v = window.VOCAB && window.VOCAB[s.id];
+    if (!v || !v.words || !v.words.length) {
+      return `<div class="card"><p style="color:var(--ink-soft)">${isPT() ? "Vocabulário chegando em breve para esta cena." : "Vocabulary coming soon for this scene."}</p></div>`;
+    }
+    return `
+      <div class="card" style="margin-bottom:14px">
+        <p style="color:var(--ink-soft)">${L("vocabIntro", { n: v.words.length })}</p>
+      </div>
+      <div class="vocab-grid">
+        ${v.words.map(w => `
+          <div class="vocab-card">
+            <button class="vocab-say" data-say="${w.en.replace(/"/g, "&quot;")}" title="${isPT() ? "Ouvir" : "Listen"}">🔊</button>
+            <div class="vocab-en">${w.en}</div>
+            <div class="vocab-pt">${w.pt}</div>
+            ${w.ex ? `<div class="vocab-ex">${w.ex}</div>` : ""}
+          </div>`).join("")}
+      </div>`;
+  }
+
+  function renderLearnExtra(s) {
+    const x = window.LEARN_EXTRA && window.LEARN_EXTRA[s.id];
+    if (!x) return "";
+    let html = "";
+    if (x.phrases2 && x.phrases2.length) {
+      html += `
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin-bottom:8px">${L("phrases2Title")}</h3>
+          ${x.phrases2.map(p => `<div class="phrase-row"><span class="phrase-en">${T(p.en)}</span><span class="phrase-note">${T(p.note)}</span></div>`).join("")}
+        </div>`;
+    }
+    if (x.dialogue && x.dialogue.lines) {
+      html += `
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin-bottom:8px">🎭 ${x.dialogue.title || (isPT() ? "Diálogo bônus" : "Bonus dialogue")}</h3>
+          ${x.dialogue.lines.map(l => `
+            <div class="dialogue-line">
+              <span class="dialogue-who">${l.who}</span>
+              <span class="dialogue-text">${l.en}${isPT() && l.pt ? `<span class="dialogue-pt">${l.pt}</span>` : ""}</span>
+            </div>`).join("")}
+        </div>`;
+    }
+    if (x.culture && x.culture.length) {
+      html += `
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin-bottom:8px">${L("cultureTitle")}</h3>
+          ${x.culture.map(c => `<div class="culture-item">${c}</div>`).join("")}
+        </div>`;
+    }
+    return html;
   }
 
   function renderLearn(s) {
@@ -4596,7 +5813,8 @@ window.SCENARIOS_C = [
           <a class="btn ghost" href="#/scenario/${s.id}/play">${L("playScene")}</a>
           <a class="btn ghost" href="#/scenario/${s.id}/speak">${L("speakIt")}</a>
         </div>
-      </div>`;
+      </div>
+      ${renderLearnExtra(s)}`;
   }
 
   // ---------- router ----------
