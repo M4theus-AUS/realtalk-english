@@ -670,24 +670,77 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
 .review-said::before { content: "You said: "; color: var(--ink-faint); }
 .review-fix { color: var(--ink-soft); margin-top: 2px; }
 
+/* ============ Mobile bottom nav ============ */
+.mobile-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+  background: var(--green-dark);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+  justify-content: space-around;
+  box-shadow: 0 -4px 18px rgba(0,0,0,.18);
+}
+.mnav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  background: none; border: none;
+  color: var(--cream-text); text-decoration: none;
+  font-size: 10.5px; font-weight: 600;
+  padding: 5px 12px; border-radius: 10px;
+  opacity: .75;
+}
+.mnav-item .mn-emoji { font-size: 19px; }
+.mnav-item.active { opacity: 1; background: rgba(255,255,255,.13); }
+
 /* ============ Responsive ============ */
 @media (max-width: 900px) {
   .app { flex-direction: column; }
-  .sidebar { width: 100%; height: auto; position: static; }
-  .nav { display: flex; flex-wrap: wrap; gap: 2px; padding-bottom: 10px; }
-  .nav-label { width: 100%; }
-  .sidebar-foot { display: none; }
-  .topbar { padding: 10px 18px; }
+  .sidebar { width: 100%; height: auto; position: static; overflow: visible; }
+  .sidebar .nav, .sidebar-foot { display: none; }
+  .brand { padding: 12px 16px 10px; }
+  .brand-mark { font-size: 22px; }
+  .brand-name { font-size: 17px; }
+  .mobile-nav { display: flex; }
+  body { padding-bottom: 74px; }
+
+  .topbar { padding: 10px 14px 9px; gap: 5px; }
   .accent-name { display: none; }
-  .accent-btn { padding: 6px 10px; }
-  .main { padding: 22px 18px 60px; }
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
-  .phrase-note { max-width: 55%; }
+  .accent-btn { padding: 6px 9px; }
+  .accent-label { display: none; }
+  .accent-tagline { display: none; }
+  .lang-switch { margin-left: auto; }
+
+  .main { padding: 18px 14px 40px; }
+  .grid-2, .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .stat { padding: 12px 10px; }
+  .stat-num { font-size: 20px; }
+  .stat-cap { font-size: 10px; letter-spacing: .4px; }
+
+  .hero { padding: 22px 20px; }
+  .hero h1 { font-size: 24px; }
+  .hero-emoji { font-size: 44px; right: 16px; top: 12px; }
+  .hero::after { font-size: 44px; bottom: -10px; letter-spacing: 3px; }
+  .hero-postcards { font-size: 17px; letter-spacing: 7px; }
+
+  .tab-row { display: flex; width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+  .tab-btn { white-space: nowrap; flex-shrink: 0; padding: 8px 13px; font-size: 13px; }
+
+  .vp-line { font-size: 14.5px; min-height: 20px; }
+  .vp-line-pt { font-size: 12px; }
+  .vp-caption { padding: 26px 14px 12px; }
+  .vp-avatar { font-size: 64px; }
+  .choice-btn, .speak-option { font-size: 14px; padding: 11px 13px; }
+
+  .phrase-row { flex-direction: column; gap: 2px; }
+  .phrase-note { max-width: 100%; text-align: left; }
+  .compare-table { display: block; overflow-x: auto; }
+  .clip-grid { grid-template-columns: 1fr; }
+  .end-count .n { font-size: 21px; }
+  .mic-btn { width: 54px; height: 54px; font-size: 22px; }
 }
 @media (max-width: 560px) {
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  .page-title { font-size: 23px; }
-  .hero { padding: 22px; }
+  .grid-2, .grid-4 { grid-template-columns: 1fr; }
+  .page-title { font-size: 22px; }
+  .quiz-q { font-size: 16px; }
 }
 
 </style>
@@ -723,6 +776,8 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
       <main class="main" id="main"></main>
     </div>
   </div>
+
+  <nav class="mobile-nav" id="mobile-nav"></nav>
 
 <script>
 // RealTalk — accent system.
@@ -4049,10 +4104,29 @@ window.SCENARIOS_C = [
     document.querySelector('.nav-item[data-route="exercises"]').innerHTML = navLabelHtml("✏️", L("exercises"), "Exercises");
     document.getElementById("study-label").textContent = L("study");
     document.getElementById("rle-label").textContent = isPT() ? "Inglês da Vida Real" : "Real Life English";
+    renderMobileNav();
     const soundBtn = document.getElementById("sound-toggle");
     soundBtn.textContent = RealTalkPlayer.speech.enabled ? L("voiceOn") : L("voiceOff");
     renderAccentBar();
     renderNav();
+  }
+
+  function renderMobileNav() {
+    const mn = document.getElementById("mobile-nav");
+    if (!mn) return;
+    mn.innerHTML = `
+      <a class="mnav-item" href="#/home" data-mroute="home"><span class="mn-emoji">🏠</span>${L("home")}</a>
+      <a class="mnav-item" href="#/grammar" data-mroute="grammar"><span class="mn-emoji">📚</span>${L("grammar")}</a>
+      <a class="mnav-item" href="#/exercises" data-mroute="exercises"><span class="mn-emoji">✏️</span>${L("exercises")}</a>
+      <button class="mnav-item" id="mnav-voice"><span class="mn-emoji">${RealTalkPlayer.speech.enabled ? "🔊" : "🔇"}</span>${isPT() ? "Voz" : "Voice"}</button>`;
+    mn.querySelector("#mnav-voice").onclick = () => {
+      RealTalkPlayer.speech.enabled = !RealTalkPlayer.speech.enabled;
+      if (!RealTalkPlayer.speech.enabled) RealTalkPlayer.speech.stop();
+      renderMobileNav();
+      const soundBtn = document.getElementById("sound-toggle");
+      if (soundBtn) soundBtn.textContent = RealTalkPlayer.speech.enabled ? L("voiceOn") : L("voiceOff");
+    };
+    highlightNav();
   }
 
   // ---------- nav ----------
@@ -4083,6 +4157,11 @@ window.SCENARIOS_C = [
       a.classList.toggle("active", r === route || (r && route.startsWith(r + "/")) ||
         (r === "grammar" && route.startsWith("grammar")) ||
         (r === "exercises" && route.startsWith("exercises")));
+    });
+    document.querySelectorAll(".mnav-item[data-mroute]").forEach(a => {
+      const r = a.dataset.mroute;
+      a.classList.toggle("active", route === r || route.startsWith(r) ||
+        (r === "home" && route.startsWith("scenario")));
     });
   }
 
