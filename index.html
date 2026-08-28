@@ -827,6 +827,122 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
 .mnav-item .mn-emoji { font-size: 19px; }
 .mnav-item.active { color: var(--green-deep); background: var(--green-wash); }
 
+/* ============ Login / profiles ============ */
+.login-screen {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+.login-card {
+  background: var(--panel);
+  border-radius: 26px;
+  box-shadow: 0 20px 60px rgba(60, 56, 80, .18);
+  padding: 34px 36px;
+  width: 100%; max-width: 420px;
+  text-align: center;
+  animation: rise .4s var(--ease-out) both;
+}
+.login-brand { font-size: 20px; margin-bottom: 14px; font-family: var(--font-display); }
+.login-brand span { display: block; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--green); font-weight: 700; }
+.login-card h2 { font-family: var(--font-display); font-size: 24px; margin-bottom: 8px; line-height: 1.2; }
+.login-sub { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 14px; }
+.login-users { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0 8px; }
+.login-user {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-wash); color: var(--green-deep);
+  border: none; border-radius: 999px;
+  padding: 9px 18px; font-size: 14.5px; font-weight: 700;
+  font-family: var(--font-display);
+  transition: transform .15s, filter .15s;
+}
+.login-user:hover { transform: translateY(-2px); filter: brightness(.97); }
+.login-user span { font-size: 18px; }
+.login-or { font-size: 12px; color: var(--ink-faint); margin: 10px 0 6px; }
+.login-avatars { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 10px 0; }
+.login-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 2.5px solid transparent;
+  background: var(--bg);
+  font-size: 21px;
+  transition: transform .15s, border-color .15s;
+}
+.login-avatar:hover { transform: scale(1.1); }
+.login-avatar.picked { border-color: var(--green); background: var(--green-wash); }
+.login-input {
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 15.5px; font-family: var(--font);
+  margin: 8px 0 14px;
+  outline: none;
+  text-align: center;
+  transition: border-color .15s;
+}
+.login-input:focus { border-color: var(--green); }
+.login-go { width: 100%; justify-content: center; font-size: 16px; }
+.profile-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: 8px;
+  background: rgba(255,255,255,.55);
+  border: none; border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
+  transition: background .18s, color .18s;
+}
+.profile-chip:hover { background: var(--coral-wash); color: #a33a1e; }
+.profile-chip span { font-size: 15px; }
+
+/* ============ 90s anime layer ============ */
+.vp-anime::before {
+  /* CRT scanlines */
+  content: "";
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1.5px, transparent 1.5px 4px);
+  opacity: .5;
+}
+.anime-char {
+  position: relative; z-index: 1;
+  height: 84%;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.anime-svg { height: 100%; filter: drop-shadow(0 8px 18px rgba(0,0,0,.35)); }
+.an-talking .anime-svg { animation: an-talk .5s ease-in-out infinite alternate; }
+@keyframes an-talk { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+.an-bounce .anime-svg { animation: an-bounce .55s var(--ease-out) 2; }
+@keyframes an-bounce { 0% { transform: translateY(0) } 40% { transform: translateY(-16px) scale(1.03) } 100% { transform: translateY(0) } }
+.an-slump .anime-svg { animation: an-slump 1.2s var(--ease-out) both; }
+@keyframes an-slump { 0% { transform: translateY(0) rotate(0) } 100% { transform: translateY(7px) rotate(-3deg) } }
+.an-shake .anime-svg { animation: an-charshake .4s linear 3; }
+@keyframes an-charshake { 0%,100% { transform: translateX(0) } 25% { transform: translateX(-6px) rotate(-2deg) } 75% { transform: translateX(6px) rotate(2deg) } }
+
+.fx-sweat { animation: fx-sweat 1.6s ease-in infinite; transform-origin: 152px 70px; }
+@keyframes fx-sweat { 0% { transform: translateY(0); opacity: 0 } 25% { opacity: 1 } 80% { transform: translateY(14px); opacity: 1 } 100% { transform: translateY(20px); opacity: 0 } }
+.fx-vein { animation: fx-pulse .7s ease-in-out infinite alternate; transform-origin: 150px 56px; }
+@keyframes fx-pulse { from { transform: scale(1) } to { transform: scale(1.18) } }
+.fx-sparkles path { animation: fx-spark 1.1s ease-in-out infinite alternate; transform-origin: center; transform-box: fill-box; }
+.fx-sparkles path:nth-child(2) { animation-delay: .25s }
+.fx-sparkles path:nth-child(3) { animation-delay: .5s }
+@keyframes fx-spark { from { transform: scale(.6) rotate(-8deg); opacity: .5 } to { transform: scale(1.15) rotate(8deg); opacity: 1 } }
+.fx-q { animation: fx-qpop .9s var(--ease-out) infinite alternate; transform-origin: 155px 55px; transform-box: view-box; }
+@keyframes fx-qpop { from { transform: translateY(0) scale(.9) } to { transform: translateY(-5px) scale(1.1) } }
+
+.fx-speedlines {
+  position: absolute; inset: -20%;
+  z-index: 0;
+  opacity: 0;
+  background: repeating-conic-gradient(from 0deg, rgba(255,255,255,.85) 0deg 2deg, transparent 2deg 11deg);
+  pointer-events: none;
+  transition: opacity .15s;
+}
+.fx-speedlines.on { opacity: .85; animation: fx-speedspin .5s linear infinite; }
+@keyframes fx-speedspin { from { transform: rotate(0deg) } to { transform: rotate(9deg) } }
+
+.vp-shake { animation: vp-shake .45s linear 2; }
+@keyframes vp-shake { 0%,100% { transform: translate(0,0) } 20% { transform: translate(-5px,3px) } 40% { transform: translate(5px,-3px) } 60% { transform: translate(-4px,-2px) } 80% { transform: translate(4px,2px) } }
+
 /* ============ Reduced motion ============ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -4669,6 +4785,321 @@ window.LEARN_EXTRA = {
 
 </script>
 <script>
+// RealTalk — lightweight profile system (static-site "login").
+// Profiles live in this browser's localStorage: each person gets their own
+// name, avatar and progress. Real cross-device accounts need a backend later.
+(function () {
+  const USERS_KEY = "realtalk-users";
+  const CURRENT_KEY = "realtalk-user";
+  const AVATARS = ["🧑🏻", "👩🏻", "🧔🏽", "👩🏾", "🧑🏼‍🦱", "👱🏻‍♀️", "🧑🏿", "👨🏼‍🦰"];
+
+  function readUsers() {
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+    catch { return []; }
+  }
+  function writeUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+
+  const RTAuth = {
+    users: readUsers,
+    current() {
+      const name = localStorage.getItem(CURRENT_KEY);
+      if (!name) return null;
+      return readUsers().find(u => u.name === name) || null;
+    },
+    login(name, avatar) {
+      name = (name || "").trim().slice(0, 24);
+      if (!name) return null;
+      const users = readUsers();
+      let u = users.find(x => x.name.toLowerCase() === name.toLowerCase());
+      if (!u) {
+        u = { name, avatar: avatar || AVATARS[0], created: new Date().toISOString() };
+        users.push(u);
+        writeUsers(users);
+      } else if (avatar) {
+        u.avatar = avatar;
+        writeUsers(users);
+      }
+      localStorage.setItem(CURRENT_KEY, u.name);
+      // adopt pre-profile progress once, so nobody loses their streak
+      const legacy = localStorage.getItem("realtalk-progress");
+      const userKey = "realtalk-progress::" + u.name;
+      if (legacy && !localStorage.getItem(userKey)) {
+        localStorage.setItem(userKey, legacy);
+        localStorage.removeItem("realtalk-progress");
+      }
+      return u;
+    },
+    logout() {
+      localStorage.removeItem(CURRENT_KEY);
+      location.reload();
+    },
+    progressKey() {
+      const u = this.current();
+      return "realtalk-progress::" + (u ? u.name : "guest");
+    },
+
+    showLogin(onDone) {
+      const isPT = window.RT_LANG === "pt";
+      const users = readUsers();
+      const ov = document.createElement("div");
+      ov.className = "login-screen";
+      ov.innerHTML = `
+        <div class="login-card">
+          <div class="login-brand">🎬 <b>RealTalk</b><span>real life english</span></div>
+          <h2>${isPT ? "Quem está aprendendo hoje?" : "Who's learning today?"}</h2>
+          ${users.length ? `
+            <div class="login-users">
+              ${users.map(u => `<button class="login-user" data-name="${u.name.replace(/"/g, "&quot;")}"><span>${u.avatar}</span>${u.name}</button>`).join("")}
+            </div>
+            <div class="login-or">${isPT ? "ou crie um novo perfil" : "or create a new profile"}</div>` : `
+            <p class="login-sub">${isPT ? "Crie seu perfil — seu progresso fica salvo neste aparelho." : "Create your profile — your progress is saved on this device."}</p>`}
+          <div class="login-avatars">
+            ${AVATARS.map((a, i) => `<button class="login-avatar ${i === 0 ? "picked" : ""}" data-a="${a}">${a}</button>`).join("")}
+          </div>
+          <input class="login-input" id="login-name" maxlength="24" placeholder="${isPT ? "Seu nome" : "Your name"}" autocomplete="off">
+          <button class="btn cta login-go" id="login-go">${isPT ? "▶ Começar" : "▶ Start learning"}</button>
+        </div>`;
+      document.body.appendChild(ov);
+
+      let picked = AVATARS[0];
+      ov.querySelectorAll(".login-avatar").forEach(b => {
+        b.onclick = () => {
+          ov.querySelectorAll(".login-avatar").forEach(x => x.classList.remove("picked"));
+          b.classList.add("picked");
+          picked = b.dataset.a;
+        };
+      });
+      const go = () => {
+        const name = ov.querySelector("#login-name").value;
+        if (!RTAuth.login(name, picked)) {
+          ov.querySelector("#login-name").focus();
+          return;
+        }
+        ov.remove();
+        onDone && onDone();
+      };
+      ov.querySelector("#login-go").onclick = go;
+      ov.querySelector("#login-name").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+      ov.querySelectorAll(".login-user").forEach(b => {
+        b.onclick = () => {
+          RTAuth.login(b.dataset.name);
+          ov.remove();
+          onDone && onDone();
+        };
+      });
+      setTimeout(() => ov.querySelector("#login-name")?.focus(), 300);
+    }
+  };
+
+  window.RTAuth = RTAuth;
+})();
+
+</script>
+<script>
+// RealTalk — 90s-anime-style animated characters for the POV viewport.
+// Cel-shaded SVG bust with per-scene looks, mood expressions, and classic
+// reaction tropes (sparkles / sweat drop / shock speed-lines) per answer.
+(function () {
+  const OUTLINE = "#2b2430";
+
+  // Per-scene character design: hair style + palette.
+  const CAST = {
+    coffee:     { style: "bun",   hair: "#5a3b2e", skin: "#f2c9a5", shirt: "#7a4a2f" },
+    food:       { style: "beard", hair: "#3b2c22", skin: "#caa07a", shirt: "#5c2e1e" },
+    directions: { style: "short", hair: "#b9b3a8", skin: "#f2c9a5", shirt: "#3f6d9e" },
+    smalltalk:  { style: "short", hair: "#2e2620", skin: "#caa07a", shirt: "#71875a" },
+    phone:      { style: "long",  hair: "#6b4a34", skin: "#f2c9a5", shirt: "#41608c" },
+    haircut:    { style: "beard", hair: "#241d18", skin: "#e8b98d", shirt: "#6e548c" },
+    doctor:     { style: "bun",   hair: "#241d18", skin: "#b98860", shirt: "#eef4f6" },
+    renting:    { style: "short", hair: "#4a3626", skin: "#f2c9a5", shirt: "#54708c" },
+    setup:      { style: "curly", hair: "#1d1712", skin: "#8a5c3c", shirt: "#54748c" },
+    interview:  { style: "long",  hair: "#8a4a2c", skin: "#f2d3b3", shirt: "#2c3a4a" },
+    flirting:   { style: "long",  hair: "#c2563b", skin: "#f2d3b3", shirt: "#8c4a6e" },
+    casual:     { style: "beard", hair: "#6b4a34", skin: "#e8b98d", shirt: "#8c7440" },
+    worktalk:   { style: "curly", hair: "#241d18", skin: "#8a5c3c", shirt: "#5c5c80" }
+  };
+
+  function hairSvg(style, hair) {
+    const back = {
+      short: `<path d="M45 92 Q40 34 100 30 Q160 34 155 92 L150 74 Q100 60 50 74 Z" fill="${hair}" stroke="${OUTLINE}" stroke-width="3"/>`,
+      bun:   `<circle cx="100" cy="26" r="17" fill="${hair}" stroke="${OUTLINE}" stroke-width="3"/>
+              <path d="M45 92 Q40 34 100 30 Q160 34 155 92 L150 74 Q100 60 50 74 Z" fill="${hair}" stroke="${OUTLINE}" stroke-width="3"/>`,
+      long:  `<path d="M42 92 Q36 30 100 27 Q164 30 158 92 L162 168 Q150 178 140 168 L142 96 Q100 62 58 96 L60 168 Q50 178 38 168 Z" fill="${hair}" stroke="${OUTLINE}" stroke-width="3"/>`,
+      curly: `<path d="M45 90 Q34 66 46 52 Q40 34 62 30 Q72 16 92 24 Q108 12 122 26 Q144 22 148 42 Q164 50 154 70 Q162 84 152 92 L148 76 Q100 58 52 76 Z" fill="${hair}" stroke="${OUTLINE}" stroke-width="3"/>`,
+      beard: `<path d="M45 92 Q40 34 100 30 Q160 34 155 92 L150 74 Q100 60 50 74 Z" fill="${hair}" stroke="${OUTLINE}" stroke-width="3"/>`
+    };
+    const front = {
+      short: `<path d="M52 74 Q60 52 100 50 Q140 52 148 74 Q126 62 100 66 Q74 62 52 74 Z" fill="${hair}"/>`,
+      bun:   `<path d="M52 74 Q62 48 100 48 Q138 48 148 74 Q120 58 100 62 Q80 58 52 74 Z" fill="${hair}"/>`,
+      long:  `<path d="M50 78 Q58 48 100 46 Q142 48 150 78 Q132 58 112 64 L106 54 Q84 58 50 78 Z" fill="${hair}"/>`,
+      curly: `<path d="M50 76 Q56 54 78 56 Q88 46 104 52 Q122 44 132 58 Q144 58 150 76 Q122 60 100 64 Q76 60 50 76 Z" fill="${hair}"/>`,
+      beard: `<path d="M52 74 Q60 52 100 50 Q140 52 148 74 Q126 62 100 66 Q74 62 52 74 Z" fill="${hair}"/>`
+    };
+    const extra = style === "beard"
+      ? `<path d="M58 108 Q60 152 100 156 Q140 152 142 108 Q142 138 100 144 Q58 138 58 108 Z" fill="${hair}" stroke="${OUTLINE}" stroke-width="2.5"/>`
+      : "";
+    return { back: back[style] || back.short, front: front[style] || front.short, extra };
+  }
+
+  class Character {
+    constructor(container, sceneId) {
+      this.root = container;
+      const c = CAST[sceneId] || CAST.smalltalk;
+      const h = hairSvg(c.style, c.hair);
+      const iris = "#3a2c22";
+      this.root.classList.add("anime-char");
+      this.root.innerHTML = `
+        <div class="fx-speedlines" id="fx-speed"></div>
+        <svg viewBox="0 0 200 210" class="anime-svg" aria-hidden="true">
+          ${h.back}
+          <path d="M62 196 Q64 158 100 156 Q136 158 138 196 Z" fill="${c.shirt}" stroke="${OUTLINE}" stroke-width="3"/>
+          <rect x="90" y="138" width="20" height="24" rx="8" fill="${c.skin}" stroke="${OUTLINE}" stroke-width="3"/>
+          <ellipse cx="100" cy="98" rx="52" ry="56" fill="${c.skin}" stroke="${OUTLINE}" stroke-width="3"/>
+          ${h.extra}
+          <!-- brows -->
+          <path id="an-brow-l" d="M64 82 Q76 76 88 81" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+          <path id="an-brow-r" d="M112 81 Q124 76 136 82" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- eyes: normal / happy / shock / flat -->
+          <g id="an-eyes-normal">
+            <ellipse cx="78" cy="100" rx="11" ry="13" fill="#fff" stroke="${OUTLINE}" stroke-width="2.5"/>
+            <circle cx="78" cy="102" r="6.5" fill="${iris}"/><circle cx="78" cy="102" r="2.8" fill="#120d0a"/><circle cx="75.5" cy="98.5" r="2.4" fill="#fff"/>
+            <ellipse cx="122" cy="100" rx="11" ry="13" fill="#fff" stroke="${OUTLINE}" stroke-width="2.5"/>
+            <circle cx="122" cy="102" r="6.5" fill="${iris}"/><circle cx="122" cy="102" r="2.8" fill="#120d0a"/><circle cx="119.5" cy="98.5" r="2.4" fill="#fff"/>
+          </g>
+          <g id="an-eyes-happy" style="display:none">
+            <path d="M68 102 Q78 92 88 102" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M112 102 Q122 92 132 102" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+          <g id="an-eyes-shock" style="display:none">
+            <ellipse cx="78" cy="100" rx="13" ry="15" fill="#fff" stroke="${OUTLINE}" stroke-width="2.5"/><circle cx="78" cy="102" r="2.2" fill="#120d0a"/>
+            <ellipse cx="122" cy="100" rx="13" ry="15" fill="#fff" stroke="${OUTLINE}" stroke-width="2.5"/><circle cx="122" cy="102" r="2.2" fill="#120d0a"/>
+          </g>
+          <g id="an-eyes-flat" style="display:none">
+            <path d="M67 100 L89 100" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M111 100 L133 100" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+          <!-- blush -->
+          <g id="an-blush" style="display:none">
+            <ellipse cx="66" cy="116" rx="9" ry="4.5" fill="#f2a0a0" opacity=".7"/>
+            <ellipse cx="134" cy="116" rx="9" ry="4.5" fill="#f2a0a0" opacity=".7"/>
+          </g>
+          <!-- mouths -->
+          <g id="an-mouth">
+            <path id="an-m-smile" d="M86 128 Q100 138 114 128" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round"/>
+            <path id="an-m-flat" d="M90 130 L110 130" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round" style="display:none"/>
+            <path id="an-m-grin" d="M84 126 Q100 142 116 126 Q100 132 84 126 Z" fill="#fff" stroke="${OUTLINE}" stroke-width="3" style="display:none"/>
+            <path id="an-m-wavy" d="M86 130 Q92 126 98 130 Q104 134 110 130" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round" style="display:none"/>
+            <ellipse id="an-m-o" cx="100" cy="131" rx="8" ry="10" fill="#5c2020" stroke="${OUTLINE}" stroke-width="3" style="display:none"/>
+            <path id="an-m-frown" d="M86 134 Q100 124 114 134" fill="none" stroke="${OUTLINE}" stroke-width="3.5" stroke-linecap="round" style="display:none"/>
+          </g>
+          ${h.front}
+          <!-- fx: sweat drop -->
+          <path id="fx-sweat" class="fx-sweat" d="M152 70 Q160 84 152 90 Q144 84 152 70 Z" fill="#9fd4f5" stroke="#4a90c2" stroke-width="2" style="display:none"/>
+          <!-- fx: anger vein -->
+          <g id="fx-vein" class="fx-vein" style="display:none" stroke="#e05a5a" stroke-width="3.5" stroke-linecap="round">
+            <path d="M146 52 Q150 56 146 60"/><path d="M154 52 Q150 56 154 60"/>
+            <path d="M144 62 Q150 58 156 62" fill="none"/>
+          </g>
+          <!-- fx: sparkles -->
+          <g id="fx-sparkles" class="fx-sparkles" style="display:none" fill="#ffe9a3" stroke="#e8b23f" stroke-width="1.5">
+            <path d="M46 60 L49 68 L57 71 L49 74 L46 82 L43 74 L35 71 L43 68 Z"/>
+            <path d="M158 96 L160 102 L166 104 L160 106 L158 112 L156 106 L150 104 L156 102 Z"/>
+            <path d="M52 128 L54 133 L59 135 L54 137 L52 142 L50 137 L45 135 L50 133 Z"/>
+          </g>
+          <!-- fx: question mark -->
+          <text id="fx-q" class="fx-q" x="152" y="62" font-size="30" font-weight="bold" fill="#fff" stroke="${OUTLINE}" stroke-width="1" style="display:none">?</text>
+        </svg>`;
+      this.$ = (id) => this.root.querySelector("#" + id);
+      this.reactTimer = null;
+      this.setMood("friendly");
+    }
+
+    _eyes(kind) {
+      ["normal", "happy", "shock", "flat"].forEach(k => {
+        const el = this.$("an-eyes-" + k);
+        if (el) el.style.display = k === kind ? "" : "none";
+      });
+    }
+    _mouth(kind) {
+      ["smile", "flat", "grin", "wavy", "o", "frown"].forEach(k => {
+        const el = this.$("an-m-" + k);
+        if (el) el.style.display = k === kind ? "" : "none";
+      });
+      this.mouthKind = kind;
+    }
+    _brows(offsetY, tilt) {
+      const l = this.$("an-brow-l"), r = this.$("an-brow-r");
+      if (l) l.setAttribute("transform", `translate(0 ${offsetY}) rotate(${-tilt} 76 82)`);
+      if (r) r.setAttribute("transform", `translate(0 ${offsetY}) rotate(${tilt} 124 82)`);
+    }
+    _fx(active) {
+      ["fx-sweat", "fx-vein", "fx-sparkles", "fx-q"].forEach(id => {
+        const el = this.$(id);
+        if (el) el.style.display = active.includes(id) ? "" : "none";
+      });
+      const speed = this.$("fx-speed");
+      if (speed) speed.classList.toggle("on", active.includes("fx-speed"));
+    }
+
+    setMood(mood) {
+      if (this.reacting) return;
+      this.root.classList.remove("an-bounce", "an-slump", "an-shake");
+      switch (mood) {
+        case "friendly": this._eyes("normal"); this._mouth("smile"); this._brows(0, 0); this._fx([]); this.$("an-blush").style.display = "none"; break;
+        case "neutral":  this._eyes("normal"); this._mouth("flat");  this._brows(0, 0); this._fx([]); this.$("an-blush").style.display = "none"; break;
+        case "confused": this._eyes("normal"); this._mouth("wavy");  this._brows(-4, 8); this._fx(["fx-q"]); this.$("an-blush").style.display = "none"; break;
+        case "amused":   this._eyes("happy");  this._mouth("grin");  this._brows(-2, 0); this._fx([]); this.$("an-blush").style.display = ""; break;
+        case "awkward":  this._eyes("flat");   this._mouth("wavy");  this._brows(2, -6); this._fx(["fx-sweat"]); this.$("an-blush").style.display = "none"; break;
+        case "worried":  this._eyes("normal"); this._mouth("frown"); this._brows(3, 12); this._fx(["fx-sweat"]); this.$("an-blush").style.display = "none"; break;
+        default:         this._eyes("normal"); this._mouth("smile"); this._brows(0, 0); this._fx([]);
+      }
+    }
+
+    // Reaction to the learner's reply — the 90s tropes.
+    react(quality) {
+      clearTimeout(this.reactTimer);
+      this.reacting = true;
+      this.root.classList.remove("an-bounce", "an-slump", "an-shake");
+      void this.root.offsetWidth; // restart CSS animations
+      if (quality === "natural") {
+        this._eyes("happy"); this._mouth("grin"); this._brows(-2, 0);
+        this.$("an-blush").style.display = "";
+        this._fx(["fx-sparkles"]);
+        this.root.classList.add("an-bounce");
+      } else if (quality === "awkward") {
+        this._eyes("flat"); this._mouth("wavy"); this._brows(2, -6);
+        this.$("an-blush").style.display = "none";
+        this._fx(["fx-sweat"]);
+        this.root.classList.add("an-slump");
+      } else {
+        this._eyes("shock"); this._mouth("o"); this._brows(-5, 14);
+        this.$("an-blush").style.display = "none";
+        this._fx(["fx-speed"]);
+        this.root.classList.add("an-shake");
+        this.reactTimer = setTimeout(() => {
+          if (!this.root.isConnected) return;
+          this._fx(["fx-vein"]);
+          this._eyes("normal"); this._mouth("wavy"); this._brows(-4, 10);
+          this.root.classList.remove("an-shake");
+        }, 1400);
+      }
+      // release the mood lock after the beat
+      setTimeout(() => { this.reacting = false; }, 2400);
+    }
+
+    setTalking(on) {
+      this.root.classList.toggle("an-talking", !!on);
+    }
+    setVisible(on) {
+      this.root.style.display = on ? "" : "none";
+    }
+  }
+
+  window.RTAnime = { Character, CAST };
+})();
+
+</script>
+<script>
 // RealTalk — POV scene engine. Modes: tap / watch / speak.
 // Dialogue is always English (voice + main caption); when the app language is PT,
 // a Portuguese subtitle renders under the English line, and teaching text
@@ -4818,8 +5249,8 @@ window.LEARN_EXTRA = {
         <div class="player-wrap">
           <p class="page-blurb" style="margin-bottom:14px">🎬 <em>${ptSetting || setting}</em>${ptSetting ? `<span class="sub-en">${setting}</span>` : ""}</p>
           <div class="viewport">
-            <div class="vp-scene" style="background:radial-gradient(ellipse at 60% 35%, ${c2}, ${c1})">
-              <div class="vp-avatar" id="vp-avatar">${CAST[this.sc.id] || "🙂"}</div>
+            <div class="vp-scene vp-anime" style="background:radial-gradient(ellipse at 60% 35%, ${c2}, ${c1})">
+              <div class="vp-avatar" id="vp-avatar"></div>
             </div>
             <video id="vp-video" style="display:none" playsinline></video>
             <div class="vp-rec"><span class="dot"></span> REC</div>
@@ -4836,6 +5267,8 @@ window.LEARN_EXTRA = {
           <div id="clip-rack"></div>
         </div>`;
       this.$avatar = this.root.querySelector("#vp-avatar");
+      this.anime = window.RTAnime ? new RTAnime.Character(this.$avatar, this.sc.id) : null;
+      if (!this.anime) this.$avatar.textContent = CAST[this.sc.id] || "🙂";
       this.$video = this.root.querySelector("#vp-video");
       this.$mood = this.root.querySelector("#vp-mood");
       this.$speaker = this.root.querySelector("#vp-speaker");
@@ -4869,12 +5302,17 @@ window.LEARN_EXTRA = {
       this.$linePt.textContent = "";
 
       if (mood && !isYou) {
-        this.$avatar.textContent = CAST[this.sc.id] || MOOD_AVATARS[mood] || "🙂";
+        if (this.anime) { this.anime.setVisible(true); this.anime.setMood(mood); }
+        else this.$avatar.textContent = CAST[this.sc.id] || MOOD_AVATARS[mood] || "🙂";
         this.$mood.textContent = (MOOD_AVATARS[mood] || "") + " " + moodLabel(mood);
         this.$mood.style.display = "block";
       } else if (isYou) {
         this.$mood.style.display = "none";
+      } else if (!mood && !isYou && this.anime) {
+        // narrator beat — the character steps out of frame
+        this.anime.setVisible(false);
       }
+      if (this.anime) this.anime.setTalking(!isYou);
       this.$avatar.classList.add("talking");
 
       const words = text.split(/\s+/);
@@ -4894,6 +5332,7 @@ window.LEARN_EXTRA = {
         if (called || !(captionDone && voiceDone) || this.destroyed) return;
         called = true;
         this.$avatar.classList.remove("talking");
+        if (this.anime) this.anime.setTalking(false);
         cb && cb();
       };
       this.later(() => { captionDone = true; maybeDone(); }, words.length * WORD_MS + 250);
@@ -5088,6 +5527,12 @@ window.LEARN_EXTRA = {
       if (micRow) micRow.style.display = "none";
 
       this.playLine({ speaker: isPT() ? "Você" : "You", text: say, isYou: true, pt: isPT() && this.choicePt(idx) }, () => {
+        // the character reacts to what you just said — 90s anime style
+        if (this.anime) this.anime.react(ch.quality);
+        if (ch.quality === "wrong") {
+          const vp = this.root.querySelector(".viewport");
+          if (vp) { vp.classList.remove("vp-shake"); void vp.offsetWidth; vp.classList.add("vp-shake"); }
+        }
         const fb = document.createElement("div");
         fb.className = `feedback ${ch.quality === "natural" ? "natural" : ch.quality === "awkward" ? "awkward" : "wrong"}`;
         const spokeNote = spoken && spoken.spoken ? `<div class="spoke-note">${L("spokeNote", { pct: spoken.pct })}</div>` : "";
@@ -5356,9 +5801,9 @@ window.LEARN_EXTRA = {
   }
   const grammarList = () => [...GRAMMAR_BASE, slangLesson()];
 
-  // ---------- progress ----------
+  // ---------- progress (per profile) ----------
   const store = {
-    key: "realtalk-progress",
+    get key() { return window.RTAuth ? RTAuth.progressKey() : "realtalk-progress"; },
     data: null,
     load() {
       try { this.data = JSON.parse(localStorage.getItem(this.key)) || {}; }
@@ -5377,7 +5822,6 @@ window.LEARN_EXTRA = {
     },
     sceneDone(id, counts) { this.data.scenes[id] = { done: true, counts }; this.save(); renderNav(); }
   };
-  store.load();
 
   // ---------- theme + top bar ----------
   function applyTheme() {
@@ -5396,7 +5840,11 @@ window.LEARN_EXTRA = {
         <button class="lang-btn ${isPT() ? "active" : ""}" data-lang="pt" title="Interface em português">🇧🇷 PT</button>
         <button class="lang-btn ${!isPT() ? "active" : ""}" data-lang="en" title="Interface in English">EN</button>
       </span>
-      <span class="accent-tagline">${accentMeta().motif} ${accentMeta().tagline}</span>`;
+      <span class="accent-tagline">${accentMeta().motif} ${accentMeta().tagline}</span>
+      ${window.RTAuth && RTAuth.current() ? `
+        <button class="profile-chip" id="logout-btn" title="${isPT() ? "Trocar de perfil" : "Switch profile"}">
+          <span>${RTAuth.current().avatar}</span>${RTAuth.current().name} · ${isPT() ? "Sair" : "Log out"}
+        </button>` : ""}`;
     bar.querySelectorAll(".accent-btn").forEach(btn => {
       btn.onclick = () => {
         window.RT_ACCENT = btn.dataset.accent;
@@ -5415,6 +5863,8 @@ window.LEARN_EXTRA = {
         route();
       };
     });
+    const logoutBtn = bar.querySelector("#logout-btn");
+    if (logoutBtn) logoutBtn.onclick = () => RTAuth.logout();
   }
 
   function navLabelHtml(emoji, pt, en) {
@@ -5500,7 +5950,7 @@ window.LEARN_EXTRA = {
     $main.innerHTML = `
       <div class="hero">
         <div class="hero-emoji">${a.motif}</div>
-        <h1>${a.greeting}! 👋</h1>
+        <h1>${a.greeting}${window.RTAuth && RTAuth.current() ? ", " + RTAuth.current().name : ""}! 👋</h1>
         <p>${L("heroP", { accent: a.name, flag: a.flag })}</p>
         <a class="btn" href="#/scenario/coffee">${L("heroCta")}</a>
         <div class="hero-postcards">${a.postcards}</div>
@@ -5841,9 +6291,20 @@ window.LEARN_EXTRA = {
   };
 
   window.addEventListener("hashchange", route);
-  applyTheme();
-  renderChrome();
-  route();
+
+  function startApp() {
+    store.load();
+    applyTheme();
+    renderChrome();
+    route();
+  }
+
+  if (window.RTAuth && !RTAuth.current()) {
+    applyTheme();
+    RTAuth.showLogin(startApp);
+  } else {
+    startApp();
+  }
 })();
 
 </script>
