@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="ui-mobile">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RealTalk English — Real life English for life abroad</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f4587a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>RealTalk English — Mobile</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 </head>
 <body>
@@ -1006,7 +1008,7 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
   transition: filter .15s;
 }
 .admin-del:hover { filter: brightness(.95); }
-@media (max-width: 900px) {
+@media (min-width: 0px) {
   .admin-vocab-row { grid-template-columns: 1fr 1fr; }
   .admin-vocab-row .v-ex { grid-column: 1 / 2; }
 }
@@ -1150,7 +1152,7 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
 }
 
 /* ============ Responsive ============ */
-@media (max-width: 900px) {
+@media (min-width: 0px) {
   .app { flex-direction: column; }
   .sidebar { width: 100%; height: auto; position: static; overflow: visible; border-right: none; border-bottom: 1px solid var(--line); }
   .sidebar .nav, .sidebar-foot { display: none; }
