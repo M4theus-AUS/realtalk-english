@@ -614,22 +614,42 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
   text-shadow: 0 1px 4px rgba(0,0,0,.6);
 }
 
+/* the classic RPG dialogue box */
 .vp-caption {
-  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-  padding: 44px 22px 16px;
-  background: linear-gradient(transparent, rgba(10, 9, 6, .9) 45%);
-  color: #fff;
+  position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 2;
+  padding: 7px 26px 9px 14px;
+  background: #f8f4e2;
+  border: 3px solid #33283a;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px #8a94c9, 0 3px 0 rgba(20, 14, 28, .35);
+  color: #2e2a30;
 }
-.vp-speaker { font-size: 11.5px; letter-spacing: 1.6px; text-transform: uppercase; color: #f5c76a; font-weight: 700; margin-bottom: 3px; }
-.vp-speaker.you { color: #8fd4ae; }
-.vp-line { font-size: 17.5px; font-weight: 600; line-height: 1.4; min-height: 25px; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+.vp-speaker {
+  font-size: 15px; letter-spacing: .5px; text-transform: uppercase;
+  color: #a03a2e; font-weight: 400; margin-bottom: 0;
+  font-family: "VT323", "Courier New", monospace;
+}
+.vp-speaker.you { color: #2e6a8a; }
+.vp-line {
+  font-size: 21px; font-weight: 400; line-height: 1.1; min-height: 23px;
+  font-family: "VT323", "Courier New", monospace;
+  color: #2e2a30; text-shadow: none;
+}
 .vp-line-pt {
-  font-size: 13.5px; font-style: italic; color: #ffd98a;
-  line-height: 1.35; margin-top: 3px; min-height: 18px;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  font-size: 16px; font-style: normal; color: #8a7a68;
+  line-height: 1.1; margin-top: 2px; min-height: 17px;
+  font-family: "VT323", "Courier New", monospace;
+  text-shadow: none;
   animation: rise .3s ease both;
 }
 .vp-line-pt:empty { animation: none; }
+.vp-caption::after {
+  content: "▼";
+  position: absolute; right: 9px; bottom: 5px;
+  color: #a03a2e; font-size: 13px;
+  animation: cont-blink 1s steps(2) infinite;
+}
+@keyframes cont-blink { 0%, 49% { opacity: 1 } 50%, 100% { opacity: 0 } }
 .vp-mood {
   position: absolute; top: 40px; right: 16px; z-index: 3;
   font-size: 12px; background: rgba(0,0,0,.5); color: #fff;
@@ -973,39 +993,23 @@ body.building #main [contenteditable], body.building #main :hover { cursor: text
 body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5); }
 
 /* ============ 90s anime layer ============ */
-/* faded 90s film wash over the whole scene */
-.vp-anime { filter: sepia(.16) saturate(.78) contrast(.94) brightness(1.03); }
-.vp-anime::before {
-  /* warm overhead light + soft scanlines */
-  content: "";
-  position: absolute; inset: 0; z-index: 2;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 8%, rgba(255, 244, 214, .22), transparent 55%),
-    repeating-linear-gradient(0deg, rgba(40, 28, 18, .09) 0 1.5px, transparent 1.5px 4px);
-}
-.vp-env {
+/* retro pixel scene — crisp squares, no smoothing anywhere */
+.vp-anime canvas { image-rendering: pixelated; image-rendering: crisp-edges; }
+.px-env {
   position: absolute; inset: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
 }
-.vp-env svg { width: 100%; height: 100%; }
-/* depth of field: the set sits soft behind the character */
-.vp-env-back { z-index: 0; }
-.vp-env-back svg { filter: blur(2.8px) saturate(.92) brightness(1.02); transform: scale(1.06); }
-.vp-env-front { z-index: 1; }
-.vp-env-front svg { filter: blur(.6px); }
-.vp-bokeh {
-  position: absolute; inset: 0; z-index: 0;
+.px-env-back { z-index: 0; }
+.px-env-front { z-index: 1; }
+.px-player {
+  position: absolute;
+  left: 6%; bottom: -3%;
+  width: 22%;
+  z-index: 1;
   pointer-events: none;
-  background:
-    radial-gradient(circle 30px at 16% 26%, rgba(255, 242, 205, .20) 0 55%, transparent 72%),
-    radial-gradient(circle 18px at 30% 14%, rgba(255, 242, 205, .16) 0 55%, transparent 72%),
-    radial-gradient(circle 24px at 82% 20%, rgba(255, 230, 190, .18) 0 55%, transparent 72%),
-    radial-gradient(circle 14px at 90% 42%, rgba(255, 242, 205, .14) 0 55%, transparent 72%),
-    radial-gradient(circle 20px at 70% 10%, rgba(255, 250, 225, .13) 0 55%, transparent 72%);
-  animation: bokeh-drift 16s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 0 rgba(40, 30, 50, .25));
 }
-@keyframes bokeh-drift { from { transform: translateX(-6px) } to { transform: translateX(6px) } }
 .env-steam path { animation: env-steam 2.2s ease-in-out infinite; }
 @keyframes env-steam { 0% { opacity: 0; transform: translateY(4px) } 30% { opacity: .8 } 100% { opacity: 0; transform: translateY(-8px) } }
 .env-smoke path { animation: env-steam 3s ease-in-out infinite; }
@@ -1014,13 +1018,25 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
 .env-light { animation: env-light 1.6s ease-in-out infinite alternate; }
 @keyframes env-light { from { opacity: .45 } to { opacity: 1 } }
 
-.anime-char {
-  position: relative; z-index: 1;
-  height: 100%;
-  display: flex; align-items: flex-end; justify-content: center;
+/* the NPC stands on the upper-right platform, battle-intro style */
+.pixel-char {
+  position: absolute !important;
+  right: 12%; bottom: 27%;
+  width: 15%;
+  z-index: 1;
 }
-/* visual-novel crop: the bust runs off the bottom of the frame */
-.anime-char .anime-svg { height: 118%; margin-bottom: -11%; }
+.pixel-char .px-canvas {
+  display: block; width: 100%;
+  filter: drop-shadow(0 2px 0 rgba(40, 30, 50, .25));
+}
+.pixel-char .px-emote {
+  position: absolute;
+  top: -46%; right: -8%;
+  width: 44%;
+  animation: emote-pop .25s var(--ease-out) both;
+}
+@keyframes emote-pop { from { transform: scale(.4) translateY(4px); opacity: 0 } to { transform: scale(1) translateY(0); opacity: 1 } }
+.pixel-char .fx-speedlines { display: none; }
 .anime-svg {
   height: 100%;
   animation: an-breathe 4.2s ease-in-out infinite;
@@ -1106,14 +1122,13 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
   .tab-btn { white-space: nowrap; flex-shrink: 0; padding: 8px 13px; font-size: 13px; }
 
   .viewport { aspect-ratio: 3 / 2; }
-  .vp-line { font-size: 14.5px; min-height: 20px; }
+  .vp-line { font-size: 17px; min-height: 19px; }
   .vp-line-pt {
-    font-size: 12px;
+    font-size: 13px;
     display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .vp-caption { padding: 26px 14px 12px; }
-  .vp-avatar { font-size: 64px; }
+  .vp-caption { padding: 5px 20px 7px 10px; }
   .choice-btn, .speak-option { font-size: 14px; padding: 11px 13px; }
 
   .phrase-row { flex-direction: column; gap: 2px; }
@@ -5509,290 +5524,376 @@ window.LEARN_EXTRA = {
 
 </script>
 <script>
-// RealTalk — anime dialogue scenes, visual-novel framing:
-// large chest-up character (big refined eyes, hair sheen, cel shading) over a
-// soft-focus environment with bokeh light. Idle life: blink, glance, breathe,
-// mouth-synced talking. Reactions: hop+sparkles / sweat+slump / shock+vein.
+// RealTalk — retro pixel scene engine (GBA-era RPG style).
+// NPC sprites on tiled pixel sets, 2-frame idle, blink, talk-mouth,
+// and classic RPG emotes: ! ? sweat anger sparkles. Crisp pixels, no smoothing.
 (function () {
-  const O = "#4a3a33";
 
-  // ---------- cast: looks per scene ----------
+  // ---------- palettes per scene ----------
   const CAST = {
-    coffee:     { style: "bun",   hair: "#5a4032", skin: "#f5d5ae", top: "#ddd3bd", garment: "apron", gColor: "#8a5a40", iris: "#6a4a34" },
-    food:       { style: "beard", hair: "#3a2b20", skin: "#e0b184", top: "#6a4a3a", iris: "#4a3626" },
-    directions: { style: "short", hair: "#b0a89a", skin: "#f5d5ae", top: "#6a80a0", iris: "#5a6a78" },
-    smalltalk:  { style: "short", hair: "#2e2620", skin: "#e0b184", top: "#8aa06a", iris: "#4a3626" },
-    phone:      { style: "long",  hair: "#6a4a34", skin: "#f5d5ae", top: "#d9c9a8", iris: "#6a4a34" },
-    haircut:    { style: "beard", hair: "#241d18", skin: "#eabf90", top: "#4a4a52", iris: "#38291f" },
-    doctor:     { style: "bun",   hair: "#241d18", skin: "#c08e64", top: "#f2ede0", garment: "coat", iris: "#38291f" },
-    renting:    { style: "short", hair: "#4a3626", skin: "#f5d5ae", top: "#5a6a80", garment: "tie", iris: "#4a3626" },
-    setup:      { style: "curly", hair: "#1d1712", skin: "#96683f", top: "#7a9c94", iris: "#2e2118" },
-    interview:  { style: "long",  hair: "#7a4a2c", skin: "#f7ddbc", top: "#7a5560", garment: "blazer", iris: "#5c3a24" },
-    flirting:   { style: "long",  hair: "#b55a42", skin: "#f7ddbc", top: "#cf8f99", garment: "stripes", iris: "#7a4530" },
-    casual:     { style: "beard", hair: "#6a4a34", skin: "#eabf90", top: "#a05a4a", iris: "#4a3626" },
-    worktalk:   { style: "curly", hair: "#241d18", skin: "#96683f", top: "#6a6a80", garment: "blazer", iris: "#2e2118" }
+    coffee:     { style: "bun",   hair: "#6b4632", skin: "#f6cfa0", top: "#c9484f", pants: "#4a5568" },
+    food:       { style: "beard", hair: "#3d2c1e", skin: "#e0a878", top: "#5c8a4a", pants: "#3f3a32" },
+    directions: { style: "short", hair: "#b8b0a0", skin: "#f6cfa0", top: "#4a6a9c", pants: "#5a544a" },
+    smalltalk:  { style: "short", hair: "#2e241c", skin: "#e0a878", top: "#8aa04a", pants: "#4a4550" },
+    phone:      { style: "long",  hair: "#7a5236", skin: "#f6cfa0", top: "#d9a04a", pants: "#5c4a6a" },
+    haircut:    { style: "beard", hair: "#241c14", skin: "#eab887", top: "#4a4a58", pants: "#32302e" },
+    doctor:     { style: "bun",   hair: "#241c14", skin: "#c08a5c", top: "#f2f2ea", pants: "#6a7280" },
+    renting:    { style: "short", hair: "#4f3822", skin: "#f6cfa0", top: "#3f5878", pants: "#2e3444" },
+    setup:      { style: "curly", hair: "#1c140f", skin: "#96683f", top: "#3f8a80", pants: "#4a5568" },
+    interview:  { style: "long",  hair: "#8a4f2a", skin: "#f8dcb2", top: "#7a4658", pants: "#3a3644" },
+    flirting:   { style: "long",  hair: "#c25a3a", skin: "#f8dcb2", top: "#e08a9c", pants: "#4a6a9c" },
+    casual:     { style: "beard", hair: "#6b4632", skin: "#eab887", top: "#c9704a", pants: "#4a6a9c" },
+    worktalk:   { style: "curly", hair: "#241c14", skin: "#96683f", top: "#5c5c7a", pants: "#32303c" }
   };
 
   function shade(hex, f) {
     const n = parseInt(hex.slice(1), 16);
-    const ch = (s) => Math.max(0, Math.min(255, Math.round(((n >> s) & 255) * f)));
-    return `#${((1 << 24) + (ch(16) << 16) + (ch(8) << 8) + ch(0)).toString(16).slice(1)}`;
+    const c = (s) => Math.max(0, Math.min(255, Math.round(((n >> s) & 255) * f)));
+    return `#${((1 << 24) + (c(16) << 16) + (c(8) << 8) + c(0)).toString(16).slice(1)}`;
   }
 
-  // hair on a large head: face spans x74-166, brow line y~78, chin y~140
-  function hairSvg(style, hair) {
-    const dark = shade(hair, .78), sheen = shade(hair, 1.45);
-    const common = { dark, sheen };
-    const H = {
-      short: {
-        back: `<path d="M70 96 Q64 34 120 28 Q176 34 170 96 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
-        front: `<path d="M76 82 Q80 44 120 40 Q160 44 164 82 Q152 62 136 70 L128 56 Q118 68 106 62 Q92 64 76 82 Z" fill="${hair}"/>
-                <path d="M88 52 Q104 42 122 44" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".55"/>`
-      },
-      bun: {
-        back: `<circle cx="120" cy="26" r="17" fill="${hair}" stroke="${O}" stroke-width="2.2"/>
-               <circle cx="120" cy="22" r="6" fill="${sheen}" opacity=".4"/>
-               <path d="M70 96 Q64 36 120 30 Q176 36 170 96 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
-        front: `<path d="M76 80 Q84 44 120 42 Q156 44 164 80 Q146 58 122 62 Q120 54 116 62 Q94 60 76 80 Z" fill="${hair}"/>
-                <path d="M92 52 Q106 44 124 46" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".55"/>`
-      },
-      long: {
-        back: `<path d="M68 92 Q62 32 120 26 Q178 32 172 92 L178 200 Q168 214 156 202 L158 100 Q120 66 82 100 L84 202 Q72 214 62 200 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>
-               <path d="M170 120 Q176 160 170 196 M70 120 Q64 160 70 196" fill="none" stroke="${dark}" stroke-width="4" opacity=".5"/>`,
-        front: `<path d="M74 84 Q80 42 120 38 Q160 42 166 84 Q150 60 134 68 L126 52 Q116 66 104 60 Q88 62 74 84 Z" fill="${hair}"/>
-                <path d="M90 50 Q106 40 126 43" fill="none" stroke="${sheen}" stroke-width="5.5" stroke-linecap="round" opacity=".55"/>`
-      },
-      curly: {
-        back: `<path d="M70 94 Q56 78 66 62 Q58 42 78 34 Q86 20 106 24 Q120 14 136 24 Q156 20 164 36 Q182 44 174 64 Q184 80 170 94 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
-        front: `<path d="M76 82 Q80 56 96 60 Q100 46 116 52 Q126 42 138 52 Q154 50 162 66 Q166 74 164 82 Q146 62 132 68 Q120 60 108 66 Q90 64 76 82 Z" fill="${hair}"/>
-                <path d="M94 56 Q108 46 126 48" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".45"/>`
-      },
-      beard: {
-        back: `<path d="M70 96 Q64 34 120 28 Q176 34 170 96 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
-        front: `<path d="M76 82 Q82 46 120 42 Q158 46 164 82 Q148 60 132 68 Q120 58 104 64 Q90 64 76 82 Z" fill="${hair}"/>
-                <path d="M90 52 Q104 44 122 46" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".5"/>`,
-        extra: `<path d="M80 108 Q82 148 120 152 Q158 148 160 108 Q160 138 120 144 Q80 138 80 108 Z" fill="${hair}" stroke="${O}" stroke-width="1.6" opacity=".95"/>`
+  // ---------- character sprite (18 wide x 26 tall) ----------
+  // keys: O outline, H hair, D hair shade, S skin, s skin shade, W eye white,
+  // E eye dark, R mouth, T shirt, U shirt shade, P pants, p pants shade,
+  // K blush, . transparent
+  const HEAD = {
+    short: [
+      "..................",
+      "..................",
+      ".....OOOOOOOO.....",
+      "....OHHHHHHHHO....",
+      "...OHHHHHHHHHHO...",
+      "...OHHHHHHHHHHO...",
+      "...OHDHHHHHHDHO...",
+      "...OHSSSSSSSSHO..."
+    ],
+    bun: [
+      "........OOO.......",
+      ".......OHHHO......",
+      "....OOOOHHHOO.....",
+      "....OHHHHHHHHO....",
+      "...OHHHHHHHHHHO...",
+      "...OHHHHHHHHHHO...",
+      "...OHDHHHHHHDHO...",
+      "...OHSSSSSSSSHO..."
+    ],
+    long: [
+      "..................",
+      "..................",
+      ".....OOOOOOOO.....",
+      "....OHHHHHHHHO....",
+      "...OHHHHHHHHHHO...",
+      "..OHHHHHHHHHHHHO..",
+      "..OHHDHHHHHHDHHO..",
+      "..OHHSSSSSSSSHHO.."
+    ],
+    curly: [
+      "..................",
+      "....O.OOOOOO.O....",
+      "...OHOHHHHHHOHO...",
+      "..OHHHHHHHHHHHHO..",
+      "..OHHHHHHHHHHHHO..",
+      "...OHHHHHHHHHHO...",
+      "...OHDHHHHHHDHO...",
+      "...OHSSSSSSSSHO..."
+    ],
+    beard: [
+      "..................",
+      "..................",
+      ".....OOOOOOOO.....",
+      "....OHHHHHHHHO....",
+      "...OHHHHHHHHHHO...",
+      "...OHHHHHHHHHHO...",
+      "...OHDHHHHHHDHO...",
+      "...OHSSSSSSSSHO..."
+    ]
+  };
+
+  // face rows 8-13 per expression (eyes rows 8-9, cheeks 10, mouth 11-12, chin 13)
+  const FACE = {
+    normal: [
+      "...OSWWESSWWESO...".replace("...O", "...O"),
+      "...OSWWESSWWESO...",
+      "...OSSSSSSSSSSO...",
+      "...OSSSSRRSSSSO...",
+      "...OSSSSSSSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    blink: [
+      "...OSSSSSSSSSSO...",
+      "...OSEESSSSEESO...",
+      "...OSSSSSSSSSSO...",
+      "...OSSSSRRSSSSO...",
+      "...OSSSSSSSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    talk: [
+      "...OSWWESSWWESO...",
+      "...OSWWESSWWESO...",
+      "...OSSSSSSSSSSO...",
+      "...OSSSROORSSSO...",
+      "...OSSSSRRSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    happy: [
+      "...OSEESSSSEESO...",
+      "...OSSSSSSSSSSO...",
+      "...OKKSSSSSSKKO...",
+      "...OSSSRRRRSSSO...",
+      "...OSSSSRRSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    happytalk: [
+      "...OSEESSSSEESO...",
+      "...OSSSSSSSSSSO...",
+      "...OKKSSSSSSKKO...",
+      "...OSSSROORSSSO...",
+      "...OSSSSRRSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    shock: [
+      "...OSWWWSSWWWSO...",
+      "...OSWEWSSWEWSO...",
+      "...OSWWWSSWWWSO...",
+      "...OSSSROORSSSO...",
+      "...OSSSSOOSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    flat: [
+      "...OSSSSSSSSSSO...",
+      "...OSEEESSEEESO...",
+      "...OSSSSSSSSSSO...",
+      "...OSSREEEERSSO...",
+      "...OSSSSSSSSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    frown: [
+      "...OSWWESSWWESO...",
+      "...OSWWESSWWESO...",
+      "...OSSSSSSSSSSO...",
+      "...OSSSSRRSSSSO...",
+      "...OSSSRSSRSSSO...",
+      "....OSSSSSSSSO...."
+    ],
+    annoyed: [
+      "...OSEEESSEEESO...",
+      "...OSWWESSWWESO...",
+      "...OSSSSSSSSSSO...",
+      "...OSSREEEERSSO...",
+      "...OSSSSSSSSSSO...",
+      "....OSSSSSSSSO...."
+    ]
+  };
+
+  // body rows 14-25 (shoulders->feet); outfit variants
+  function bodyRows(garment) {
+    const base = [
+      "....OOTTTTTTOO....",
+      "...OTTTTTTTTTTO...",
+      "..OTTTTTTTTTTTTO..",
+      "..OSTTTTTTTTTTSO..",
+      "..OSTTTUTTUTTTSO..",
+      "...OTTTTTTTTTTO...",
+      "...OTTTTTTTTTTO...",
+      "....OPPPPPPPPO....",
+      "....OPPPOOPPPO....",
+      "....OPPO..OPPO....",
+      "....OppO..OppO....",
+      "....OOO....OOO...."
+    ];
+    if (garment === "apron") {
+      base[2] = "..OTTAAAAAAAATTO..".replace(/A/g, "A");
+      base[3] = "..OSTAAAAAAAATSO..";
+      base[4] = "..OSTAAAAAAAATSO..";
+      base[5] = "...OTAAAAAAAATO...";
+      base[6] = "...OTAAAAAAAATO...";
+    } else if (garment === "coat") {
+      base[1] = "...OWWTTTTTTWWO...";
+      base[2] = "..OWWTTTTTTTTWWO..";
+      base[3] = "..OSWTTTTTTTTWSO..";
+      base[4] = "..OSWTTUTTUTTWSO..";
+      base[5] = "...OWTTTTTTTTWO...";
+      base[6] = "...OWTTTTTTTTWO...";
+    } else if (garment === "tie") {
+      base[2] = "..OTTTTTRRTTTTTO..";
+      base[3] = "..OSTTTTRRTTTTSO..";
+      base[4] = "..OSTTTTRRTTTTSO..";
+    } else if (garment === "stripes") {
+      base[2] = "..OWWWWWWWWWWWWO..";
+      base[4] = "..OSWWWWWWWWWWSO..";
+      base[6] = "...OWWWWWWWWWWO...";
+    }
+    return base;
+  }
+
+  const OUTFIT = { coffee: "apron", doctor: "coat", renting: "tie", interview: "tie", worktalk: "tie", flirting: "stripes" };
+
+  // ---------- emote sprites (drawn above the head) ----------
+  const EMOTES = {
+    exclaim: { pal: { R: "#e04838", W: "#fff2e0", O: "#402820" }, rows: [
+      ".OOO.", "OWRWO", "OWRWO", "OWRWO", ".ORO.", ".OOO.", ".ORO.", ".OOO."
+    ] },
+    question: { pal: { R: "#4a78c9", W: "#fff2e0", O: "#283048" }, rows: [
+      ".OOOO.", "OWRRWO", "OW..RO", "..ORO.", "..ORO.", "..OO..", "..OR..", "..OO.."
+    ] },
+    sweat: { pal: { R: "#7ac0e8", W: "#d8f0fc", O: "#3a688a" }, rows: [
+      "..O..", ".ORO.", ".ORO.", "ORRWO", "ORRWO", ".OOO."
+    ] },
+    anger: { pal: { R: "#e04838", O: "#e04838" }, rows: [
+      "R.R.R", ".RRR.", "RR.RR", ".RRR.", "R.R.R"
+    ] },
+    sparkle: { pal: { R: "#f2d060", W: "#fdf6d8", O: "#c99a30" }, rows: [
+      "..R..", ".RWR.", "RWWWR", ".RWR.", "..R.."
+    ] },
+    heart: { pal: { R: "#e06a8a", O: "#a03a52" }, rows: [
+      ".RR.RR.", "RRRRRRR", "RRRRRRR", ".RRRRR.", "..RRR..", "...R..."
+    ] }
+  };
+
+  function drawGrid(ctx, rows, pal, ox, oy) {
+    rows.forEach((row, y) => {
+      for (let x = 0; x < row.length; x++) {
+        const k = row[x];
+        if (k === "." || k === " ") continue;
+        const col = pal[k];
+        if (!col) continue;
+        ctx.fillStyle = col;
+        ctx.fillRect(ox + x, oy + y, 1, 1);
       }
-    };
-    const h = H[style] || H.short;
-    return { back: h.back, front: h.front, extra: h.extra || "", ...common };
-  }
-
-  function outfitSvg(c) {
-    const dark = shade(c.top, .8);
-    const base = `
-      <path d="M46 230 Q50 176 86 166 L120 158 L154 166 Q190 176 194 230 Z" fill="${c.top}" stroke="${O}" stroke-width="2.2"/>
-      <path d="M46 230 Q50 176 86 166 L94 172 Q70 184 62 230 Z" fill="${dark}" opacity=".45"/>
-      <path d="M104 160 Q120 170 136 160 L132 168 Q120 176 108 168 Z" fill="${dark}" opacity=".6"/>`;
-    const extra =
-      c.garment === "apron" ? `<path d="M96 176 L144 176 L150 230 L90 230 Z" fill="${c.gColor}" stroke="${O}" stroke-width="1.6"/><path d="M102 176 L104 164 M138 176 L136 164" stroke="${c.gColor}" stroke-width="5"/>` :
-      c.garment === "coat" ? `<path d="M84 166 L100 160 L96 230 L74 226 Z M156 166 L140 160 L144 230 L166 226 Z" fill="#fbf8f0" stroke="${O}" stroke-width="1.6"/>` :
-      c.garment === "stripes" ? `${[0, 1, 2].map(i => `<path d="M52 ${188 + i * 16} Q120 ${196 + i * 16} 188 ${188 + i * 16} L188 ${195 + i * 16} Q120 ${203 + i * 16} 52 ${195 + i * 16} Z" fill="#fbf5ee" opacity=".7"/>`).join("")}` :
-      c.garment === "blazer" ? `<path d="M92 164 L120 196 L148 164 L154 170 L120 210 L86 170 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.4"/><path d="M86 168 L100 162 L120 196 L96 230 L78 228 Z M154 168 L140 162 L120 196 L144 230 L162 228 Z" fill="${shade(c.top, .85)}" stroke="${O}" stroke-width="1.6"/>` :
-      c.garment === "tie" ? `<path d="M114 162 L126 162 L124 172 L116 172 Z M116 172 L124 172 L126 206 L120 214 L114 206 Z" fill="#8a4a44" stroke="${O}" stroke-width="1.3"/><path d="M96 160 L114 162 L110 174 Z M144 160 L126 162 L130 174 Z" fill="#fbf8f0" stroke="${O}" stroke-width="1.3"/>` : "";
-    return base + extra;
+    });
   }
 
   class Character {
     constructor(container, sceneId) {
       this.root = container;
+      this.sceneId = sceneId;
       const c = CAST[sceneId] || CAST.smalltalk;
-      const h = hairSvg(c.style, c.hair);
-      const skinShade = shade(c.skin, .88);
-      this.root.classList.add("anime-char");
+      this.pal = {
+        O: "#33283a", H: c.hair, D: shade(c.hair, .7), S: c.skin, s: shade(c.skin, .82),
+        W: "#ffffff", E: "#2b2026", R: "#b8504a", T: c.top, U: shade(c.top, .72),
+        P: c.pants, p: shade(c.pants, .72), K: "#eb9a8a", A: "#e8dcc0"
+      };
+      this.head = HEAD[(c.style in HEAD) ? c.style : "short"];
+      this.beard = c.style === "beard";
+      this.body = bodyRows(OUTFIT[sceneId]);
+      this.root.classList.add("pixel-char");
       this.root.innerHTML = `
-        <div class="fx-speedlines" id="fx-speed"></div>
-        <svg viewBox="0 0 240 232" class="anime-svg" aria-hidden="true">
-          <defs>
-            <radialGradient id="iris-${sceneId}" cx="50%" cy="40%">
-              <stop offset="0%" stop-color="${shade(c.iris, 1.6)}"/>
-              <stop offset="55%" stop-color="${c.iris}"/>
-              <stop offset="100%" stop-color="${shade(c.iris, .6)}"/>
-            </radialGradient>
-            <filter id="soft-${sceneId}" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="1.6"/>
-            </filter>
-          </defs>
-          ${h.back}
-          <g id="an-body">
-            <path d="M108 130 L132 130 L132 168 L108 168 Z" fill="${c.skin}" stroke="${O}" stroke-width="2"/>
-            <path d="M108 132 Q120 142 132 132 L132 146 Q120 152 108 146 Z" fill="${skinShade}" opacity=".7"/>
-            ${outfitSvg(c)}
-          </g>
-          <g id="an-head">
-            <path d="M120 38 C 88 38 72 60 73 90 C 74 116 92 136 120 142 C 148 136 166 116 167 90 C 168 60 152 38 120 38 Z" fill="${c.skin}" stroke="${O}" stroke-width="2.2"/>
-            <path d="M150 60 C 162 74 164 100 152 120 C 162 104 162 76 150 60 Z" fill="${skinShade}" opacity=".8"/>
-            <path d="M72 92 Q68 98 73 104 M168 92 Q172 98 167 104" fill="${c.skin}" stroke="${O}" stroke-width="1.8"/>
-            ${h.extra}
-            <path id="an-brow-l" d="M86 76 Q97 71 108 75" fill="none" stroke="${shade(c.hair, .7)}" stroke-width="3.2" stroke-linecap="round"/>
-            <path id="an-brow-r" d="M132 75 Q143 71 154 76" fill="none" stroke="${shade(c.hair, .7)}" stroke-width="3.2" stroke-linecap="round"/>
-            <g id="an-eyes-normal">
-              <path d="M87 94 Q97 84 107 94 Q97 103 87 94 Z" fill="#fff" stroke="${O}" stroke-width="1.2"/>
-              <path d="M133 94 Q143 84 153 94 Q143 103 133 94 Z" fill="#fff" stroke="${O}" stroke-width="1.2"/>
-              <g id="an-pupils">
-                <circle cx="97" cy="93" r="6.2" fill="url(#iris-${sceneId})"/>
-                <circle cx="97" cy="93" r="2.6" fill="#17100c"/>
-                <circle cx="94.6" cy="90.2" r="2" fill="#fff"/><circle cx="99.6" cy="95.6" r="1" fill="#fff" opacity=".8"/>
-                <circle cx="143" cy="93" r="6.2" fill="url(#iris-${sceneId})"/>
-                <circle cx="143" cy="93" r="2.6" fill="#17100c"/>
-                <circle cx="140.6" cy="90.2" r="2" fill="#fff"/><circle cx="145.6" cy="95.6" r="1" fill="#fff" opacity=".8"/>
-              </g>
-              <path d="M85 92 Q97 81 109 92 L107 88.5 Q97 80 87 88.5 Z" fill="${O}"/>
-              <path d="M131 92 Q143 81 155 92 L153 88.5 Q143 80 133 88.5 Z" fill="${O}"/>
-              <path d="M88 100 Q97 104 106 100 M134 100 Q143 104 152 100" fill="none" stroke="${O}" stroke-width="1" opacity=".4"/>
-              <g id="an-lids" style="display:none">
-                <path d="M85 93 Q97 83 109 93 Q97 102 85 93 Z" fill="${c.skin}"/>
-                <path d="M131 93 Q143 83 155 93 Q143 102 131 93 Z" fill="${c.skin}"/>
-                <path d="M86 94 Q97 98 108 94 M132 94 Q143 98 154 94" fill="none" stroke="${O}" stroke-width="1.6"/>
-              </g>
-            </g>
-            <g id="an-eyes-happy" style="display:none">
-              <path d="M87 95 Q97 86 107 95" fill="none" stroke="${O}" stroke-width="2.6" stroke-linecap="round"/>
-              <path d="M133 95 Q143 86 153 95" fill="none" stroke="${O}" stroke-width="2.6" stroke-linecap="round"/>
-            </g>
-            <g id="an-eyes-shock" style="display:none">
-              <path d="M85 94 Q97 82 109 94 Q97 105 85 94 Z" fill="#fff" stroke="${O}" stroke-width="1.4"/><circle cx="97" cy="93.5" r="1.7" fill="#17100c"/>
-              <path d="M131 94 Q143 82 155 94 Q143 105 131 94 Z" fill="#fff" stroke="${O}" stroke-width="1.4"/><circle cx="143" cy="93.5" r="1.7" fill="#17100c"/>
-            </g>
-            <g id="an-eyes-flat" style="display:none">
-              <path d="M87 93 L107 93 M133 93 L153 93" stroke="${O}" stroke-width="2.4" stroke-linecap="round"/>
-              <path d="M87 89 Q97 86 107 89 M133 89 Q143 86 153 89" fill="none" stroke="${O}" stroke-width="1.4" opacity=".6"/>
-            </g>
-            <g id="an-blush" style="display:none" filter="url(#soft-${sceneId})">
-              <ellipse cx="90" cy="110" rx="10" ry="4.5" fill="#e58a7a" opacity=".5"/>
-              <ellipse cx="150" cy="110" rx="10" ry="4.5" fill="#e58a7a" opacity=".5"/>
-            </g>
-            <path d="M118 106 Q121 109 119 112" fill="none" stroke="${shade(c.skin, .7)}" stroke-width="1.6" stroke-linecap="round"/>
-            <g id="an-mouth">
-              <path id="an-m-smile" d="M110 124 Q120 130 130 124" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round"/>
-              <path id="an-m-flat" d="M112 125 L128 125" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round" style="display:none"/>
-              <path id="an-m-open" d="M111 121 Q120 134 129 121 Q120 126 111 121 Z" fill="#8a5048" stroke="${O}" stroke-width="1.8" style="display:none"/>
-              <path id="an-m-grin" d="M108 122 Q120 134 132 122 Q120 127 108 122 Z" fill="#fff" stroke="${O}" stroke-width="1.8" style="display:none"/>
-              <path id="an-m-wavy" d="M110 124.5 Q115 122 120 124.5 Q125 127 130 124.5" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round" style="display:none"/>
-              <ellipse id="an-m-o" cx="120" cy="125" rx="6" ry="7.5" fill="#8a5048" stroke="${O}" stroke-width="1.8" style="display:none"/>
-              <path id="an-m-frown" d="M110 128 Q120 122 130 128" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round" style="display:none"/>
-            </g>
-            ${h.front}
-            <path id="fx-sweat" class="fx-sweat" d="M170 62 Q176 72 170 77 Q164 72 170 62 Z" fill="#b8dcee" stroke="#6a9cb8" stroke-width="1.6" style="display:none"/>
-            <g id="fx-vein" class="fx-vein" style="display:none" stroke="#c25a52" stroke-width="2.6" stroke-linecap="round">
-              <path d="M166 44 Q169 47 166 50"/><path d="M173 44 Q170 47 173 50"/><path d="M164 53 Q169.5 50 175 53" fill="none"/>
-            </g>
-            <text id="fx-q" class="fx-q" x="170" y="52" font-size="22" font-weight="bold" fill="#fff" stroke="${O}" stroke-width=".8" style="display:none">?</text>
-          </g>
-          <g id="fx-sparkles" class="fx-sparkles" style="display:none" fill="#f7e6ae" stroke="#d9b25a" stroke-width="1">
-            <path d="M56 84 L59 92 L67 95 L59 98 L56 106 L53 98 L45 95 L53 92 Z"/>
-            <path d="M186 120 L188 126 L194 128 L188 130 L186 136 L184 130 L178 128 L184 126 Z"/>
-            <path d="M64 150 L66 155 L71 157 L66 159 L64 164 L62 159 L57 157 L62 155 Z"/>
-          </g>
-        </svg>`;
-
-      this.$ = (id) => this.root.querySelector("#" + id);
-      this.reactTimer = null;
+        <canvas class="px-canvas" width="18" height="27"></canvas>
+        <canvas class="px-emote" width="8" height="8"></canvas>
+        <div class="fx-speedlines" id="fx-speed"></div>`;
+      this.cv = this.root.querySelector(".px-canvas");
+      this.ecv = this.root.querySelector(".px-emote");
+      this.ctx = this.cv.getContext("2d");
+      this.ectx = this.ecv.getContext("2d");
+      this.face = "normal";
+      this.emote = null;
+      this.bounce = 0;
+      this.shakeX = 0;
       this.timers = [];
       this.talkTimer = null;
-      this.setMood("friendly");
+      this.draw();
       this._startLife();
     }
 
+    draw() {
+      const ctx = this.ctx;
+      ctx.clearRect(0, 0, 18, 27);
+      const oy = 1 + this.bounce;
+      const ox = this.shakeX;
+      drawGrid(ctx, this.head, this.pal, ox, oy - (this.head === HEAD.bun ? 0 : 0));
+      let face = FACE[this.face] || FACE.normal;
+      drawGrid(ctx, face, this.pal, ox, oy + 8);
+      if (this.beard) {
+        drawGrid(ctx, ["...OHSSSSSSSSHO...", "....OHHHHHHHHO...."], { O: this.pal.O, H: this.pal.H, S: this.pal.S }, ox, oy + 12);
+      }
+      drawGrid(ctx, this.body, this.pal, ox, oy + 14);
+      // emote
+      const e = this.ectx;
+      e.clearRect(0, 0, 8, 8);
+      if (this.emote && EMOTES[this.emote]) {
+        const em = EMOTES[this.emote];
+        drawGrid(e, em.rows, em.pal, Math.floor((8 - em.rows[0].length) / 2), 0);
+        this.ecv.style.display = "block";
+      } else {
+        this.ecv.style.display = "none";
+      }
+    }
+
     _startLife() {
+      // 2-frame idle bounce, RPG style
+      this.timers.push(setInterval(() => {
+        if (this.reacting) return;
+        this.bounce = this.bounce === 0 ? 0 : 0; // idle body static; breathing via head? keep subtle:
+        this.draw();
+      }, 600));
+      // blink
       const blink = () => {
-        const lids = this.$("an-lids");
-        if (lids && this.$("an-eyes-normal").style.display !== "none") {
-          lids.style.display = "";
-          this.timers.push(setTimeout(() => { lids.style.display = "none"; }, 130));
+        if (!this.reacting && (this.face === "normal" || this.face === "talk")) {
+          const prev = this.face;
+          this.face = "blink";
+          this.draw();
+          this.timers.push(setTimeout(() => { if (this.face === "blink") { this.face = prev; this.draw(); } }, 150));
         }
-        this.timers.push(setTimeout(blink, 2200 + Math.random() * 3200));
+        this.timers.push(setTimeout(blink, 2200 + Math.random() * 3000));
       };
-      this.timers.push(setTimeout(blink, 1400));
-      const glance = () => {
-        const p = this.$("an-pupils");
-        if (p && !this.reacting) {
-          const dx = Math.random() > 0.5 ? 3 : -3;
-          p.setAttribute("transform", `translate(${dx} 0)`);
-          this.timers.push(setTimeout(() => p.setAttribute("transform", ""), 700 + Math.random() * 500));
-        }
-        this.timers.push(setTimeout(glance, 5200 + Math.random() * 4200));
-      };
-      this.timers.push(setTimeout(glance, 3200));
+      this.timers.push(setTimeout(blink, 1500));
     }
 
     destroy() {
-      this.timers.forEach(clearTimeout);
+      this.timers.forEach(t => { clearTimeout(t); clearInterval(t); });
       clearInterval(this.talkTimer);
       clearTimeout(this.reactTimer);
     }
 
-    _eyes(kind) {
-      ["normal", "happy", "shock", "flat"].forEach(k => {
-        const el = this.$("an-eyes-" + k);
-        if (el) el.style.display = k === kind ? "" : "none";
-      });
+    _set(face, emote) {
+      this.face = face;
+      this.emote = emote || null;
+      this.draw();
     }
-    _mouthSwap(kind) {
-      ["smile", "flat", "open", "grin", "wavy", "o", "frown"].forEach(k => {
-        const el = this.$("an-m-" + k);
-        if (el) el.style.display = k === kind ? "" : "none";
-      });
-    }
-    _mouth(kind) { this._mouthSwap(kind); this.mouthKind = kind; }
-    _brows(y, tilt) {
-      const l = this.$("an-brow-l"), r = this.$("an-brow-r");
-      if (l) l.setAttribute("transform", `translate(0 ${y}) rotate(${-tilt} 97 75)`);
-      if (r) r.setAttribute("transform", `translate(0 ${y}) rotate(${tilt} 143 75)`);
-    }
-    _fx(active) {
-      ["fx-sweat", "fx-vein", "fx-sparkles", "fx-q"].forEach(id => {
-        const el = this.$(id);
-        if (el) el.style.display = active.includes(id) ? "" : "none";
-      });
-      const speed = this.$("fx-speed");
-      if (speed) speed.classList.toggle("on", active.includes("fx-speed"));
-    }
-    _head(tilt) {
-      const head = this.$("an-head");
-      if (head) head.setAttribute("transform", tilt ? `rotate(${tilt} 120 120)` : "");
-    }
-    _blushOn(on) { const b = this.$("an-blush"); if (b) b.style.display = on ? "" : "none"; }
 
     setMood(mood) {
       if (this.reacting) return;
-      this.root.classList.remove("an-hop", "an-slump", "an-stepback");
       switch (mood) {
-        case "friendly": this._eyes("normal"); this._mouth("smile"); this._brows(0, 0); this._fx([]); this._head(0); this._blushOn(false); break;
-        case "neutral":  this._eyes("normal"); this._mouth("flat");  this._brows(0, 0); this._fx([]); this._head(0); this._blushOn(false); break;
-        case "confused": this._eyes("normal"); this._mouth("wavy");  this._brows(-3, 7); this._fx(["fx-q"]); this._head(3.5); this._blushOn(false); break;
-        case "amused":   this._eyes("happy");  this._mouth("grin");  this._brows(-2, 0); this._fx([]); this._head(-2); this._blushOn(true); break;
-        case "awkward":  this._eyes("flat");   this._mouth("wavy");  this._brows(2, -5); this._fx(["fx-sweat"]); this._head(-2.5); this._blushOn(false); break;
-        case "worried":  this._eyes("normal"); this._mouth("frown"); this._brows(2.5, 9); this._fx(["fx-sweat"]); this._head(1.5); this._blushOn(false); break;
-        default:         this._eyes("normal"); this._mouth("smile"); this._brows(0, 0); this._fx([]); this._head(0);
+        case "friendly": this._set("normal", null); break;
+        case "neutral":  this._set("flat", null); break;
+        case "confused": this._set("frown", "question"); break;
+        case "amused":   this._set("happy", null); break;
+        case "awkward":  this._set("flat", "sweat"); break;
+        case "worried":  this._set("frown", "sweat"); break;
+        default:         this._set("normal", null);
       }
     }
 
     react(quality) {
       clearTimeout(this.reactTimer);
       this.reacting = true;
-      this.root.classList.remove("an-hop", "an-slump", "an-stepback");
-      void this.root.offsetWidth;
       if (quality === "natural") {
-        this._eyes("happy"); this._mouth("grin"); this._brows(-2, 0); this._head(-2);
-        this._blushOn(true);
-        this._fx(["fx-sparkles"]);
-        this.root.classList.add("an-hop");
+        this._set("happy", "sparkle");
+        // little double hop
+        let hops = 0;
+        const hop = setInterval(() => {
+          this.bounce = this.bounce === 0 ? -2 : 0;
+          this.draw();
+          if (++hops >= 6) { clearInterval(hop); this.bounce = 0; this.draw(); }
+        }, 110);
+        this.timers.push(hop);
       } else if (quality === "awkward") {
-        this._eyes("flat"); this._mouth("wavy"); this._brows(2, -5); this._head(-3.5);
-        this._blushOn(false);
-        this._fx(["fx-sweat"]);
-        this.root.classList.add("an-slump");
+        this._set("flat", "sweat");
+        this.bounce = 1;
+        this.draw();
+        this.timers.push(setTimeout(() => { this.bounce = 0; this.draw(); }, 1200));
       } else {
-        this._eyes("shock"); this._mouth("o"); this._brows(-4, 11); this._head(0);
-        this._blushOn(false);
-        this._fx(["fx-speed"]);
-        this.root.classList.add("an-stepback");
+        // the classic "!" surprise, then anger mark
+        this._set("shock", "exclaim");
+        let shakes = 0;
+        const sh = setInterval(() => {
+          this.shakeX = this.shakeX === 0 ? 1 : (this.shakeX === 1 ? -1 : 0);
+          this.draw();
+          if (++shakes >= 8) { clearInterval(sh); this.shakeX = 0; this.draw(); }
+        }, 70);
+        this.timers.push(sh);
         this.reactTimer = setTimeout(() => {
-          if (!this.root.isConnected) return;
-          this._fx(["fx-vein"]);
-          this._eyes("normal"); this._mouth("wavy"); this._brows(-3, 8); this._head(3.5);
-          this.root.classList.remove("an-stepback");
+          this._set("annoyed", "anger");
         }, 1300);
       }
       setTimeout(() => { this.reacting = false; }, 2400);
@@ -5803,208 +5904,269 @@ window.LEARN_EXTRA = {
       if (on) {
         let open = false;
         this.talkTimer = setInterval(() => {
-          if (!this.root.isConnected) { clearInterval(this.talkTimer); return; }
           if (this.reacting) return;
           open = !open;
-          const base = this.mouthKind === "grin" ? "grin" : this.mouthKind === "frown" ? "frown" : "smile";
-          this._mouthSwap(open ? "open" : base);
-        }, 150);
+          if (this.face === "happy" || this.face === "happytalk") this.face = open ? "happytalk" : "happy";
+          else if (this.face === "normal" || this.face === "talk" || this.face === "blink") this.face = open ? "talk" : "normal";
+          this.draw();
+        }, 160);
       } else {
-        this._mouthSwap(this.mouthKind === "open" ? "smile" : (this.mouthKind || "smile"));
+        if (this.face === "talk") this.face = "normal";
+        if (this.face === "happytalk") this.face = "happy";
+        this.draw();
       }
     }
 
     setVisible(on) { this.root.style.display = on ? "" : "none"; }
   }
 
-  // ============ environments — muted sets, mounted soft-focus ============
-  const PRODUCTS = ["#c96a5a", "#d9a05a", "#8aa06a", "#6a80a0", "#c9b85a", "#a06a8c", "#d9d0b8", "#7a9c94", "#b5654e", "#8a8276"];
-  function ceil() {
-    return `<rect x="0" y="0" width="320" height="16" fill="#efe7d3"/>
-            <line x1="0" y1="16" x2="320" y2="16" stroke="${O}" stroke-width="1.4"/>
-            ${[60, 160, 260].map(x => `<rect x="${x - 24}" y="5" width="48" height="7" rx="3" fill="#fdf8e2" stroke="#c9bfa5" stroke-width="1.2"/>`).join("")}`;
+  // ============ tiled pixel environments (96 x 54 grid) ============
+  const GW = 96, GH = 54, FLOOR_Y = 36;
+
+  function px(ctx, x, y, w, h, col) { ctx.fillStyle = col; ctx.fillRect(x, y, w, h); }
+
+  function wallAndFloor(ctx, wall, wallLine, floor, floorAlt) {
+    px(ctx, 0, 0, GW, FLOOR_Y, wall);
+    for (let y = 4; y < FLOOR_Y; y += 6) px(ctx, 0, y, GW, 1, wallLine);
+    px(ctx, 0, FLOOR_Y, GW, GH - FLOOR_Y, floor);
+    for (let y = FLOOR_Y; y < GH; y += 4) {
+      for (let x = ((y / 4) % 2) * 4; x < GW; x += 8) px(ctx, x, y, 4, 4, floorAlt);
+    }
+    px(ctx, 0, FLOOR_Y, GW, 1, "#33283a");
   }
-  function frame(wall, floor, extra, noCeil) {
-    return `<rect x="0" y="0" width="320" height="122" fill="${wall}"/>
-            <rect x="0" y="122" width="320" height="58" fill="${floor}"/>
-            <rect x="0" y="122" width="320" height="4" fill="rgba(0,0,0,.12)"/>
-            ${noCeil ? "" : ceil()}${extra || ""}`;
-  }
-  function shelfUnit(x, w, tone) {
-    const rows = [30, 56, 82, 108];
-    let s = `<rect x="${x}" y="20" width="${w}" height="96" fill="${tone}" stroke="${O}" stroke-width="1.6"/>`;
-    rows.forEach((y, r) => {
-      s += `<rect x="${x}" y="${y}" width="${w}" height="3" fill="rgba(0,0,0,.2)"/>`;
-      let px = x + 3, i = r * 3;
-      while (px < x + w - 8) {
-        const pw = 6 + ((i * 7) % 6), ph = 10 + ((i * 5) % 8);
-        s += `<rect x="${px}" y="${y - ph}" width="${pw}" height="${ph}" rx="1" fill="${PRODUCTS[i % PRODUCTS.length]}" stroke="${O}" stroke-width=".8" opacity=".92"/>`;
-        px += pw + 2; i++;
+  function shelfPx(ctx, x, w) {
+    px(ctx, x, 6, w, 26, "#6b5a44");
+    px(ctx, x, 6, w, 1, "#33283a"); px(ctx, x, 31, w, 1, "#33283a");
+    px(ctx, x, 6, 1, 26, "#33283a"); px(ctx, x + w - 1, 6, 1, 26, "#33283a");
+    const cols = ["#c9584a", "#d9a04a", "#7a9c4a", "#4a78c9", "#c9c05a", "#9c5a8a"];
+    [12, 20, 28].forEach((sy, r) => {
+      px(ctx, x + 1, sy, w - 2, 1, "#4a3c2e");
+      let gx = x + 2, i = r * 2;
+      while (gx < x + w - 4) {
+        const gw = 2 + (i % 2), gh = 3 + (i % 3);
+        px(ctx, gx, sy - gh, gw, gh, cols[i % cols.length]);
+        gx += gw + 1; i++;
       }
     });
-    return s;
   }
-  const poster = (x, y) => `<rect x="${x}" y="${y}" width="26" height="34" fill="#e8ddc8" stroke="${O}" stroke-width="1.4"/>
-    <rect x="${x + 3}" y="${y + 3}" width="20" height="18" fill="#c9a0a0"/>
-    <line x1="${x + 4}" y1="${y + 26}" x2="${x + 22}" y2="${y + 26}" stroke="#8a8276" stroke-width="1.6"/>`;
-  const win = (x, y, w, h, dusk) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${dusk ? "#c9a582" : "#cfe0da"}" stroke="${O}" stroke-width="1.6"/>
-    ${dusk ? `<rect x="${x}" y="${y}" width="${w}" height="${h * .45}" fill="#b58a6a" opacity=".7"/>` : `<path d="M${x} ${y + h * .7} Q${x + w * .3} ${y + h * .5} ${x + w * .55} ${y + h * .68} Q${x + w * .8} ${y + h * .52} ${x + w} ${y + h * .66} L${x + w} ${y + h} L${x} ${y + h} Z" fill="#9cb08e"/>`}
-    <line x1="${x + w / 2}" y1="${y}" x2="${x + w / 2}" y2="${y + h}" stroke="${O}" stroke-width="1.2"/>`;
-  const steam = (x, y) => `<g class="env-steam"><path d="M${x} ${y} Q${x - 3} ${y - 6} ${x} ${y - 11} Q${x + 3} ${y - 16} ${x} ${y - 21}" fill="none" stroke="#f5efdf" stroke-width="2.2" stroke-linecap="round" opacity=".7"/></g>`;
-  const cloud = (x, y, s) => `<g class="env-cloud" style="animation-duration:${20 + s * 8}s"><ellipse cx="${x}" cy="${y}" rx="${15 * s}" ry="${6 * s}" fill="#f2ede0" opacity=".85"/><ellipse cx="${x + 9 * s}" cy="${y - 3 * s}" rx="${9 * s}" ry="${5 * s}" fill="#f2ede0" opacity=".85"/></g>`;
-  const counterFront = (fill, prop) => `<rect x="0" y="132" width="320" height="48" fill="${fill}" stroke="${O}" stroke-width="1.8"/>
-    <rect x="0" y="132" width="320" height="5" fill="rgba(255,255,255,.18)"/>${prop || ""}`;
-  const cup = (x) => `<path d="M${x} 120 L${x + 13} 120 L${x + 11.5} 131 L${x + 1.5} 131 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>${steam(x + 6.5, 117)}`;
+  function windowPx(ctx, x, y, w, h, night) {
+    px(ctx, x, y, w, h, night ? "#3a4468" : "#a8d8e0");
+    if (!night) { px(ctx, x + 1, y + h - 4, w - 2, 3, "#8ab06a"); px(ctx, x + 2, y + 2, 3, 2, "#f2ede0"); }
+    else px(ctx, x + w - 4, y + 2, 2, 2, "#f2e2b0");
+    px(ctx, x, y, w, 1, "#33283a"); px(ctx, x, y + h - 1, w, 1, "#33283a");
+    px(ctx, x, y, 1, h, "#33283a"); px(ctx, x + w - 1, y, 1, h, "#33283a");
+    px(ctx, x + Math.floor(w / 2), y, 1, h, "#33283a");
+  }
+  function counterPx(ctx, top, wood) {
+    px(ctx, 0, 40, GW, 14, wood);
+    px(ctx, 0, 40, GW, 2, shade(wood, 1.3));
+    px(ctx, 0, 40, GW, 1, "#33283a");
+    px(ctx, 0, 46, GW, 1, shade(wood, .7));
+  }
+  function menuPx(ctx, x, y, w, h) {
+    px(ctx, x, y, w, h, "#3f3a32");
+    px(ctx, x, y, w, 1, "#33283a"); px(ctx, x, y + h - 1, w, 1, "#33283a");
+    for (let i = 0; i < 3; i++) px(ctx, x + 2, y + 3 + i * 4, w - 6 + (i % 2) * 2, 1, "#e8dcc0");
+  }
+  function plantPx(ctx, x, y) {
+    px(ctx, x + 1, y, 4, 3, "#5c8a4a"); px(ctx, x, y + 1, 6, 2, "#5c8a4a");
+    px(ctx, x + 1, y + 3, 4, 3, "#b5654e");
+    px(ctx, x + 1, y + 3, 4, 1, "#33283a");
+  }
 
-  const ENV = {
-    coffee: {
-      back: frame("#e5d9bd", "#8a7a62", `
-        <rect x="16" y="24" width="66" height="34" rx="2" fill="#4a4038" stroke="${O}" stroke-width="1.6"/>
-        ${["LATTE  4.5", "FLAT W  5.5", "LONG B  4.0"].map((t, i) => `<text x="22" y="${34 + i * 9}" font-size="6.5" fill="#e8ddc8" font-family="monospace">${t}</text>`).join("")}
-        ${poster(96, 24)}
-        <rect x="228" y="56" width="66" height="46" rx="3" fill="#b0aba0" stroke="${O}" stroke-width="1.6"/>
-        <rect x="235" y="63" width="17" height="23" rx="2" fill="#6a655c" stroke="${O}" stroke-width="1.3"/>
-        ${steam(244, 60)}
-        <rect x="136" y="28" width="70" height="3" fill="#8a7a62" stroke="${O}" stroke-width="1"/>
-        ${[0, 1, 2, 3].map(i => `<path d="M${142 + i * 16} 31 L${152 + i * 16} 31 L${150.5 + i * 16} 40 L${143.5 + i * 16} 40 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.1"/>`).join("")}`,
-        true),
-      front: counterFront("#9a7a55", cup(42) + `<rect x="240" y="112" width="44" height="20" rx="3" fill="rgba(230,240,240,.55)" stroke="${O}" stroke-width="1.4"/><ellipse cx="262" cy="128" rx="14" ry="5" fill="#e0cba0" stroke="${O}" stroke-width="1.2"/>`)
+  const SCENES = {
+    coffee(b, f) {
+      wallAndFloor(b, "#e0cfa8", "#d0bd94", "#a08050", "#96784a");
+      menuPx(b, 6, 8, 20, 14);
+      shelfPx(b, 66, 24);
+      px(b, 34, 14, 14, 10, "#b0aba0"); px(b, 34, 14, 14, 1, "#33283a"); px(b, 36, 17, 4, 6, "#6a655c");
+      counterPx(f, 0, "#8a6a42");
+      px(f, 10, 36, 4, 4, "#f2ede0"); px(f, 10, 36, 4, 1, "#33283a");
+      px(f, 76, 34, 10, 6, "#d8ecec"); px(f, 78, 38, 6, 2, "#e0cba0");
     },
-    food: {
-      back: frame("#ddd0b5", "#6a5a48", `
-        <rect x="210" y="22" width="88" height="38" rx="2" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/>
-        ${["PARMA + CHIPS 28", "FISH & CHIPS 26", "BURGER 24"].map((t, i) => `<text x="216" y="${33 + i * 10}" font-size="6" fill="#e8ddc8" font-family="monospace">${t}</text>`).join("")}
-        ${shelfUnit(16, 84, "#6a5a48")}
-        ${[0, 1, 2].map(i => `<rect x="${118 + i * 20}" y="86" width="8" height="26" rx="2.5" fill="${["#c9a05a", "#3f3a32", "#a05a52"][i]}" stroke="${O}" stroke-width="1.3"/>`).join("")}`,
-        true),
-      front: counterFront("#7a5f42", `<path d="M40 112 L53 112 L51.5 131 L41.5 131 Z" fill="#d9b25a" stroke="${O}" stroke-width="1.4"/>`)
+    food(b, f) {
+      wallAndFloor(b, "#d8c9a0", "#c9b78a", "#7a5f42", "#6f5539");
+      menuPx(b, 64, 8, 24, 16);
+      shelfPx(b, 6, 26);
+      counterPx(f, 0, "#6f5539");
+      px(f, 12, 35, 5, 5, "#d9b25a"); px(f, 12, 35, 5, 1, "#33283a");
     },
-    directions: {
-      back: frame("#ccdcd6", "#8e8a80", `
-        ${cloud(70, 32, 1)} ${cloud(220, 44, 1.3)}
-        <circle cx="284" cy="30" r="11" fill="#f2e2b0" stroke="${O}" stroke-width="1.4" opacity=".9"/>
-        <rect x="8" y="46" width="54" height="76" fill="#b5a890" stroke="${O}" stroke-width="1.6"/>
-        <rect x="66" y="62" width="42" height="60" fill="#93a3ad" stroke="${O}" stroke-width="1.6"/>
-        <rect x="238" y="52" width="50" height="70" fill="#baa895" stroke="${O}" stroke-width="1.6"/>
-        ${[0, 1].map(r => [0, 1].map(c => `<rect x="${17 + c * 20}" y="${55 + r * 22}" width="11" height="13" fill="#e8e2c8" stroke="${O}" stroke-width="1"/>`).join("")).join("")}
-        <line x1="0" y1="52" x2="320" y2="40" stroke="#5a544a" stroke-width="1.2"/>
-        <line x1="0" y1="58" x2="320" y2="47" stroke="#5a544a" stroke-width="1"/>
-        <rect x="118" y="38" width="3" height="84" fill="#5a544a"/>
-        <rect x="296" y="60" width="5" height="62" fill="#55504a" stroke="${O}" stroke-width="1.2"/>
-        <rect x="291" y="40" width="15" height="22" rx="3" fill="#3f3a32" stroke="${O}" stroke-width="1.4"/>
-        <circle cx="298.5" cy="47" r="3.2" fill="#c96a5a"/><circle cx="298.5" cy="55" r="3.2" fill="#8aa06a"/>
-        <path d="M0 152 L36 152 M64 152 L100 152 M128 152 L164 152 M192 152 L228 152 M256 152 L292 152" stroke="#ded4bd" stroke-width="3.5"/>`,
-        true)
+    directions(b) {
+      px(b, 0, 0, GW, 20, "#a8d0d8");
+      px(b, 8, 4, 10, 4, "#f2ede0"); px(b, 60, 7, 12, 4, "#f2ede0");
+      px(b, 84, 3, 6, 6, "#f2d060");
+      px(b, 4, 12, 20, 24, "#b0a088"); px(b, 30, 16, 16, 20, "#8a9cb0"); px(b, 70, 14, 20, 22, "#baa88a");
+      [6, 12, 18].forEach(x => px(b, x, 16, 4, 4, "#f2e2b0"));
+      [33, 39].forEach(x => px(b, x, 20, 4, 4, "#f2e2b0"));
+      [73, 80].forEach(x => px(b, x, 18, 4, 4, "#f2e2b0"));
+      px(b, 0, 11, GW, 1, "#5a544a");
+      px(b, 50, 8, 1, 28, "#5a544a");
+      px(b, 91, 14, 2, 22, "#55504a"); px(b, 89, 8, 6, 8, "#3f3a32");
+      px(b, 91, 10, 2, 2, "#e04838"); px(b, 91, 13, 2, 2, "#7a9c4a");
+      px(b, 0, 36, GW, 18, "#8e8a80");
+      for (let x = 2; x < GW; x += 12) px(b, x, 44, 6, 2, "#ded4bd");
     },
-    smalltalk: {
-      back: frame("#e0dcc9", "#a89a80", `
-        ${win(24, 28, 54, 42)}
-        <circle cx="160" cy="34" r="11" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>
-        <line x1="160" y1="34" x2="160" y2="26.5" stroke="${O}" stroke-width="1.4"/><line x1="160" y1="34" x2="165" y2="34" stroke="${O}" stroke-width="1.4"/>
-        <rect x="238" y="42" width="50" height="78" rx="3" fill="#d9d4c5" stroke="${O}" stroke-width="1.6"/>
-        ${poster(198, 28)}`),
-      front: counterFront("#bcaa88", `<path d="M48 114 Q48 109 53 109 L60 109 Q65 109 65 114 L63 131 L50 131 Z" fill="#7a9cb5" stroke="${O}" stroke-width="1.4"/>${steam(56, 106)}` + cup(238))
+    smalltalk(b, f) {
+      wallAndFloor(b, "#ddd8c2", "#cfc9b0", "#b0a284", "#a4967a");
+      windowPx(b, 8, 8, 16, 12);
+      px(b, 44, 8, 8, 8, "#f2ede0"); px(b, 47, 11, 1, 3, "#33283a"); px(b, 48, 12, 2, 1, "#33283a");
+      px(b, 68, 10, 16, 24, "#d0cabb"); px(b, 68, 10, 16, 1, "#33283a"); px(b, 68, 22, 16, 1, "#33283a");
+      counterPx(f, 0, "#a8946e");
+      px(f, 14, 36, 4, 4, "#7a9cb5"); px(f, 74, 36, 4, 4, "#f2ede0");
     },
-    phone: {
-      back: frame("#ddd6c5", "#8a8276", `
-        <rect x="20" y="24" width="40" height="50" rx="2" fill="#f2ede0" stroke="${O}" stroke-width="1.6"/>
-        ${[0, 1, 2].map(r => [0, 1, 2].map(c => `<rect x="${24 + c * 11}" y="${38 + r * 11}" width="8" height="8" fill="${r === 1 && c === 1 ? "#c96a5a" : "#ded4bd"}" stroke="${O}" stroke-width=".8"/>`).join("")).join("")}
-        <rect x="20" y="24" width="40" height="11" rx="2" fill="#7a86b5" stroke="${O}" stroke-width="1.4"/>
-        ${poster(100, 26)}
-        <path d="M242 84 Q248 72 256 84 Q262 72 270 84 Q276 72 284 84 L284 116 L242 116 Z" fill="#8aa06a" stroke="${O}" stroke-width="1.6"/>
-        <rect x="254" y="116" width="24" height="9" fill="#b5654e" stroke="${O}" stroke-width="1.4"/>`),
-      front: counterFront("#94897b", `<rect x="40" y="110" width="30" height="20" rx="3" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/><path d="M44 110 Q55 100 66 110" fill="none" stroke="${O}" stroke-width="3.2" stroke-linecap="round"/>`)
+    phone(b, f) {
+      wallAndFloor(b, "#d8d2c0", "#c9c2ad", "#8a8276", "#7e7669");
+      px(b, 8, 8, 14, 18, "#f2ede0"); px(b, 8, 8, 14, 4, "#4a78c9");
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) px(b, 10 + c * 4, 14 + r * 3, 3, 2, r === 1 && c === 1 ? "#c9584a" : "#d5cfc0");
+      plantPx(b, 76, 28);
+      px(b, 42, 8, 12, 14, "#e8dcc0"); px(b, 44, 10, 8, 8, "#c9a0a0");
+      counterPx(f, 0, "#8a8072");
+      px(f, 12, 35, 8, 5, "#3f3a32"); px(f, 13, 33, 6, 2, "#33283a");
     },
-    haircut: {
-      back: frame("#d6d9d6", "#8a7a68", `
-        <ellipse cx="160" cy="60" rx="40" ry="46" fill="#c5d9d9" stroke="${O}" stroke-width="2.2"/>
-        <ellipse cx="160" cy="60" rx="33" ry="39" fill="#dbe8e6" opacity=".75"/>
-        <g class="env-pole"><rect x="24" y="32" width="12" height="60" rx="6" fill="#f2ede0" stroke="${O}" stroke-width="1.6"/>
-        ${[0, 1, 2].map(i => `<rect x="24" y="${38 + i * 18}" width="12" height="7" fill="${i % 2 ? "#7a86b5" : "#c96a5a"}"/>`).join("")}</g>
-        ${shelfUnit(238, 60, "#7a6a58")}`)
+    haircut(b, f) {
+      wallAndFloor(b, "#d2d6d2", "#c4c9c4", "#8a7a68", "#7e6f5e");
+      px(b, 38, 8, 20, 22, "#c8e0e0"); px(b, 38, 8, 20, 1, "#33283a"); px(b, 38, 29, 20, 1, "#33283a");
+      px(b, 38, 8, 1, 22, "#33283a"); px(b, 57, 8, 1, 22, "#33283a");
+      px(b, 40, 10, 4, 3, "#f2ede0");
+      for (let i = 0; i < 4; i++) px(b, 8, 8 + i * 6, 6, 3, i % 2 ? "#4a78c9" : "#c9584a");
+      px(b, 7, 6, 8, 1, "#33283a"); px(b, 7, 32, 8, 1, "#33283a"); px(b, 7, 6, 1, 27, "#33283a"); px(b, 14, 6, 1, 27, "#33283a");
+      shelfPx(b, 70, 20);
+      counterPx(f, 0, "#7e6f5e");
     },
-    doctor: {
-      back: frame("#e0e5dc", "#9aa096", `
-        <rect x="20" y="24" width="30" height="30" rx="3" fill="#6a9c7a" stroke="${O}" stroke-width="1.6"/>
-        <rect x="31" y="30" width="8" height="18" fill="#f2ede0"/><rect x="26" y="35" width="18" height="8" fill="#f2ede0"/>
-        ${shelfUnit(66, 92, "#8a9088")} ${shelfUnit(224, 80, "#8a9088")}`,
-        true),
-      front: counterFront("#b5bcae", `<rect x="46" y="110" width="13" height="20" rx="2.5" fill="#7a9c94" stroke="${O}" stroke-width="1.4"/>`)
+    doctor(b, f) {
+      wallAndFloor(b, "#dde4da", "#cfd8cc", "#9aa896", "#8e9c8a");
+      px(b, 8, 8, 12, 12, "#4a9c6a");
+      px(b, 12, 10, 4, 8, "#f2ede0"); px(b, 10, 12, 8, 4, "#f2ede0");
+      shelfPx(b, 30, 26); shelfPx(b, 64, 24);
+      counterPx(f, 0, "#a8b0a0");
+      px(f, 14, 35, 4, 5, "#3f8a80"); px(f, 13, 34, 6, 1, "#f2ede0");
     },
-    renting: {
-      back: frame("#e5dcc6", "#a08662", `
-        ${win(34, 30, 56, 44)}
-        <rect x="240" y="36" width="48" height="86" rx="2" fill="#b5915f" stroke="${O}" stroke-width="1.6"/>
-        <circle cx="280" cy="80" r="2.8" fill="#7a6a52" stroke="${O}" stroke-width="1"/>
-        ${poster(150, 32)}`)
+    renting(b) {
+      wallAndFloor(b, "#e0d5b8", "#d2c6a6", "#a08050", "#96784a");
+      windowPx(b, 10, 8, 18, 14);
+      px(b, 66, 6, 16, 30, "#b5915f"); px(b, 66, 6, 16, 1, "#33283a"); px(b, 66, 6, 1, 30, "#33283a"); px(b, 81, 6, 1, 30, "#33283a");
+      px(b, 78, 20, 2, 2, "#6b5433");
+      px(b, 40, 10, 12, 10, "#f2ede0"); px(b, 42, 12, 8, 5, "#8ab06a"); px(b, 44, 11, 2, 2, "#f2d060");
+      plantPx(b, 88, 28);
     },
-    setup: {
-      back: frame("#dde0dc", "#8a8e94", `
-        ${shelfUnit(16, 110, "#7a8288")} ${shelfUnit(230, 74, "#7a8288")}
-        <rect x="142" y="26" width="72" height="26" rx="3" fill="#b5654e" stroke="${O}" stroke-width="1.6"/>
-        <text x="178" y="43" font-size="12" font-weight="bold" fill="#f2ede0" text-anchor="middle" font-family="sans-serif">SIM 30/mo</text>`,
-        true),
-      front: counterFront("#9aa0a6", `<rect x="44" y="112" width="22" height="15" rx="1.5" fill="#f2ede0" stroke="${O}" stroke-width="1.4"/>`)
+    setup(b, f) {
+      wallAndFloor(b, "#d8dce0", "#c9cfd5", "#8a929c", "#7e8690");
+      shelfPx(b, 6, 30); shelfPx(b, 62, 28);
+      px(b, 40, 8, 18, 8, "#c9584a"); px(b, 43, 10, 12, 4, "#f2ede0");
+      counterPx(f, 0, "#8e969e");
+      px(f, 14, 36, 6, 4, "#f2ede0"); px(f, 16, 37, 2, 2, "#f2d060");
     },
-    interview: {
-      back: frame("#dcdfe2", "#767c84", `
-        <rect x="18" y="24" width="72" height="50" rx="2" fill="#c2ccd4" stroke="${O}" stroke-width="1.6"/>
-        ${[0, 1, 2, 3, 4, 5].map(i => `<line x1="18" y1="${29 + i * 8}" x2="90" y2="${29 + i * 8}" stroke="#e8ecef" stroke-width="3"/>`).join("")}
-        <rect x="240" y="28" width="38" height="30" rx="2" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>
-        <path d="M284 84 Q289 70 296 84 Q301 72 306 86 L306 116 L284 116 Z" fill="#8aa06a" stroke="${O}" stroke-width="1.6"/>`),
-      front: counterFront("#5f6670", `<path d="M42 131 L50 110 L96 110 L92 131 Z" fill="#8a929c" stroke="${O}" stroke-width="1.6"/>`)
+    interview(b, f) {
+      wallAndFloor(b, "#d8dce2", "#cad0d8", "#767c84", "#6a7078");
+      px(b, 8, 8, 22, 14, "#c2ccd4");
+      for (let i = 0; i < 4; i++) px(b, 8, 10 + i * 3, 22, 1, "#e8ecef");
+      px(b, 64, 8, 12, 9, "#f2ede0"); px(b, 68, 10, 4, 4, "#f2d060");
+      plantPx(b, 86, 28);
+      counterPx(f, 0, "#5c646c");
     },
-    flirting: {
-      back: frame("#5c5064", "#75657a", `
-        ${win(228, 32, 52, 42, true)}
-        <path d="M8 24 Q80 46 160 26 Q240 46 312 24" fill="none" stroke="#463c50" stroke-width="2.2"/>
-        ${[0, 1, 2, 3, 4, 5, 6].map(i => `<circle class="env-light" style="animation-delay:${i * .35}s" cx="${26 + i * 45}" cy="${28 + Math.abs(3 - i) * -1.5 + 10}" r="4" fill="${["#e5c97a", "#d9909c", "#8ab5b5"][i % 3]}" stroke="${O}" stroke-width=".9"/>`).join("")}
-        ${shelfUnit(20, 66, "#4c4254")}`,
-        true),
-      front: counterFront("#544860", `${[0, 1, 2].map(i => `<path d="M${42 + i * 24} 113 L${54 + i * 24} 113 L${52.5 + i * 24} 130 L${43.5 + i * 24} 130 Z" fill="#b5654e" stroke="${O}" stroke-width="1.4"/>`).join("")}`)
+    flirting(b, f) {
+      wallAndFloor(b, "#584c66", "#4e4259", "#6f6076", "#655669");
+      windowPx(b, 70, 8, 16, 12, true);
+      const cols = ["#f2d060", "#e08a9c", "#7ac0c0"];
+      for (let i = 0; i < 8; i++) px(b, 6 + i * 11, 5 + (i % 2) * 2, 2, 2, cols[i % 3]);
+      px(b, 0, 4, GW, 1, "#463c50");
+      shelfPx(b, 8, 22);
+      counterPx(f, 0, "#4e4056");
+      [16, 28, 40].forEach(x => { px(f, x, 35, 4, 5, "#c9584a"); px(f, x, 35, 4, 1, "#33283a"); });
     },
-    casual: {
-      back: frame("#ccdcd6", "#8a9c6a", `
-        <circle cx="40" cy="30" r="13" fill="#f2e2b0" stroke="${O}" stroke-width="1.4" opacity=".9"/>
-        ${cloud(150, 28, 1.1)}
-        ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<rect x="${i * 41}" y="66" width="33" height="56" fill="#b5915f" stroke="${O}" stroke-width="1.4"/>`).join("")}
-        <ellipse cx="58" cy="60" rx="32" ry="24" fill="#7a9c6a" stroke="${O}" stroke-width="1.6"/>
-        <rect x="52" y="80" width="11" height="34" fill="#7a6a52" stroke="${O}" stroke-width="1.4"/>
-        <rect x="238" y="86" width="52" height="28" rx="3" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/>
-        <g class="env-smoke"><path d="M258 76 Q252 66 260 56 Q254 46 262 38" fill="none" stroke="#d9d4c8" stroke-width="3.2" stroke-linecap="round" opacity=".7"/></g>`,
-        true)
+    casual(b) {
+      px(b, 0, 0, GW, 16, "#a8d0d8");
+      px(b, 8, 3, 8, 5, "#f2d060");
+      px(b, 40, 5, 12, 3, "#f2ede0");
+      px(b, 0, 16, GW, 12, "#b5915f");
+      for (let x = 0; x < GW; x += 8) px(b, x, 16, 1, 12, "#96784a");
+      px(b, 0, 16, GW, 1, "#33283a"); px(b, 0, 27, GW, 1, "#33283a");
+      px(b, 6, 6, 18, 14, "#5c8a4a"); px(b, 10, 4, 10, 8, "#6f9c5a");
+      px(b, 13, 20, 4, 8, "#6b5433");
+      px(b, 66, 22, 16, 8, "#3f3a32"); px(b, 68, 20, 12, 2, "#5a544e");
+      px(b, 70, 30, 2, 4, "#2e2a26"); px(b, 76, 30, 2, 4, "#2e2a26");
+      px(b, 70, 14, 2, 2, "#d9d4c8"); px(b, 73, 10, 2, 2, "#d9d4c8"); px(b, 71, 6, 2, 2, "#d9d4c8");
+      px(b, 0, 34, GW, 20, "#7a9c5a");
+      for (let y = 34; y < GH; y += 4) for (let x = (y % 8 === 2 ? 4 : 0); x < GW; x += 8) px(b, x, y, 4, 4, "#719253");
     },
-    worktalk: {
-      back: frame("#e2e4e2", "#8e9498", `
-        <rect x="16" y="24" width="86" height="54" rx="2" fill="#f2ede0" stroke="${O}" stroke-width="1.6"/>
-        <path d="M24 38 Q44 34 56 41 M24 52 L80 52 M24 63 L66 63" fill="none" stroke="#7a86b5" stroke-width="2"/>
-        <rect x="232" y="70" width="48" height="34" rx="2" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/>
-        <rect x="236" y="74" width="40" height="26" rx="1.5" fill="#7a9cb5"/>
-        ${poster(130, 28)}`),
-      front: counterFront("#a0a8ae", cup(248))
+    worktalk(b, f) {
+      wallAndFloor(b, "#dee0de", "#d0d4d0", "#8e9498", "#828890");
+      px(b, 8, 8, 24, 16, "#f2ede0");
+      px(b, 10, 12, 14, 1, "#4a78c9"); px(b, 10, 16, 18, 1, "#4a78c9"); px(b, 10, 20, 10, 1, "#c9584a");
+      px(b, 64, 10, 14, 10, "#3f3a32"); px(b, 65, 11, 12, 8, "#7a9cb5");
+      px(b, 44, 8, 8, 8, "#f2ede0"); px(b, 47, 11, 1, 3, "#33283a");
+      counterPx(f, 0, "#9aa2a8");
+      px(f, 70, 36, 4, 4, "#f2ede0");
     }
   };
 
-  function mountEnv(sceneEl, sceneId) {
-    const env = ENV[sceneId];
-    if (!env || !sceneEl) return;
-    const back = document.createElement("div");
-    back.className = "vp-env vp-env-back";
-    back.innerHTML = `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMax slice">${env.back}</svg>`;
-    sceneEl.insertBefore(back, sceneEl.firstChild);
-    // bokeh light over the blurred set — the anime depth-of-field feel
-    const bokeh = document.createElement("div");
-    bokeh.className = "vp-bokeh";
-    sceneEl.insertBefore(bokeh, back.nextSibling);
-    if (env.front) {
-      const front = document.createElement("div");
-      front.className = "vp-env vp-env-front";
-      front.innerHTML = `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMax slice">${env.front}</svg>`;
-      sceneEl.appendChild(front);
-    }
+  // the learner, seen from behind (battle-intro style): cap + backpack
+  const PLAYER_BACK = [
+    "......OOOOOO......",
+    ".....OCCCCCCO.....",
+    "....OCCCCCCCCO....",
+    "....OCCCCCCCCO....",
+    "....OccccccccO....",
+    "....OHHHHHHHHO....",
+    "....OHHHHHHHHO....",
+    ".....OHHHHHHO.....",
+    "....OOSSSSSSOO....",
+    "...OTTTTTTTTTTO...",
+    "..OTTBBBBBBBBTTO..",
+    "..OSTBBBBBBBBTSO..",
+    "..OSTBBBBBBBBTSO..",
+    "..OSTBBBBBBBBTSO..",
+    "...OTTBBBBBBTTO...",
+    "...OTTTTTTTTTTO...",
+    "....OPPPPPPPPO....",
+    "....OPPPOOPPPO....",
+    "....OPPO..OPPO....",
+    "....OppO..OppO....",
+    "....OOO....OOO...."
+  ];
+  const PLAYER_PAL = {
+    O: "#33283a", C: "#c9484f", c: "#8a2f36", H: "#4f3822", S: "#e8b887",
+    T: "#3f6a9c", U: "#2e5078", B: "#d9a04a", P: "#3a4458", p: "#2c3444"
+  };
+
+  function mountPlayer(sceneEl) {
+    if (!sceneEl || sceneEl.querySelector(".px-player")) return;
+    const cv = document.createElement("canvas");
+    cv.className = "px-player";
+    cv.width = 18; cv.height = 21;
+    drawGrid(cv.getContext("2d"), PLAYER_BACK, PLAYER_PAL, 0, 0);
+    sceneEl.appendChild(cv);
   }
 
-  window.RTAnime = { Character, CAST, mountEnv };
+  function mountEnv(sceneEl, sceneId) {
+    const draw = SCENES[sceneId];
+    if (!draw || !sceneEl) return;
+    const back = document.createElement("canvas");
+    back.className = "px-env px-env-back";
+    back.width = GW; back.height = GH;
+    const front = document.createElement("canvas");
+    front.className = "px-env px-env-front";
+    front.width = GW; front.height = GH;
+    const bctx = back.getContext("2d");
+    draw(bctx, front.getContext("2d"));
+    // battle-style platforms: NPC upper-right, player lower-left
+    const plat = (cx, cy, rx, ry) => {
+      bctx.beginPath();
+      bctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      bctx.fillStyle = "rgba(240, 234, 208, .35)";
+      bctx.fill();
+      bctx.strokeStyle = "rgba(51, 40, 58, .5)";
+      bctx.lineWidth = 1;
+      bctx.stroke();
+    };
+    plat(72, 38, 17, 4.5);
+    plat(20, 53, 19, 5);
+    sceneEl.insertBefore(back, sceneEl.firstChild);
+    sceneEl.appendChild(front);
+    mountPlayer(sceneEl);
+  }
+
+  window.RTAnime = { Character, CAST, mountEnv, mountPlayer };
 })();
 
 </script>
