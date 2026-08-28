@@ -929,6 +929,49 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
   .admin-vocab-row .v-ex { grid-column: 1 / 2; }
 }
 
+/* ============ Building mode ============ */
+.build-fab {
+  position: fixed; right: 18px; bottom: 84px; z-index: 90;
+  width: 54px; height: 54px; border-radius: 50%;
+  border: none;
+  background: var(--gold); color: #2b1d04;
+  font-size: 23px;
+  box-shadow: 0 8px 22px rgba(240, 165, 46, .45);
+  transition: transform .15s;
+}
+.build-fab:hover { transform: scale(1.08); }
+.build-fab.active { background: var(--cta); color: #fff; box-shadow: 0 8px 22px rgba(244, 88, 122, .5); }
+.build-panel {
+  position: fixed; right: 18px; bottom: 148px; z-index: 90;
+  width: 270px;
+  background: var(--panel);
+  border-radius: 18px;
+  box-shadow: 0 16px 44px rgba(60, 56, 80, .25);
+  padding: 16px 18px;
+  animation: rise .25s var(--ease-out) both;
+}
+.bp-title { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+.bp-hint { font-size: 12px; color: var(--ink-soft); margin-bottom: 5px; }
+.bp-sec { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--ink-faint); font-weight: 700; margin: 12px 0 7px; }
+.bp-colors { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.bp-colors label { font-size: 11.5px; color: var(--ink-soft); display: flex; flex-direction: column; gap: 2px; }
+.bp-colors input[type=color] { width: 100%; height: 30px; border: 1px solid var(--line); border-radius: 8px; padding: 2px; background: #fff; cursor: pointer; }
+.bp-row { display: flex; gap: 8px; margin-top: 12px; }
+.bp-btn { padding: 7px 12px; font-size: 12.5px; }
+.build-editing { outline: 2px dashed var(--cta) !important; outline-offset: 2px; border-radius: 4px; background: rgba(244, 88, 122, .06); }
+body.building #main [contenteditable], body.building #main :hover { cursor: text; }
+.bp-order {
+  position: absolute; top: 8px; right: 8px; z-index: 5;
+  display: flex; gap: 4px;
+}
+.bp-order button {
+  width: 26px; height: 26px; border-radius: 8px;
+  border: none; background: var(--cta); color: #fff;
+  font-size: 15px; font-weight: 700; line-height: 1;
+  box-shadow: 0 3px 8px rgba(244, 88, 122, .4);
+}
+body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5); }
+
 /* ============ 90s anime layer ============ */
 /* faded 90s film wash over the whole scene */
 .vp-anime { filter: sepia(.16) saturate(.78) contrast(.94) brightness(1.03); }
@@ -946,8 +989,23 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
   pointer-events: none;
 }
 .vp-env svg { width: 100%; height: 100%; }
+/* depth of field: the set sits soft behind the character */
 .vp-env-back { z-index: 0; }
+.vp-env-back svg { filter: blur(2.8px) saturate(.92) brightness(1.02); transform: scale(1.06); }
 .vp-env-front { z-index: 1; }
+.vp-env-front svg { filter: blur(.6px); }
+.vp-bokeh {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 30px at 16% 26%, rgba(255, 242, 205, .20) 0 55%, transparent 72%),
+    radial-gradient(circle 18px at 30% 14%, rgba(255, 242, 205, .16) 0 55%, transparent 72%),
+    radial-gradient(circle 24px at 82% 20%, rgba(255, 230, 190, .18) 0 55%, transparent 72%),
+    radial-gradient(circle 14px at 90% 42%, rgba(255, 242, 205, .14) 0 55%, transparent 72%),
+    radial-gradient(circle 20px at 70% 10%, rgba(255, 250, 225, .13) 0 55%, transparent 72%);
+  animation: bokeh-drift 16s ease-in-out infinite alternate;
+}
+@keyframes bokeh-drift { from { transform: translateX(-6px) } to { transform: translateX(6px) } }
 .env-steam path { animation: env-steam 2.2s ease-in-out infinite; }
 @keyframes env-steam { 0% { opacity: 0; transform: translateY(4px) } 30% { opacity: .8 } 100% { opacity: 0; transform: translateY(-8px) } }
 .env-smoke path { animation: env-steam 3s ease-in-out infinite; }
@@ -958,10 +1016,11 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
 
 .anime-char {
   position: relative; z-index: 1;
-  height: 88%;
-  padding-bottom: 1.5%;
+  height: 100%;
   display: flex; align-items: flex-end; justify-content: center;
 }
+/* visual-novel crop: the bust runs off the bottom of the frame */
+.anime-char .anime-svg { height: 118%; margin-bottom: -11%; }
 .anime-svg {
   height: 100%;
   animation: an-breathe 4.2s ease-in-out infinite;
@@ -5037,6 +5096,7 @@ window.LEARN_EXTRA = {
       this.hidden = Array.isArray(d.hidden) ? d.hidden : [];
     },
 
+    saveNow() { save(this.data); },
     setMeta(id, meta) {
       this.data.meta = this.data.meta || {};
       this.data.meta[id] = meta;
@@ -5205,151 +5265,424 @@ window.LEARN_EXTRA = {
 
 </script>
 <script>
-// RealTalk — 90s-anime characters & environments, Ghibli-leaning:
-// muted warm palette, thin outlines, full-body figures with natural idle life
-// (breathing, blinking, glances, head tilts), dense cel-style sets, film wash.
+// RealTalk — Building mode (admin): edit the platform inside the platform.
+// Double-click any text to rewrite it · reorder scene cards · recolor the theme
+// · add phrases. Everything lands in RTAdmin's override bundle (exportable).
 (function () {
-  const O = "#4a3a33";          // warm thin outline
-  const OW = 1.8;               // outline width
+  const isPT = () => window.RT_LANG === "pt";
+  const t = (pt, en) => isPT() ? pt : en;
 
-  // ---------- cast: full-body looks, muted colors ----------
-  const CAST = {
-    coffee:     { style: "bun",   hair: "#4a3328", skin: "#f0cda3", top: "#ddd3bd", bottom: "#7a95b5", garment: "apron", gColor: "#8a5a40", pose: "stand" },
-    food:       { style: "beard", hair: "#3a2b20", skin: "#d9ab80", top: "#6a4a3a", bottom: "#4a4038", pose: "stand" },
-    directions: { style: "short", hair: "#b0a89a", skin: "#f0cda3", top: "#6a80a0", bottom: "#8a8276", pose: "stand" },
-    smalltalk:  { style: "short", hair: "#2e2620", skin: "#d9ab80", top: "#8aa06a", bottom: "#6a6a72", pose: "stand" },
-    phone:      { style: "long",  hair: "#5a4030", skin: "#f0cda3", top: "#d9c9a8", bottom: "#6a6a80", pose: "clasp", skirt: true },
-    haircut:    { style: "beard", hair: "#241d18", skin: "#e5b98d", top: "#4a4a52", bottom: "#3a3a40", pose: "stand" },
-    doctor:     { style: "bun",   hair: "#241d18", skin: "#b98860", top: "#f2ede0", bottom: "#8a8a92", garment: "coat", gColor: "#f2ede0", pose: "clasp" },
-    renting:    { style: "short", hair: "#4a3626", skin: "#f0cda3", top: "#5a6a80", bottom: "#4a5568", pose: "stand" },
-    setup:      { style: "curly", hair: "#1d1712", skin: "#8a5c3c", top: "#7a9c94", bottom: "#7a95b5", pose: "stand" },
-    interview:  { style: "long",  hair: "#7a4a2c", skin: "#f2d9b8", top: "#7a5560", bottom: "#4a4550", pose: "clasp", skirt: true },
-    flirting:   { style: "long",  hair: "#b55a42", skin: "#f2d9b8", top: "#cf8f99", bottom: "#7a95b5", garment: "stripes", pose: "clasp" },
-    casual:     { style: "beard", hair: "#6a4a34", skin: "#e5b98d", top: "#a05a4a", bottom: "#7a95b5", pose: "stand" },
-    worktalk:   { style: "curly", hair: "#241d18", skin: "#8a5c3c", top: "#6a6a80", bottom: "#4a4550", pose: "clasp", skirt: true }
+  const RTB = {
+    on: false,
+    _route: "home",
+
+    bdata() {
+      if (!window.RTAdmin) return {};
+      RTAdmin.data.build = RTAdmin.data.build || {};
+      return RTAdmin.data.build;
+    },
+    save() { if (window.RTAdmin && RTAdmin.saveNow) RTAdmin.saveNow(); },
+
+    // ---------- mount: floating tools for admins ----------
+    mount() {
+      if (!window.RTAuth || !RTAuth.isAdmin() || document.getElementById("build-fab")) return;
+      const fab = document.createElement("button");
+      fab.id = "build-fab";
+      fab.className = "build-fab";
+      fab.innerHTML = "🔨";
+      fab.title = t("Modo Construção", "Building mode");
+      fab.onclick = () => this.toggle();
+      document.body.appendChild(fab);
+
+      const panel = document.createElement("div");
+      panel.id = "build-panel";
+      panel.className = "build-panel";
+      panel.style.display = "none";
+      document.body.appendChild(panel);
+
+      // one delegated dblclick listener for text editing
+      document.addEventListener("dblclick", (e) => {
+        if (!this.on) return;
+        const main = document.getElementById("main");
+        const side = document.getElementById("scenario-nav");
+        if (!main.contains(e.target) && !(side && side.contains(e.target))) return;
+        let el = e.target;
+        // walk down to a reasonable editable block (leaf-ish)
+        if (el.children.length > 2 || el.id === "main") return;
+        if (el.closest(".viewport, .choice-area, .build-panel")) return;
+        e.preventDefault();
+        const original = el.textContent;
+        el.setAttribute("contenteditable", "true");
+        el.classList.add("build-editing");
+        el.focus();
+        const finish = () => {
+          el.removeAttribute("contenteditable");
+          el.classList.remove("build-editing");
+          const now = el.textContent;
+          if (now !== original && now.trim()) {
+            const d = this.bdata();
+            d.texts = d.texts || [];
+            // replace an earlier override of the same original on this route
+            d.texts = d.texts.filter(o => !(o.route === this._route && o.original === original));
+            d.texts.push({ route: this._route, original, text: now });
+            this.save();
+          }
+          el.removeEventListener("blur", finish);
+        };
+        el.addEventListener("blur", finish);
+        el.addEventListener("keydown", (ke) => { if (ke.key === "Enter") { ke.preventDefault(); el.blur(); } });
+      });
+    },
+
+    toggle() {
+      this.on = !this.on;
+      document.body.classList.toggle("building", this.on);
+      document.getElementById("build-fab").classList.toggle("active", this.on);
+      const panel = document.getElementById("build-panel");
+      panel.style.display = this.on ? "block" : "none";
+      if (this.on) this.renderToolPanel();
+      // re-render so order buttons appear/disappear
+      if (window.dispatchEvent) window.dispatchEvent(new HashChangeEvent("hashchange"));
+    },
+
+    renderToolPanel() {
+      const panel = document.getElementById("build-panel");
+      const acc = window.RT_ACCENT;
+      const c = (this.bdata().colors || {})[acc] || {};
+      const cs = getComputedStyle(document.documentElement);
+      const cur = (v, fallbackVar) => v || cs.getPropertyValue(fallbackVar).trim() || "#2f8f6b";
+      panel.innerHTML = `
+        <div class="bp-title">🔨 ${t("Modo Construção", "Building mode")}</div>
+        <div class="bp-hint">✎ ${t("Dê dois cliques em qualquer texto para reescrever.", "Double-click any text to rewrite it.")}</div>
+        <div class="bp-hint">↔ ${t("Na Início, use ‹ › nos cards para mudar a ordem.", "On Home, use ‹ › on cards to reorder.")}</div>
+        <div class="bp-hint">＋ ${t("Na aba Aprender: botão para adicionar frases.", "On the Learn tab: button to add phrases.")}</div>
+        <div class="bp-sec">🎨 ${t("Cores deste sotaque", "This accent's colors")} (${acc.toUpperCase()})</div>
+        <div class="bp-colors">
+          ${[["green", t("Principal", "Primary")], ["deep", t("Escura", "Deep")], ["bg", t("Fundo", "Background")], ["cta", "CTA"]].map(([k, label]) => `
+            <label>${label}<input type="color" data-k="${k}" value="${cur(c[k], k === "green" ? "--green" : k === "deep" ? "--green-deep" : k === "bg" ? "--bg" : "--cta")}"></label>`).join("")}
+        </div>
+        <div class="bp-row">
+          <button class="btn ghost bp-btn" id="bp-reset-colors">${t("Cores padrão", "Default colors")}</button>
+          <button class="btn bp-btn" id="bp-export">⬇ ${t("Exportar tudo", "Export all")}</button>
+        </div>`;
+      panel.querySelectorAll("input[type=color]").forEach(inp => {
+        inp.oninput = () => {
+          const d = this.bdata();
+          d.colors = d.colors || {};
+          d.colors[acc] = d.colors[acc] || {};
+          d.colors[acc][inp.dataset.k] = inp.value;
+          this.save();
+          this.applyColors();
+        };
+      });
+      panel.querySelector("#bp-reset-colors").onclick = () => {
+        const d = this.bdata();
+        if (d.colors) delete d.colors[acc];
+        this.save();
+        ["--green", "--green-deep", "--bg", "--cta", "--green-wash"].forEach(v => document.documentElement.style.removeProperty(v));
+        this.renderToolPanel();
+      };
+      panel.querySelector("#bp-export").onclick = () => RTAdmin.exportJson();
+    },
+
+    // custom colors for the current accent (runs after every theme apply)
+    applyColors() {
+      const root = document.documentElement;
+      ["--green", "--green-deep", "--bg", "--cta", "--green-wash"].forEach(v => root.style.removeProperty(v));
+      const c = (this.bdata().colors || {})[window.RT_ACCENT];
+      if (!c) return;
+      if (c.green) {
+        root.style.setProperty("--green", c.green);
+        root.style.setProperty("--green-wash", `color-mix(in srgb, ${c.green} 14%, white)`);
+      }
+      if (c.deep) root.style.setProperty("--green-deep", c.deep);
+      if (c.bg) root.style.setProperty("--bg", c.bg);
+      if (c.cta) root.style.setProperty("--cta", c.cta);
+    },
+
+    // scenario display order (Home + sidebar)
+    orderOf(id) {
+      const ord = this.bdata().order;
+      if (!Array.isArray(ord)) return null;
+      const i = ord.indexOf(id);
+      return i < 0 ? null : i;
+    },
+    sortScenarios(list) {
+      const ord = this.bdata().order;
+      if (!Array.isArray(ord) || !ord.length) return list;
+      return [...list].sort((a, b) => {
+        const ia = ord.indexOf(a.id), ib = ord.indexOf(b.id);
+        return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib);
+      });
+    },
+    moveScenario(id, dir, allIds) {
+      const d = this.bdata();
+      let ord = Array.isArray(d.order) && d.order.length ? d.order.filter(x => allIds.includes(x)) : [...allIds];
+      allIds.forEach(x => { if (!ord.includes(x)) ord.push(x); });
+      const i = ord.indexOf(id);
+      const j = i + dir;
+      if (i < 0 || j < 0 || j >= ord.length) return;
+      [ord[i], ord[j]] = [ord[j], ord[i]];
+      d.order = ord;
+      this.save();
+    },
+
+    // extra phrases added by the admin (merged into the Learn tab)
+    addedPhrases(sceneId) {
+      const p = this.bdata().phrases;
+      return (p && p[sceneId]) || [];
+    },
+    addPhrase(sceneId) {
+      const en = prompt(t("Frase em inglês:", "Phrase in English:"));
+      if (!en || !en.trim()) return false;
+      const note = prompt(t("Nota/explicação (pode ser em português):", "Note/explanation:")) || "";
+      const d = this.bdata();
+      d.phrases = d.phrases || {};
+      d.phrases[sceneId] = d.phrases[sceneId] || [];
+      d.phrases[sceneId].push({ en: en.trim(), note: note.trim() });
+      this.save();
+      return true;
+    },
+
+    // after each route render: re-apply saved text rewrites; add build controls
+    afterRender(routeKey, ctx) {
+      this._route = routeKey.split("/")[0] === "scenario" ? routeKey : routeKey.split("/")[0] || "home";
+      const d = this.bdata();
+      // 1) text overrides (match by exact original text, leaf elements only)
+      if (d.texts && d.texts.length) {
+        const scope = [document.getElementById("main"), document.getElementById("scenario-nav")];
+        d.texts.forEach(o => {
+          if (o.route !== this._route && o.route !== "home") return;
+          scope.forEach(root => {
+            if (!root) return;
+            const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+            let el;
+            while ((el = walker.nextNode())) {
+              if (el.children.length === 0 && el.textContent === o.original) {
+                el.textContent = o.text;
+              }
+            }
+          });
+        });
+      }
+      // 2) build-mode controls
+      if (!this.on) return;
+      // reorder arrows on home cards
+      if (this._route === "home" && ctx && ctx.scenarioIds) {
+        document.querySelectorAll("#main .scenario-card[href^='#/scenario/']").forEach(card => {
+          const id = card.getAttribute("href").split("/")[2];
+          if (!id || card.querySelector(".bp-order")) return;
+          const ctr = document.createElement("div");
+          ctr.className = "bp-order";
+          ctr.innerHTML = `<button data-d="-1">‹</button><button data-d="1">›</button>`;
+          ctr.querySelectorAll("button").forEach(b => {
+            b.onclick = (e) => {
+              e.preventDefault(); e.stopPropagation();
+              this.moveScenario(id, +b.dataset.d, ctx.scenarioIds);
+              window.dispatchEvent(new HashChangeEvent("hashchange"));
+            };
+          });
+          card.style.position = "relative";
+          card.appendChild(ctr);
+        });
+      }
+      // "+ add phrase" on learn tab
+      if (this._route.startsWith("scenario") && ctx && ctx.tab === "learn" && ctx.sceneId) {
+        const firstCardH3 = [...document.querySelectorAll("#scenario-body .card h3")][0];
+        if (firstCardH3 && !document.getElementById("bp-add-phrase")) {
+          const btn = document.createElement("button");
+          btn.id = "bp-add-phrase";
+          btn.className = "btn ghost bp-btn";
+          btn.style.marginTop = "10px";
+          btn.textContent = "＋ " + t("Adicionar frase", "Add phrase");
+          btn.onclick = () => {
+            if (this.addPhrase(ctx.sceneId)) window.dispatchEvent(new HashChangeEvent("hashchange"));
+          };
+          firstCardH3.closest(".card").appendChild(btn);
+        }
+      }
+    }
   };
 
-  function hairPaths(style, hair) {
-    // head center x=70, cy=40, rx=19 ry=21
-    const back = {
-      short: `<path d="M52 42 Q50 18 70 16 Q90 18 88 42 L85 32 Q70 24 55 32 Z" fill="${hair}" stroke="${O}" stroke-width="${OW}"/>`,
-      bun:   `<circle cx="70" cy="14" r="8" fill="${hair}" stroke="${O}" stroke-width="${OW}"/>
-              <path d="M52 42 Q50 18 70 16 Q90 18 88 42 L85 32 Q70 24 55 32 Z" fill="${hair}" stroke="${O}" stroke-width="${OW}"/>`,
-      long:  `<path d="M51 40 Q49 16 70 15 Q91 16 89 40 L91 86 Q86 92 81 86 L82 44 Q70 28 58 44 L59 86 Q54 92 49 86 Z" fill="${hair}" stroke="${O}" stroke-width="${OW}"/>`,
-      curly: `<path d="M52 40 Q46 30 52 24 Q50 14 62 13 Q68 6 78 11 Q88 8 90 20 Q96 26 90 34 Q94 40 88 43 L85 32 Q70 24 55 32 Z" fill="${hair}" stroke="${O}" stroke-width="${OW}"/>`,
-      beard: `<path d="M52 42 Q50 18 70 16 Q90 18 88 42 L85 32 Q70 24 55 32 Z" fill="${hair}" stroke="${O}" stroke-width="${OW}"/>`
+  window.RTBuilder = RTB;
+})();
+
+</script>
+<script>
+// RealTalk — anime dialogue scenes, visual-novel framing:
+// large chest-up character (big refined eyes, hair sheen, cel shading) over a
+// soft-focus environment with bokeh light. Idle life: blink, glance, breathe,
+// mouth-synced talking. Reactions: hop+sparkles / sweat+slump / shock+vein.
+(function () {
+  const O = "#4a3a33";
+
+  // ---------- cast: looks per scene ----------
+  const CAST = {
+    coffee:     { style: "bun",   hair: "#5a4032", skin: "#f5d5ae", top: "#ddd3bd", garment: "apron", gColor: "#8a5a40", iris: "#6a4a34" },
+    food:       { style: "beard", hair: "#3a2b20", skin: "#e0b184", top: "#6a4a3a", iris: "#4a3626" },
+    directions: { style: "short", hair: "#b0a89a", skin: "#f5d5ae", top: "#6a80a0", iris: "#5a6a78" },
+    smalltalk:  { style: "short", hair: "#2e2620", skin: "#e0b184", top: "#8aa06a", iris: "#4a3626" },
+    phone:      { style: "long",  hair: "#6a4a34", skin: "#f5d5ae", top: "#d9c9a8", iris: "#6a4a34" },
+    haircut:    { style: "beard", hair: "#241d18", skin: "#eabf90", top: "#4a4a52", iris: "#38291f" },
+    doctor:     { style: "bun",   hair: "#241d18", skin: "#c08e64", top: "#f2ede0", garment: "coat", iris: "#38291f" },
+    renting:    { style: "short", hair: "#4a3626", skin: "#f5d5ae", top: "#5a6a80", garment: "tie", iris: "#4a3626" },
+    setup:      { style: "curly", hair: "#1d1712", skin: "#96683f", top: "#7a9c94", iris: "#2e2118" },
+    interview:  { style: "long",  hair: "#7a4a2c", skin: "#f7ddbc", top: "#7a5560", garment: "blazer", iris: "#5c3a24" },
+    flirting:   { style: "long",  hair: "#b55a42", skin: "#f7ddbc", top: "#cf8f99", garment: "stripes", iris: "#7a4530" },
+    casual:     { style: "beard", hair: "#6a4a34", skin: "#eabf90", top: "#a05a4a", iris: "#4a3626" },
+    worktalk:   { style: "curly", hair: "#241d18", skin: "#96683f", top: "#6a6a80", garment: "blazer", iris: "#2e2118" }
+  };
+
+  function shade(hex, f) {
+    const n = parseInt(hex.slice(1), 16);
+    const ch = (s) => Math.max(0, Math.min(255, Math.round(((n >> s) & 255) * f)));
+    return `#${((1 << 24) + (ch(16) << 16) + (ch(8) << 8) + ch(0)).toString(16).slice(1)}`;
+  }
+
+  // hair on a large head: face spans x74-166, brow line y~78, chin y~140
+  function hairSvg(style, hair) {
+    const dark = shade(hair, .78), sheen = shade(hair, 1.45);
+    const common = { dark, sheen };
+    const H = {
+      short: {
+        back: `<path d="M70 96 Q64 34 120 28 Q176 34 170 96 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
+        front: `<path d="M76 82 Q80 44 120 40 Q160 44 164 82 Q152 62 136 70 L128 56 Q118 68 106 62 Q92 64 76 82 Z" fill="${hair}"/>
+                <path d="M88 52 Q104 42 122 44" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".55"/>`
+      },
+      bun: {
+        back: `<circle cx="120" cy="26" r="17" fill="${hair}" stroke="${O}" stroke-width="2.2"/>
+               <circle cx="120" cy="22" r="6" fill="${sheen}" opacity=".4"/>
+               <path d="M70 96 Q64 36 120 30 Q176 36 170 96 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
+        front: `<path d="M76 80 Q84 44 120 42 Q156 44 164 80 Q146 58 122 62 Q120 54 116 62 Q94 60 76 80 Z" fill="${hair}"/>
+                <path d="M92 52 Q106 44 124 46" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".55"/>`
+      },
+      long: {
+        back: `<path d="M68 92 Q62 32 120 26 Q178 32 172 92 L178 200 Q168 214 156 202 L158 100 Q120 66 82 100 L84 202 Q72 214 62 200 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>
+               <path d="M170 120 Q176 160 170 196 M70 120 Q64 160 70 196" fill="none" stroke="${dark}" stroke-width="4" opacity=".5"/>`,
+        front: `<path d="M74 84 Q80 42 120 38 Q160 42 166 84 Q150 60 134 68 L126 52 Q116 66 104 60 Q88 62 74 84 Z" fill="${hair}"/>
+                <path d="M90 50 Q106 40 126 43" fill="none" stroke="${sheen}" stroke-width="5.5" stroke-linecap="round" opacity=".55"/>`
+      },
+      curly: {
+        back: `<path d="M70 94 Q56 78 66 62 Q58 42 78 34 Q86 20 106 24 Q120 14 136 24 Q156 20 164 36 Q182 44 174 64 Q184 80 170 94 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
+        front: `<path d="M76 82 Q80 56 96 60 Q100 46 116 52 Q126 42 138 52 Q154 50 162 66 Q166 74 164 82 Q146 62 132 68 Q120 60 108 66 Q90 64 76 82 Z" fill="${hair}"/>
+                <path d="M94 56 Q108 46 126 48" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".45"/>`
+      },
+      beard: {
+        back: `<path d="M70 96 Q64 34 120 28 Q176 34 170 96 L163 78 Q120 58 77 78 Z" fill="${hair}" stroke="${O}" stroke-width="2.2"/>`,
+        front: `<path d="M76 82 Q82 46 120 42 Q158 46 164 82 Q148 60 132 68 Q120 58 104 64 Q90 64 76 82 Z" fill="${hair}"/>
+                <path d="M90 52 Q104 44 122 46" fill="none" stroke="${sheen}" stroke-width="5" stroke-linecap="round" opacity=".5"/>`,
+        extra: `<path d="M80 108 Q82 148 120 152 Q158 148 160 108 Q160 138 120 144 Q80 138 80 108 Z" fill="${hair}" stroke="${O}" stroke-width="1.6" opacity=".95"/>`
+      }
     };
-    const fringe = {
-      short: `<path d="M55 33 Q60 24 70 23 Q80 24 85 33 Q76 28 70 30 Q64 28 55 33 Z" fill="${hair}"/>`,
-      bun:   `<path d="M55 32 Q62 23 70 23 Q78 23 85 32 Q74 26 70 28 Q66 26 55 32 Z" fill="${hair}"/>`,
-      long:  `<path d="M54 34 Q60 23 70 22 Q80 23 86 34 Q78 26 72 30 L69 25 Q60 27 54 34 Z" fill="${hair}"/>`,
-      curly: `<path d="M54 33 Q58 25 66 27 Q70 22 76 26 Q82 25 86 33 Q74 27 70 29 Q64 27 54 33 Z" fill="${hair}"/>`,
-      beard: `<path d="M55 33 Q60 24 70 23 Q80 24 85 33 Q76 28 70 30 Q64 28 55 33 Z" fill="${hair}"/>`
-    };
-    const extra = style === "beard"
-      ? `<path d="M56 46 Q57 62 70 64 Q83 62 84 46 Q84 58 70 60 Q56 58 56 46 Z" fill="${hair}" stroke="${O}" stroke-width="1.4"/>`
-      : "";
-    return { back: back[style] || back.short, fringe: fringe[style] || fringe.short, extra };
+    const h = H[style] || H.short;
+    return { back: h.back, front: h.front, extra: h.extra || "", ...common };
+  }
+
+  function outfitSvg(c) {
+    const dark = shade(c.top, .8);
+    const base = `
+      <path d="M46 230 Q50 176 86 166 L120 158 L154 166 Q190 176 194 230 Z" fill="${c.top}" stroke="${O}" stroke-width="2.2"/>
+      <path d="M46 230 Q50 176 86 166 L94 172 Q70 184 62 230 Z" fill="${dark}" opacity=".45"/>
+      <path d="M104 160 Q120 170 136 160 L132 168 Q120 176 108 168 Z" fill="${dark}" opacity=".6"/>`;
+    const extra =
+      c.garment === "apron" ? `<path d="M96 176 L144 176 L150 230 L90 230 Z" fill="${c.gColor}" stroke="${O}" stroke-width="1.6"/><path d="M102 176 L104 164 M138 176 L136 164" stroke="${c.gColor}" stroke-width="5"/>` :
+      c.garment === "coat" ? `<path d="M84 166 L100 160 L96 230 L74 226 Z M156 166 L140 160 L144 230 L166 226 Z" fill="#fbf8f0" stroke="${O}" stroke-width="1.6"/>` :
+      c.garment === "stripes" ? `${[0, 1, 2].map(i => `<path d="M52 ${188 + i * 16} Q120 ${196 + i * 16} 188 ${188 + i * 16} L188 ${195 + i * 16} Q120 ${203 + i * 16} 52 ${195 + i * 16} Z" fill="#fbf5ee" opacity=".7"/>`).join("")}` :
+      c.garment === "blazer" ? `<path d="M92 164 L120 196 L148 164 L154 170 L120 210 L86 170 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.4"/><path d="M86 168 L100 162 L120 196 L96 230 L78 228 Z M154 168 L140 162 L120 196 L144 230 L162 228 Z" fill="${shade(c.top, .85)}" stroke="${O}" stroke-width="1.6"/>` :
+      c.garment === "tie" ? `<path d="M114 162 L126 162 L124 172 L116 172 Z M116 172 L124 172 L126 206 L120 214 L114 206 Z" fill="#8a4a44" stroke="${O}" stroke-width="1.3"/><path d="M96 160 L114 162 L110 174 Z M144 160 L126 162 L130 174 Z" fill="#fbf8f0" stroke="${O}" stroke-width="1.3"/>` : "";
+    return base + extra;
   }
 
   class Character {
     constructor(container, sceneId) {
       this.root = container;
       const c = CAST[sceneId] || CAST.smalltalk;
-      const h = hairPaths(c.style, c.hair);
-      const iris = "#4a3629";
+      const h = hairSvg(c.style, c.hair);
+      const skinShade = shade(c.skin, .88);
       this.root.classList.add("anime-char");
-
-      const legs = c.skirt
-        ? `<path d="M56 158 L84 158 L88 208 L52 208 Z" fill="${c.bottom}" stroke="${O}" stroke-width="${OW}"/>
-           <rect x="58" y="206" width="9" height="52" rx="4" fill="${c.skin}" stroke="${O}" stroke-width="1.5"/>
-           <rect x="73" y="206" width="9" height="52" rx="4" fill="${c.skin}" stroke="${O}" stroke-width="1.5"/>`
-        : `<path d="M56 158 L69 158 L68 258 L56 258 Z" fill="${c.bottom}" stroke="${O}" stroke-width="${OW}"/>
-           <path d="M71 158 L84 158 L84 258 L72 258 Z" fill="${c.bottom}" stroke="${O}" stroke-width="${OW}"/>`;
-
-      const arms = c.pose === "clasp"
-        ? `<path d="M52 82 Q44 108 56 128 L62 132" fill="none" stroke="${c.top}" stroke-width="9" stroke-linecap="round"/>
-           <path d="M88 82 Q96 108 84 128 L78 132" fill="none" stroke="${c.top}" stroke-width="9" stroke-linecap="round"/>
-           <ellipse cx="70" cy="132" rx="9" ry="6" fill="${c.skin}" stroke="${O}" stroke-width="1.5"/>`
-        : `<path d="M52 82 Q46 108 50 130" fill="none" stroke="${c.top}" stroke-width="9" stroke-linecap="round"/>
-           <path d="M88 82 Q94 108 90 130" fill="none" stroke="${c.top}" stroke-width="9" stroke-linecap="round"/>
-           <circle cx="50" cy="134" r="5" fill="${c.skin}" stroke="${O}" stroke-width="1.5"/>
-           <circle cx="90" cy="134" r="5" fill="${c.skin}" stroke="${O}" stroke-width="1.5"/>`;
-
-      const garment =
-        c.garment === "apron" ? `<path d="M58 86 L82 86 L86 150 L54 150 Z" fill="${c.gColor}" stroke="${O}" stroke-width="1.5"/><path d="M62 86 L62 78 L78 78 L78 86" fill="none" stroke="${c.gColor}" stroke-width="4"/>` :
-        c.garment === "coat" ? `<path d="M50 76 L58 70 L60 156 L48 152 Z M90 76 L82 70 L80 156 L92 152 Z" fill="#fff" stroke="${O}" stroke-width="1.4" opacity=".9"/>` :
-        c.garment === "stripes" ? `${[0, 1, 2].map(i => `<path d="M52 ${92 + i * 18} Q70 ${96 + i * 18} 88 ${92 + i * 18} L88 ${98 + i * 18} Q70 ${102 + i * 18} 52 ${98 + i * 18} Z" fill="#fff" opacity=".65"/>`).join("")}` : "";
-
       this.root.innerHTML = `
         <div class="fx-speedlines" id="fx-speed"></div>
-        <svg viewBox="0 0 140 268" class="anime-svg" aria-hidden="true">
-          <ellipse cx="70" cy="260" rx="34" ry="6" fill="rgba(40,30,25,.22)"/>
+        <svg viewBox="0 0 240 232" class="anime-svg" aria-hidden="true">
+          <defs>
+            <radialGradient id="iris-${sceneId}" cx="50%" cy="40%">
+              <stop offset="0%" stop-color="${shade(c.iris, 1.6)}"/>
+              <stop offset="55%" stop-color="${c.iris}"/>
+              <stop offset="100%" stop-color="${shade(c.iris, .6)}"/>
+            </radialGradient>
+            <filter id="soft-${sceneId}" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="1.6"/>
+            </filter>
+          </defs>
+          ${h.back}
           <g id="an-body">
-            ${legs}
-            <path d="M50 258 L69 258 L69 265 L46 265 Z" fill="#5a4a40" stroke="${O}" stroke-width="1.5"/>
-            <path d="M71 258 L90 258 L94 265 L71 265 Z" fill="#5a4a40" stroke="${O}" stroke-width="1.5"/>
-            <path d="M52 74 Q70 66 88 74 L92 118 Q90 150 84 160 L56 160 Q50 150 48 118 Z" fill="${c.top}" stroke="${O}" stroke-width="${OW}"/>
-            ${garment}
-            ${arms}
-            <rect x="64" y="58" width="12" height="14" fill="${c.skin}" stroke="${O}" stroke-width="1.5"/>
+            <path d="M108 130 L132 130 L132 168 L108 168 Z" fill="${c.skin}" stroke="${O}" stroke-width="2"/>
+            <path d="M108 132 Q120 142 132 132 L132 146 Q120 152 108 146 Z" fill="${skinShade}" opacity=".7"/>
+            ${outfitSvg(c)}
           </g>
           <g id="an-head">
-            ${h.back}
-            <ellipse cx="70" cy="40" rx="19" ry="21" fill="${c.skin}" stroke="${O}" stroke-width="${OW}"/>
-            <path d="M51 40 Q49 44 52 46 M89 40 Q91 44 88 46" fill="${c.skin}" stroke="${O}" stroke-width="1.4"/>
+            <path d="M120 38 C 88 38 72 60 73 90 C 74 116 92 136 120 142 C 148 136 166 116 167 90 C 168 60 152 38 120 38 Z" fill="${c.skin}" stroke="${O}" stroke-width="2.2"/>
+            <path d="M150 60 C 162 74 164 100 152 120 C 162 104 162 76 150 60 Z" fill="${skinShade}" opacity=".8"/>
+            <path d="M72 92 Q68 98 73 104 M168 92 Q172 98 167 104" fill="${c.skin}" stroke="${O}" stroke-width="1.8"/>
             ${h.extra}
-            <path id="an-brow-l" d="M58 33.5 Q63 31 68 33" fill="none" stroke="${O}" stroke-width="1.8" stroke-linecap="round"/>
-            <path id="an-brow-r" d="M72 33 Q77 31 82 33.5" fill="none" stroke="${O}" stroke-width="1.8" stroke-linecap="round"/>
+            <path id="an-brow-l" d="M86 76 Q97 71 108 75" fill="none" stroke="${shade(c.hair, .7)}" stroke-width="3.2" stroke-linecap="round"/>
+            <path id="an-brow-r" d="M132 75 Q143 71 154 76" fill="none" stroke="${shade(c.hair, .7)}" stroke-width="3.2" stroke-linecap="round"/>
             <g id="an-eyes-normal">
-              <ellipse cx="62.5" cy="41" rx="4.6" ry="5.6" fill="#fff" stroke="${O}" stroke-width="1.4"/>
-              <ellipse cx="77.5" cy="41" rx="4.6" ry="5.6" fill="#fff" stroke="${O}" stroke-width="1.4"/>
+              <path d="M87 94 Q97 84 107 94 Q97 103 87 94 Z" fill="#fff" stroke="${O}" stroke-width="1.2"/>
+              <path d="M133 94 Q143 84 153 94 Q143 103 133 94 Z" fill="#fff" stroke="${O}" stroke-width="1.2"/>
               <g id="an-pupils">
-                <circle cx="62.5" cy="41.8" r="2.9" fill="${iris}"/><circle cx="62.5" cy="41.8" r="1.2" fill="#1d1410"/><circle cx="61.4" cy="40.4" r="1" fill="#fff"/>
-                <circle cx="77.5" cy="41.8" r="2.9" fill="${iris}"/><circle cx="77.5" cy="41.8" r="1.2" fill="#1d1410"/><circle cx="76.4" cy="40.4" r="1" fill="#fff"/>
+                <circle cx="97" cy="93" r="6.2" fill="url(#iris-${sceneId})"/>
+                <circle cx="97" cy="93" r="2.6" fill="#17100c"/>
+                <circle cx="94.6" cy="90.2" r="2" fill="#fff"/><circle cx="99.6" cy="95.6" r="1" fill="#fff" opacity=".8"/>
+                <circle cx="143" cy="93" r="6.2" fill="url(#iris-${sceneId})"/>
+                <circle cx="143" cy="93" r="2.6" fill="#17100c"/>
+                <circle cx="140.6" cy="90.2" r="2" fill="#fff"/><circle cx="145.6" cy="95.6" r="1" fill="#fff" opacity=".8"/>
               </g>
-              <path d="M58 36.8 Q62.5 34.6 67 36.8 M73 36.8 Q77.5 34.6 82 36.8" fill="none" stroke="${O}" stroke-width="1.7"/>
+              <path d="M85 92 Q97 81 109 92 L107 88.5 Q97 80 87 88.5 Z" fill="${O}"/>
+              <path d="M131 92 Q143 81 155 92 L153 88.5 Q143 80 133 88.5 Z" fill="${O}"/>
+              <path d="M88 100 Q97 104 106 100 M134 100 Q143 104 152 100" fill="none" stroke="${O}" stroke-width="1" opacity=".4"/>
               <g id="an-lids" style="display:none">
-                <ellipse cx="62.5" cy="41" rx="4.9" ry="5.9" fill="${c.skin}"/>
-                <ellipse cx="77.5" cy="41" rx="4.9" ry="5.9" fill="${c.skin}"/>
-                <path d="M58 41 Q62.5 43 67 41 M73 41 Q77.5 43 82 41" fill="none" stroke="${O}" stroke-width="1.5"/>
+                <path d="M85 93 Q97 83 109 93 Q97 102 85 93 Z" fill="${c.skin}"/>
+                <path d="M131 93 Q143 83 155 93 Q143 102 131 93 Z" fill="${c.skin}"/>
+                <path d="M86 94 Q97 98 108 94 M132 94 Q143 98 154 94" fill="none" stroke="${O}" stroke-width="1.6"/>
               </g>
             </g>
             <g id="an-eyes-happy" style="display:none">
-              <path d="M58 42 Q62.5 37.5 67 42" fill="none" stroke="${O}" stroke-width="2" stroke-linecap="round"/>
-              <path d="M73 42 Q77.5 37.5 82 42" fill="none" stroke="${O}" stroke-width="2" stroke-linecap="round"/>
+              <path d="M87 95 Q97 86 107 95" fill="none" stroke="${O}" stroke-width="2.6" stroke-linecap="round"/>
+              <path d="M133 95 Q143 86 153 95" fill="none" stroke="${O}" stroke-width="2.6" stroke-linecap="round"/>
             </g>
             <g id="an-eyes-shock" style="display:none">
-              <ellipse cx="62.5" cy="41" rx="5.4" ry="6.4" fill="#fff" stroke="${O}" stroke-width="1.4"/><circle cx="62.5" cy="41.8" r="1" fill="#1d1410"/>
-              <ellipse cx="77.5" cy="41" rx="5.4" ry="6.4" fill="#fff" stroke="${O}" stroke-width="1.4"/><circle cx="77.5" cy="41.8" r="1" fill="#1d1410"/>
+              <path d="M85 94 Q97 82 109 94 Q97 105 85 94 Z" fill="#fff" stroke="${O}" stroke-width="1.4"/><circle cx="97" cy="93.5" r="1.7" fill="#17100c"/>
+              <path d="M131 94 Q143 82 155 94 Q143 105 131 94 Z" fill="#fff" stroke="${O}" stroke-width="1.4"/><circle cx="143" cy="93.5" r="1.7" fill="#17100c"/>
             </g>
             <g id="an-eyes-flat" style="display:none">
-              <path d="M58 41 L67 41 M73 41 L82 41" stroke="${O}" stroke-width="1.9" stroke-linecap="round"/>
+              <path d="M87 93 L107 93 M133 93 L153 93" stroke="${O}" stroke-width="2.4" stroke-linecap="round"/>
+              <path d="M87 89 Q97 86 107 89 M133 89 Q143 86 153 89" fill="none" stroke="${O}" stroke-width="1.4" opacity=".6"/>
             </g>
-            <g id="an-blush" style="display:none">
-              <path d="M55 47 L60 45 M57 49 L62 47" stroke="#d98a80" stroke-width="1.4" opacity=".8"/>
-              <path d="M80 45 L85 47 M78 47 L83 49" stroke="#d98a80" stroke-width="1.4" opacity=".8"/>
+            <g id="an-blush" style="display:none" filter="url(#soft-${sceneId})">
+              <ellipse cx="90" cy="110" rx="10" ry="4.5" fill="#e58a7a" opacity=".5"/>
+              <ellipse cx="150" cy="110" rx="10" ry="4.5" fill="#e58a7a" opacity=".5"/>
             </g>
-            <path d="M69 46 Q70 48 71 46" fill="none" stroke="${O}" stroke-width="1.2"/>
+            <path d="M118 106 Q121 109 119 112" fill="none" stroke="${shade(c.skin, .7)}" stroke-width="1.6" stroke-linecap="round"/>
             <g id="an-mouth">
-              <path id="an-m-smile" d="M65 53 Q70 56.5 75 53" fill="none" stroke="${O}" stroke-width="1.8" stroke-linecap="round"/>
-              <path id="an-m-flat" d="M66 53.5 L74 53.5" fill="none" stroke="${O}" stroke-width="1.8" stroke-linecap="round" style="display:none"/>
-              <path id="an-m-open" d="M66 51.5 Q70 58 74 51.5 Q70 54 66 51.5 Z" fill="#8a5048" stroke="${O}" stroke-width="1.5" style="display:none"/>
-              <path id="an-m-grin" d="M64 52 Q70 58.5 76 52 Q70 54.5 64 52 Z" fill="#fff" stroke="${O}" stroke-width="1.5" style="display:none"/>
-              <path id="an-m-wavy" d="M65 53.5 Q67.5 52 70 53.5 Q72.5 55 75 53.5" fill="none" stroke="${O}" stroke-width="1.8" stroke-linecap="round" style="display:none"/>
-              <ellipse id="an-m-o" cx="70" cy="53.5" rx="3.4" ry="4.4" fill="#8a5048" stroke="${O}" stroke-width="1.5" style="display:none"/>
-              <path id="an-m-frown" d="M65 55 Q70 51.5 75 55" fill="none" stroke="${O}" stroke-width="1.8" stroke-linecap="round" style="display:none"/>
+              <path id="an-m-smile" d="M110 124 Q120 130 130 124" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round"/>
+              <path id="an-m-flat" d="M112 125 L128 125" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round" style="display:none"/>
+              <path id="an-m-open" d="M111 121 Q120 134 129 121 Q120 126 111 121 Z" fill="#8a5048" stroke="${O}" stroke-width="1.8" style="display:none"/>
+              <path id="an-m-grin" d="M108 122 Q120 134 132 122 Q120 127 108 122 Z" fill="#fff" stroke="${O}" stroke-width="1.8" style="display:none"/>
+              <path id="an-m-wavy" d="M110 124.5 Q115 122 120 124.5 Q125 127 130 124.5" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round" style="display:none"/>
+              <ellipse id="an-m-o" cx="120" cy="125" rx="6" ry="7.5" fill="#8a5048" stroke="${O}" stroke-width="1.8" style="display:none"/>
+              <path id="an-m-frown" d="M110 128 Q120 122 130 128" fill="none" stroke="${O}" stroke-width="2.2" stroke-linecap="round" style="display:none"/>
             </g>
-            <path id="fx-sweat" class="fx-sweat" d="M92 30 Q96 37 92 40 Q88 37 92 30 Z" fill="#b8d9ea" stroke="#6a9cb8" stroke-width="1.3" style="display:none"/>
-            <g id="fx-vein" class="fx-vein" style="display:none" stroke="#c25a52" stroke-width="1.8" stroke-linecap="round">
-              <path d="M89 20 Q91 22 89 24"/><path d="M94 20 Q92 22 94 24"/><path d="M88 26 Q91.5 24 95 26" fill="none"/>
+            ${h.front}
+            <path id="fx-sweat" class="fx-sweat" d="M170 62 Q176 72 170 77 Q164 72 170 62 Z" fill="#b8dcee" stroke="#6a9cb8" stroke-width="1.6" style="display:none"/>
+            <g id="fx-vein" class="fx-vein" style="display:none" stroke="#c25a52" stroke-width="2.6" stroke-linecap="round">
+              <path d="M166 44 Q169 47 166 50"/><path d="M173 44 Q170 47 173 50"/><path d="M164 53 Q169.5 50 175 53" fill="none"/>
             </g>
-            <text id="fx-q" class="fx-q" x="92" y="24" font-size="15" font-weight="bold" fill="#fff" stroke="${O}" stroke-width=".6" style="display:none">?</text>
+            <text id="fx-q" class="fx-q" x="170" y="52" font-size="22" font-weight="bold" fill="#fff" stroke="${O}" stroke-width=".8" style="display:none">?</text>
           </g>
-          <g id="fx-sparkles" class="fx-sparkles" style="display:none" fill="#f5e2a8" stroke="#d9b25a" stroke-width=".8">
-            <path d="M34 60 L36 66 L42 68 L36 70 L34 76 L32 70 L26 68 L32 66 Z"/>
-            <path d="M106 84 L107.5 88 L112 89.5 L107.5 91 L106 95 L104.5 91 L100 89.5 L104.5 88 Z"/>
-            <path d="M40 110 L41.5 114 L46 115.5 L41.5 117 L40 121 L38.5 117 L34 115.5 L38.5 114 Z"/>
+          <g id="fx-sparkles" class="fx-sparkles" style="display:none" fill="#f7e6ae" stroke="#d9b25a" stroke-width="1">
+            <path d="M56 84 L59 92 L67 95 L59 98 L56 106 L53 98 L45 95 L53 92 Z"/>
+            <path d="M186 120 L188 126 L194 128 L188 130 L186 136 L184 130 L178 128 L184 126 Z"/>
+            <path d="M64 150 L66 155 L71 157 L66 159 L64 164 L62 159 L57 157 L62 155 Z"/>
           </g>
         </svg>`;
 
@@ -5362,7 +5695,6 @@ window.LEARN_EXTRA = {
     }
 
     _startLife() {
-      // blinking — irregular, like a person
       const blink = () => {
         const lids = this.$("an-lids");
         if (lids && this.$("an-eyes-normal").style.display !== "none") {
@@ -5372,11 +5704,10 @@ window.LEARN_EXTRA = {
         this.timers.push(setTimeout(blink, 2200 + Math.random() * 3200));
       };
       this.timers.push(setTimeout(blink, 1400));
-      // occasional glance to the side
       const glance = () => {
         const p = this.$("an-pupils");
         if (p && !this.reacting) {
-          const dx = Math.random() > 0.5 ? 1.6 : -1.6;
+          const dx = Math.random() > 0.5 ? 3 : -3;
           p.setAttribute("transform", `translate(${dx} 0)`);
           this.timers.push(setTimeout(() => p.setAttribute("transform", ""), 700 + Math.random() * 500));
         }
@@ -5397,17 +5728,17 @@ window.LEARN_EXTRA = {
         if (el) el.style.display = k === kind ? "" : "none";
       });
     }
-    _mouth(kind) {
+    _mouthSwap(kind) {
       ["smile", "flat", "open", "grin", "wavy", "o", "frown"].forEach(k => {
         const el = this.$("an-m-" + k);
         if (el) el.style.display = k === kind ? "" : "none";
       });
-      this.mouthKind = kind;
     }
+    _mouth(kind) { this._mouthSwap(kind); this.mouthKind = kind; }
     _brows(y, tilt) {
       const l = this.$("an-brow-l"), r = this.$("an-brow-r");
-      if (l) l.setAttribute("transform", `translate(0 ${y}) rotate(${-tilt} 63 33)`);
-      if (r) r.setAttribute("transform", `translate(0 ${y}) rotate(${tilt} 77 33)`);
+      if (l) l.setAttribute("transform", `translate(0 ${y}) rotate(${-tilt} 97 75)`);
+      if (r) r.setAttribute("transform", `translate(0 ${y}) rotate(${tilt} 143 75)`);
     }
     _fx(active) {
       ["fx-sweat", "fx-vein", "fx-sparkles", "fx-q"].forEach(id => {
@@ -5419,7 +5750,7 @@ window.LEARN_EXTRA = {
     }
     _head(tilt) {
       const head = this.$("an-head");
-      if (head) head.setAttribute("transform", tilt ? `rotate(${tilt} 70 60)` : "");
+      if (head) head.setAttribute("transform", tilt ? `rotate(${tilt} 120 120)` : "");
     }
     _blushOn(on) { const b = this.$("an-blush"); if (b) b.style.display = on ? "" : "none"; }
 
@@ -5429,10 +5760,10 @@ window.LEARN_EXTRA = {
       switch (mood) {
         case "friendly": this._eyes("normal"); this._mouth("smile"); this._brows(0, 0); this._fx([]); this._head(0); this._blushOn(false); break;
         case "neutral":  this._eyes("normal"); this._mouth("flat");  this._brows(0, 0); this._fx([]); this._head(0); this._blushOn(false); break;
-        case "confused": this._eyes("normal"); this._mouth("wavy");  this._brows(-2, 6); this._fx(["fx-q"]); this._head(4); this._blushOn(false); break;
-        case "amused":   this._eyes("happy");  this._mouth("grin");  this._brows(-1, 0); this._fx([]); this._head(-2); this._blushOn(true); break;
-        case "awkward":  this._eyes("flat");   this._mouth("wavy");  this._brows(1, -4); this._fx(["fx-sweat"]); this._head(-3); this._blushOn(false); break;
-        case "worried":  this._eyes("normal"); this._mouth("frown"); this._brows(1.5, 8); this._fx(["fx-sweat"]); this._head(2); this._blushOn(false); break;
+        case "confused": this._eyes("normal"); this._mouth("wavy");  this._brows(-3, 7); this._fx(["fx-q"]); this._head(3.5); this._blushOn(false); break;
+        case "amused":   this._eyes("happy");  this._mouth("grin");  this._brows(-2, 0); this._fx([]); this._head(-2); this._blushOn(true); break;
+        case "awkward":  this._eyes("flat");   this._mouth("wavy");  this._brows(2, -5); this._fx(["fx-sweat"]); this._head(-2.5); this._blushOn(false); break;
+        case "worried":  this._eyes("normal"); this._mouth("frown"); this._brows(2.5, 9); this._fx(["fx-sweat"]); this._head(1.5); this._blushOn(false); break;
         default:         this._eyes("normal"); this._mouth("smile"); this._brows(0, 0); this._fx([]); this._head(0);
       }
     }
@@ -5443,24 +5774,24 @@ window.LEARN_EXTRA = {
       this.root.classList.remove("an-hop", "an-slump", "an-stepback");
       void this.root.offsetWidth;
       if (quality === "natural") {
-        this._eyes("happy"); this._mouth("grin"); this._brows(-1, 0); this._head(-2);
+        this._eyes("happy"); this._mouth("grin"); this._brows(-2, 0); this._head(-2);
         this._blushOn(true);
         this._fx(["fx-sparkles"]);
         this.root.classList.add("an-hop");
       } else if (quality === "awkward") {
-        this._eyes("flat"); this._mouth("wavy"); this._brows(1, -4); this._head(-4);
+        this._eyes("flat"); this._mouth("wavy"); this._brows(2, -5); this._head(-3.5);
         this._blushOn(false);
         this._fx(["fx-sweat"]);
         this.root.classList.add("an-slump");
       } else {
-        this._eyes("shock"); this._mouth("o"); this._brows(-3, 10); this._head(0);
+        this._eyes("shock"); this._mouth("o"); this._brows(-4, 11); this._head(0);
         this._blushOn(false);
         this._fx(["fx-speed"]);
         this.root.classList.add("an-stepback");
         this.reactTimer = setTimeout(() => {
           if (!this.root.isConnected) return;
           this._fx(["fx-vein"]);
-          this._eyes("normal"); this._mouth("wavy"); this._brows(-2, 8); this._head(4);
+          this._eyes("normal"); this._mouth("wavy"); this._brows(-3, 8); this._head(3.5);
           this.root.classList.remove("an-stepback");
         }, 1300);
       }
@@ -5475,25 +5806,18 @@ window.LEARN_EXTRA = {
           if (!this.root.isConnected) { clearInterval(this.talkTimer); return; }
           if (this.reacting) return;
           open = !open;
-          const base = this.mouthKind === "grin" ? "grin" : "smile";
+          const base = this.mouthKind === "grin" ? "grin" : this.mouthKind === "frown" ? "frown" : "smile";
           this._mouthSwap(open ? "open" : base);
         }, 150);
       } else {
-        const back = this.mouthKind === "open" ? "smile" : this.mouthKind;
-        this._mouthSwap(back || "smile");
+        this._mouthSwap(this.mouthKind === "open" ? "smile" : (this.mouthKind || "smile"));
       }
-    }
-    _mouthSwap(kind) {
-      ["smile", "flat", "open", "grin", "wavy", "o", "frown"].forEach(k => {
-        const el = this.$("an-m-" + k);
-        if (el) el.style.display = k === kind ? "" : "none";
-      });
     }
 
     setVisible(on) { this.root.style.display = on ? "" : "none"; }
   }
 
-  // ============ environments — muted, dense, lived-in ============
+  // ============ environments — muted sets, mounted soft-focus ============
   const PRODUCTS = ["#c96a5a", "#d9a05a", "#8aa06a", "#6a80a0", "#c9b85a", "#a06a8c", "#d9d0b8", "#7a9c94", "#b5654e", "#8a8276"];
   function ceil() {
     return `<rect x="0" y="0" width="320" height="16" fill="#efe7d3"/>
@@ -5504,41 +5828,32 @@ window.LEARN_EXTRA = {
     return `<rect x="0" y="0" width="320" height="122" fill="${wall}"/>
             <rect x="0" y="122" width="320" height="58" fill="${floor}"/>
             <rect x="0" y="122" width="320" height="4" fill="rgba(0,0,0,.12)"/>
-            <path d="M30 180 L52 122 M290 180 L268 122" stroke="rgba(255,255,255,.10)" stroke-width="7"/>
             ${noCeil ? "" : ceil()}${extra || ""}`;
   }
-  // a shelf unit packed with goods, like a 90s conbini aisle
   function shelfUnit(x, w, tone) {
     const rows = [30, 56, 82, 108];
     let s = `<rect x="${x}" y="20" width="${w}" height="96" fill="${tone}" stroke="${O}" stroke-width="1.6"/>`;
     rows.forEach((y, r) => {
       s += `<rect x="${x}" y="${y}" width="${w}" height="3" fill="rgba(0,0,0,.2)"/>`;
-      let px = x + 3;
-      let i = r * 3;
+      let px = x + 3, i = r * 3;
       while (px < x + w - 8) {
-        const pw = 6 + ((i * 7) % 6);
-        const ph = 10 + ((i * 5) % 8);
+        const pw = 6 + ((i * 7) % 6), ph = 10 + ((i * 5) % 8);
         s += `<rect x="${px}" y="${y - ph}" width="${pw}" height="${ph}" rx="1" fill="${PRODUCTS[i % PRODUCTS.length]}" stroke="${O}" stroke-width=".8" opacity=".92"/>`;
-        px += pw + 2;
-        i++;
+        px += pw + 2; i++;
       }
     });
     return s;
   }
   const poster = (x, y) => `<rect x="${x}" y="${y}" width="26" height="34" fill="#e8ddc8" stroke="${O}" stroke-width="1.4"/>
     <rect x="${x + 3}" y="${y + 3}" width="20" height="18" fill="#c9a0a0"/>
-    <path d="M${x + 9} ${y + 12} a4 5 0 1 1 8 0 l-4 8 Z" fill="#e8ddc8"/>
-    <line x1="${x + 4}" y1="${y + 26}" x2="${x + 22}" y2="${y + 26}" stroke="#8a8276" stroke-width="1.6"/>
-    <line x1="${x + 4}" y1="${y + 30}" x2="${x + 18}" y2="${y + 30}" stroke="#b0a89a" stroke-width="1.4"/>`;
+    <line x1="${x + 4}" y1="${y + 26}" x2="${x + 22}" y2="${y + 26}" stroke="#8a8276" stroke-width="1.6"/>`;
   const win = (x, y, w, h, dusk) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${dusk ? "#c9a582" : "#cfe0da"}" stroke="${O}" stroke-width="1.6"/>
     ${dusk ? `<rect x="${x}" y="${y}" width="${w}" height="${h * .45}" fill="#b58a6a" opacity=".7"/>` : `<path d="M${x} ${y + h * .7} Q${x + w * .3} ${y + h * .5} ${x + w * .55} ${y + h * .68} Q${x + w * .8} ${y + h * .52} ${x + w} ${y + h * .66} L${x + w} ${y + h} L${x} ${y + h} Z" fill="#9cb08e"/>`}
-    <line x1="${x + w / 2}" y1="${y}" x2="${x + w / 2}" y2="${y + h}" stroke="${O}" stroke-width="1.2"/>
-    <line x1="${x}" y1="${y + h / 2}" x2="${x + w}" y2="${y + h / 2}" stroke="${O}" stroke-width="1.2"/>`;
+    <line x1="${x + w / 2}" y1="${y}" x2="${x + w / 2}" y2="${y + h}" stroke="${O}" stroke-width="1.2"/>`;
   const steam = (x, y) => `<g class="env-steam"><path d="M${x} ${y} Q${x - 3} ${y - 6} ${x} ${y - 11} Q${x + 3} ${y - 16} ${x} ${y - 21}" fill="none" stroke="#f5efdf" stroke-width="2.2" stroke-linecap="round" opacity=".7"/></g>`;
   const cloud = (x, y, s) => `<g class="env-cloud" style="animation-duration:${20 + s * 8}s"><ellipse cx="${x}" cy="${y}" rx="${15 * s}" ry="${6 * s}" fill="#f2ede0" opacity=".85"/><ellipse cx="${x + 9 * s}" cy="${y - 3 * s}" rx="${9 * s}" ry="${5 * s}" fill="#f2ede0" opacity=".85"/></g>`;
   const counterFront = (fill, prop) => `<rect x="0" y="132" width="320" height="48" fill="${fill}" stroke="${O}" stroke-width="1.8"/>
-    <rect x="0" y="132" width="320" height="5" fill="rgba(255,255,255,.18)"/>
-    <rect x="0" y="140" width="320" height="3" fill="rgba(0,0,0,.12)"/>${prop || ""}`;
+    <rect x="0" y="132" width="320" height="5" fill="rgba(255,255,255,.18)"/>${prop || ""}`;
   const cup = (x) => `<path d="M${x} 120 L${x + 13} 120 L${x + 11.5} 131 L${x + 1.5} 131 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>${steam(x + 6.5, 117)}`;
 
   const ENV = {
@@ -5549,22 +5864,20 @@ window.LEARN_EXTRA = {
         ${poster(96, 24)}
         <rect x="228" y="56" width="66" height="46" rx="3" fill="#b0aba0" stroke="${O}" stroke-width="1.6"/>
         <rect x="235" y="63" width="17" height="23" rx="2" fill="#6a655c" stroke="${O}" stroke-width="1.3"/>
-        <rect x="258" y="72" width="22" height="14" rx="1.5" fill="#8a857a" stroke="${O}" stroke-width="1.3"/>
         ${steam(244, 60)}
         <rect x="136" y="28" width="70" height="3" fill="#8a7a62" stroke="${O}" stroke-width="1"/>
-        ${[0, 1, 2, 3].map(i => `<path d="M${142 + i * 16} 31 L${152 + i * 16} 31 L${150.5 + i * 16} 40 L${143.5 + i * 16} 40 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.1"/>`).join("")}
-        ${shelfUnit(228, 66, "#7a6a52")}`,
+        ${[0, 1, 2, 3].map(i => `<path d="M${142 + i * 16} 31 L${152 + i * 16} 31 L${150.5 + i * 16} 40 L${143.5 + i * 16} 40 Z" fill="#f2ede0" stroke="${O}" stroke-width="1.1"/>`).join("")}`,
         true),
-      front: counterFront("#9a7a55", cup(42) + `<rect x="240" y="112" width="44px" height="20" rx="3" fill="rgba(230,240,240,.55)" stroke="${O}" stroke-width="1.4"/><ellipse cx="262" cy="128" rx="14" ry="5" fill="#e0cba0" stroke="${O}" stroke-width="1.2"/>`)
+      front: counterFront("#9a7a55", cup(42) + `<rect x="240" y="112" width="44" height="20" rx="3" fill="rgba(230,240,240,.55)" stroke="${O}" stroke-width="1.4"/><ellipse cx="262" cy="128" rx="14" ry="5" fill="#e0cba0" stroke="${O}" stroke-width="1.2"/>`)
     },
     food: {
       back: frame("#ddd0b5", "#6a5a48", `
         <rect x="210" y="22" width="88" height="38" rx="2" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/>
         ${["PARMA + CHIPS 28", "FISH & CHIPS 26", "BURGER 24"].map((t, i) => `<text x="216" y="${33 + i * 10}" font-size="6" fill="#e8ddc8" font-family="monospace">${t}</text>`).join("")}
         ${shelfUnit(16, 84, "#6a5a48")}
-        ${[0, 1, 2].map(i => `<rect x="${118 + i * 20}" y="86" width="8" height="26" rx="2.5" fill="${["#c9a05a", "#3f3a32", "#a05a52"][i]}" stroke="${O}" stroke-width="1.3"/><rect x="${116 + i * 20}" y="82" width="12" height="7" rx="1.5" fill="#d9d0b8" stroke="${O}" stroke-width="1.2"/>`).join("")}`,
+        ${[0, 1, 2].map(i => `<rect x="${118 + i * 20}" y="86" width="8" height="26" rx="2.5" fill="${["#c9a05a", "#3f3a32", "#a05a52"][i]}" stroke="${O}" stroke-width="1.3"/>`).join("")}`,
         true),
-      front: counterFront("#7a5f42", `<path d="M40 112 L53 112 L51.5 131 L41.5 131 Z" fill="#d9b25a" stroke="${O}" stroke-width="1.4"/><ellipse cx="250" cy="126" rx="16" ry="5.5" fill="#e8ddc8" stroke="${O}" stroke-width="1.3"/>`)
+      front: counterFront("#7a5f42", `<path d="M40 112 L53 112 L51.5 131 L41.5 131 Z" fill="#d9b25a" stroke="${O}" stroke-width="1.4"/>`)
     },
     directions: {
       back: frame("#ccdcd6", "#8e8a80", `
@@ -5574,7 +5887,6 @@ window.LEARN_EXTRA = {
         <rect x="66" y="62" width="42" height="60" fill="#93a3ad" stroke="${O}" stroke-width="1.6"/>
         <rect x="238" y="52" width="50" height="70" fill="#baa895" stroke="${O}" stroke-width="1.6"/>
         ${[0, 1].map(r => [0, 1].map(c => `<rect x="${17 + c * 20}" y="${55 + r * 22}" width="11" height="13" fill="#e8e2c8" stroke="${O}" stroke-width="1"/>`).join("")).join("")}
-        ${[0, 1].map(c => `<rect x="${247 + c * 20}" y="62" width="11" height="13" fill="#e8e2c8" stroke="${O}" stroke-width="1"/>`).join("")}
         <line x1="0" y1="52" x2="320" y2="40" stroke="#5a544a" stroke-width="1.2"/>
         <line x1="0" y1="58" x2="320" y2="47" stroke="#5a544a" stroke-width="1"/>
         <rect x="118" y="38" width="3" height="84" fill="#5a544a"/>
@@ -5590,8 +5902,6 @@ window.LEARN_EXTRA = {
         <circle cx="160" cy="34" r="11" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>
         <line x1="160" y1="34" x2="160" y2="26.5" stroke="${O}" stroke-width="1.4"/><line x1="160" y1="34" x2="165" y2="34" stroke="${O}" stroke-width="1.4"/>
         <rect x="238" y="42" width="50" height="78" rx="3" fill="#d9d4c5" stroke="${O}" stroke-width="1.6"/>
-        <line x1="238" y1="70" x2="288" y2="70" stroke="${O}" stroke-width="1.3"/>
-        <rect x="258" y="52" width="10" height="5" rx="1.5" fill="#8a857a" stroke="${O}" stroke-width="1"/>
         ${poster(198, 28)}`),
       front: counterFront("#bcaa88", `<path d="M48 114 Q48 109 53 109 L60 109 Q65 109 65 114 L63 131 L50 131 Z" fill="#7a9cb5" stroke="${O}" stroke-width="1.4"/>${steam(56, 106)}` + cup(238))
     },
@@ -5600,8 +5910,6 @@ window.LEARN_EXTRA = {
         <rect x="20" y="24" width="40" height="50" rx="2" fill="#f2ede0" stroke="${O}" stroke-width="1.6"/>
         ${[0, 1, 2].map(r => [0, 1, 2].map(c => `<rect x="${24 + c * 11}" y="${38 + r * 11}" width="8" height="8" fill="${r === 1 && c === 1 ? "#c96a5a" : "#ded4bd"}" stroke="${O}" stroke-width=".8"/>`).join("")).join("")}
         <rect x="20" y="24" width="40" height="11" rx="2" fill="#7a86b5" stroke="${O}" stroke-width="1.4"/>
-        <circle cx="270" cy="36" r="11" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>
-        <line x1="270" y1="36" x2="270" y2="28.5" stroke="${O}" stroke-width="1.4"/><line x1="270" y1="36" x2="275.5" y2="38.5" stroke="${O}" stroke-width="1.4"/>
         ${poster(100, 26)}
         <path d="M242 84 Q248 72 256 84 Q262 72 270 84 Q276 72 284 84 L284 116 L242 116 Z" fill="#8aa06a" stroke="${O}" stroke-width="1.6"/>
         <rect x="254" y="116" width="24" height="9" fill="#b5654e" stroke="${O}" stroke-width="1.4"/>`),
@@ -5611,10 +5919,9 @@ window.LEARN_EXTRA = {
       back: frame("#d6d9d6", "#8a7a68", `
         <ellipse cx="160" cy="60" rx="40" ry="46" fill="#c5d9d9" stroke="${O}" stroke-width="2.2"/>
         <ellipse cx="160" cy="60" rx="33" ry="39" fill="#dbe8e6" opacity=".75"/>
-        <path d="M138 44 Q150 32 165 38" fill="none" stroke="#f2ede0" stroke-width="3" opacity=".6"/>
         <g class="env-pole"><rect x="24" y="32" width="12" height="60" rx="6" fill="#f2ede0" stroke="${O}" stroke-width="1.6"/>
         ${[0, 1, 2].map(i => `<rect x="24" y="${38 + i * 18}" width="12" height="7" fill="${i % 2 ? "#7a86b5" : "#c96a5a"}"/>`).join("")}</g>
-        ${shelfUnit(238, 60, "#7a6a58")}`),
+        ${shelfUnit(238, 60, "#7a6a58")}`)
     },
     doctor: {
       back: frame("#e0e5dc", "#9aa096", `
@@ -5622,15 +5929,14 @@ window.LEARN_EXTRA = {
         <rect x="31" y="30" width="8" height="18" fill="#f2ede0"/><rect x="26" y="35" width="18" height="8" fill="#f2ede0"/>
         ${shelfUnit(66, 92, "#8a9088")} ${shelfUnit(224, 80, "#8a9088")}`,
         true),
-      front: counterFront("#b5bcae", `<rect x="46" y="110" width="13" height="20" rx="2.5" fill="#7a9c94" stroke="${O}" stroke-width="1.4"/><rect x="44" y="106" width="17" height="6" rx="1.5" fill="#f2ede0" stroke="${O}" stroke-width="1.2"/>`)
+      front: counterFront("#b5bcae", `<rect x="46" y="110" width="13" height="20" rx="2.5" fill="#7a9c94" stroke="${O}" stroke-width="1.4"/>`)
     },
     renting: {
       back: frame("#e5dcc6", "#a08662", `
         ${win(34, 30, 56, 44)}
         <rect x="240" y="36" width="48" height="86" rx="2" fill="#b5915f" stroke="${O}" stroke-width="1.6"/>
         <circle cx="280" cy="80" r="2.8" fill="#7a6a52" stroke="${O}" stroke-width="1"/>
-        ${poster(150, 32)}
-        <path d="M0 138 L320 132 M0 154 L320 146 M0 170 L320 162" stroke="rgba(0,0,0,.08)" stroke-width="2"/>`)
+        ${poster(150, 32)}`)
     },
     setup: {
       back: frame("#dde0dc", "#8a8e94", `
@@ -5638,25 +5944,22 @@ window.LEARN_EXTRA = {
         <rect x="142" y="26" width="72" height="26" rx="3" fill="#b5654e" stroke="${O}" stroke-width="1.6"/>
         <text x="178" y="43" font-size="12" font-weight="bold" fill="#f2ede0" text-anchor="middle" font-family="sans-serif">SIM 30/mo</text>`,
         true),
-      front: counterFront("#9aa0a6", `<rect x="44" y="112" width="22" height="15" rx="1.5" fill="#f2ede0" stroke="${O}" stroke-width="1.4"/><rect x="48" y="115" width="7" height="9" rx="1" fill="#d9b25a" stroke="${O}" stroke-width="1"/>`)
+      front: counterFront("#9aa0a6", `<rect x="44" y="112" width="22" height="15" rx="1.5" fill="#f2ede0" stroke="${O}" stroke-width="1.4"/>`)
     },
     interview: {
       back: frame("#dcdfe2", "#767c84", `
         <rect x="18" y="24" width="72" height="50" rx="2" fill="#c2ccd4" stroke="${O}" stroke-width="1.6"/>
         ${[0, 1, 2, 3, 4, 5].map(i => `<line x1="18" y1="${29 + i * 8}" x2="90" y2="${29 + i * 8}" stroke="#e8ecef" stroke-width="3"/>`).join("")}
         <rect x="240" y="28" width="38" height="30" rx="2" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>
-        <circle cx="259" cy="39" r="6" fill="#d9b25a" stroke="${O}" stroke-width="1.2"/>
-        <line x1="248" y1="50" x2="270" y2="50" stroke="${O}" stroke-width="1.3"/>
         <path d="M284 84 Q289 70 296 84 Q301 72 306 86 L306 116 L284 116 Z" fill="#8aa06a" stroke="${O}" stroke-width="1.6"/>`),
-      front: counterFront("#5f6670", `<path d="M42 131 L50 110 L96 110 L92 131 Z" fill="#8a929c" stroke="${O}" stroke-width="1.6"/><rect x="56" y="113" width="28" height="2.5" fill="#3f3a32"/>`)
+      front: counterFront("#5f6670", `<path d="M42 131 L50 110 L96 110 L92 131 Z" fill="#8a929c" stroke="${O}" stroke-width="1.6"/>`)
     },
     flirting: {
       back: frame("#5c5064", "#75657a", `
         ${win(228, 32, 52, 42, true)}
         <path d="M8 24 Q80 46 160 26 Q240 46 312 24" fill="none" stroke="#463c50" stroke-width="2.2"/>
         ${[0, 1, 2, 3, 4, 5, 6].map(i => `<circle class="env-light" style="animation-delay:${i * .35}s" cx="${26 + i * 45}" cy="${28 + Math.abs(3 - i) * -1.5 + 10}" r="4" fill="${["#e5c97a", "#d9909c", "#8ab5b5"][i % 3]}" stroke="${O}" stroke-width=".9"/>`).join("")}
-        ${shelfUnit(20, 66, "#4c4254")}
-        ${poster(118, 34)}`,
+        ${shelfUnit(20, 66, "#4c4254")}`,
         true),
       front: counterFront("#544860", `${[0, 1, 2].map(i => `<path d="M${42 + i * 24} 113 L${54 + i * 24} 113 L${52.5 + i * 24} 130 L${43.5 + i * 24} 130 Z" fill="#b5654e" stroke="${O}" stroke-width="1.4"/>`).join("")}`)
     },
@@ -5666,11 +5969,8 @@ window.LEARN_EXTRA = {
         ${cloud(150, 28, 1.1)}
         ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<rect x="${i * 41}" y="66" width="33" height="56" fill="#b5915f" stroke="${O}" stroke-width="1.4"/>`).join("")}
         <ellipse cx="58" cy="60" rx="32" ry="24" fill="#7a9c6a" stroke="${O}" stroke-width="1.6"/>
-        <ellipse cx="44" cy="52" rx="16" ry="12" fill="#8aac7a" opacity=".8"/>
         <rect x="52" y="80" width="11" height="34" fill="#7a6a52" stroke="${O}" stroke-width="1.4"/>
         <rect x="238" y="86" width="52" height="28" rx="3" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/>
-        <rect x="246" y="80" width="36" height="8" rx="2" fill="#5a544e" stroke="${O}" stroke-width="1.3"/>
-        <rect x="258" y="114" width="5" height="16" fill="#2e2a26"/><rect x="268" y="114" width="5" height="16" fill="#2e2a26"/>
         <g class="env-smoke"><path d="M258 76 Q252 66 260 56 Q254 46 262 38" fill="none" stroke="#d9d4c8" stroke-width="3.2" stroke-linecap="round" opacity=".7"/></g>`,
         true)
     },
@@ -5678,12 +5978,8 @@ window.LEARN_EXTRA = {
       back: frame("#e2e4e2", "#8e9498", `
         <rect x="16" y="24" width="86" height="54" rx="2" fill="#f2ede0" stroke="${O}" stroke-width="1.6"/>
         <path d="M24 38 Q44 34 56 41 M24 52 L80 52 M24 63 L66 63" fill="none" stroke="#7a86b5" stroke-width="2"/>
-        <path d="M60 34 L92 34" stroke="#c96a5a" stroke-width="2"/>
-        <circle cx="266" cy="34" r="11" fill="#f2ede0" stroke="${O}" stroke-width="1.5"/>
-        <line x1="266" y1="34" x2="266" y2="26.5" stroke="${O}" stroke-width="1.4"/><line x1="266" y1="34" x2="271.5" y2="36.5" stroke="${O}" stroke-width="1.4"/>
         <rect x="232" y="70" width="48" height="34" rx="2" fill="#3f3a32" stroke="${O}" stroke-width="1.6"/>
-        <rect x="236" y="74" width="40" height="24" rx="1.5" fill="#7a9cb5"/>
-        <rect x="248" y="104" width="14" height="7" fill="#5a544e" stroke="${O}" stroke-width="1.3"/>
+        <rect x="236" y="74" width="40" height="26" rx="1.5" fill="#7a9cb5"/>
         ${poster(130, 28)}`),
       front: counterFront("#a0a8ae", cup(248))
     }
@@ -5696,6 +5992,10 @@ window.LEARN_EXTRA = {
     back.className = "vp-env vp-env-back";
     back.innerHTML = `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMax slice">${env.back}</svg>`;
     sceneEl.insertBefore(back, sceneEl.firstChild);
+    // bokeh light over the blurred set — the anime depth-of-field feel
+    const bokeh = document.createElement("div");
+    bokeh.className = "vp-bokeh";
+    sceneEl.insertBefore(bokeh, back.nextSibling);
     if (env.front) {
       const front = document.createElement("div");
       front.className = "vp-env vp-env-front";
@@ -6392,7 +6692,10 @@ window.LEARN_EXTRA = {
 
   const accentMeta = () => window.ACCENTS[window.RT_ACCENT];
   const isAdmin = () => window.RTAuth && RTAuth.isAdmin();
-  const visibleScenarios = () => SCENARIOS.filter(s => !(window.RTAdmin && RTAdmin.isHidden(s.id)) || isAdmin());
+  const visibleScenarios = () => {
+    const list = SCENARIOS.filter(s => !(window.RTAdmin && RTAdmin.isHidden(s.id)) || isAdmin());
+    return window.RTBuilder ? RTBuilder.sortScenarios(list) : list;
+  };
   const isPT = () => window.RT_LANG === "pt";
   const ptMeta = (id) => (isPT() && window.PT_META && window.PT_META[id]) || null;
   const levelLabel = (lv) => isPT() ? (LEVEL_PT[lv] || lv) : lv;
@@ -6439,6 +6742,7 @@ window.LEARN_EXTRA = {
   // ---------- theme + top bar ----------
   function applyTheme() {
     document.documentElement.dataset.accent = window.RT_ACCENT;
+    if (window.RTBuilder) RTBuilder.applyColors();
   }
 
   function renderAccentBar() {
@@ -6855,7 +7159,7 @@ window.LEARN_EXTRA = {
       <div class="grid grid-2" style="align-items:start">
         <div class="card">
           <h3 style="margin-bottom:8px">${L("keyPhrases")}</h3>
-          ${L2.phrases.map(p => `<div class="phrase-row"><span class="phrase-en">${T(p.en)}</span><span class="phrase-note">${T(p.note)}</span></div>`).join("")}
+          ${[...L2.phrases, ...(window.RTBuilder ? RTBuilder.addedPhrases(s.id) : [])].map(p => `<div class="phrase-row"><span class="phrase-en">${T(p.en)}</span><span class="phrase-note">${T(p.note)}</span></div>`).join("")}
         </div>
         <div>
           <div class="card" style="margin-bottom:14px">
@@ -6904,6 +7208,10 @@ window.LEARN_EXTRA = {
     }
     highlightNav();
     if (window.RTFX) requestAnimationFrame(() => RTFX.enhance($main));
+    if (window.RTBuilder) RTBuilder.afterRender(
+      parts.join("/") || "home",
+      { scenarioIds: SCENARIOS.map(s => s.id), tab: parts[0] === "scenario" ? (parts[2] || "learn") : null, sceneId: parts[0] === "scenario" ? parts[1] : null }
+    );
   }
 
   // ---------- sound toggle ----------
@@ -6920,6 +7228,7 @@ window.LEARN_EXTRA = {
     store.load();
     applyTheme();
     renderChrome();
+    if (window.RTBuilder) RTBuilder.mount();
     route();
   }
 
