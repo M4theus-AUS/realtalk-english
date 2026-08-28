@@ -894,6 +894,41 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
 .profile-chip:hover { background: var(--coral-wash); color: #a33a1e; }
 .profile-chip span { font-size: 15px; }
 
+/* ============ Admin panel ============ */
+.admin-nav { background: var(--gold-wash); color: #9c6410 !important; font-weight: 700; margin-bottom: 8px; }
+.admin-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--ink-faint); font-weight: 700; margin: 10px 0 4px; }
+.admin-input, .admin-select {
+  width: 100%;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px; font-family: var(--font);
+  outline: none;
+  background: #fff;
+  transition: border-color .15s;
+}
+.admin-input:focus, .admin-select:focus { border-color: var(--green); }
+.admin-check { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 14px; color: var(--ink-soft); cursor: pointer; }
+.admin-check input { width: 17px; height: 17px; accent-color: var(--green); }
+.admin-vocab-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1.1fr 1.4fr auto;
+  gap: 6px;
+  margin-bottom: 6px;
+  align-items: center;
+}
+.admin-del {
+  border: none; background: var(--coral-wash); color: #a33a1e;
+  width: 30px; height: 30px; border-radius: 9px;
+  font-weight: 700;
+  transition: filter .15s;
+}
+.admin-del:hover { filter: brightness(.95); }
+@media (max-width: 900px) {
+  .admin-vocab-row { grid-template-columns: 1fr 1fr; }
+  .admin-vocab-row .v-ex { grid-column: 1 / 2; }
+}
+
 /* ============ 90s anime layer ============ */
 .vp-anime::before {
   /* CRT scanlines */
@@ -903,6 +938,21 @@ html[data-accent="sco"] .hero::after { content: "SCOTLAND"; }
   background: repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1.5px, transparent 1.5px 4px);
   opacity: .5;
 }
+.vp-env {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.vp-env svg { width: 100%; height: 100%; }
+.vp-env-back { z-index: 0; }
+.vp-env-front { z-index: 1; }
+.env-steam path { animation: env-steam 2.2s ease-in-out infinite; }
+@keyframes env-steam { 0% { opacity: 0; transform: translateY(4px) } 30% { opacity: .8 } 100% { opacity: 0; transform: translateY(-8px) } }
+.env-smoke path { animation: env-steam 3s ease-in-out infinite; }
+.env-cloud { animation: env-cloud 20s linear infinite alternate; }
+@keyframes env-cloud { from { transform: translateX(-14px) } to { transform: translateX(14px) } }
+.env-light { animation: env-light 1.6s ease-in-out infinite alternate; }
+@keyframes env-light { from { opacity: .45 } to { opacity: 1 } }
+
 .anime-char {
   position: relative; z-index: 1;
   height: 84%;
@@ -4811,6 +4861,7 @@ window.LEARN_EXTRA = {
       if (!name) return null;
       const users = readUsers();
       let u = users.find(x => x.name.toLowerCase() === name.toLowerCase());
+      if (u && u.admin) return null; // admin only enters via PIN
       if (!u) {
         u = { name, avatar: avatar || AVATARS[0], created: new Date().toISOString() };
         users.push(u);
@@ -4833,6 +4884,28 @@ window.LEARN_EXTRA = {
       localStorage.removeItem(CURRENT_KEY);
       location.reload();
     },
+    isAdmin() {
+      const u = this.current();
+      return !!(u && u.admin);
+    },
+    loginAdmin(pin) {
+      const stored = localStorage.getItem("realtalk-admin-pin");
+      if (!stored) {
+        if (!pin || pin.length < 4) return { ok: false, setup: true };
+        localStorage.setItem("realtalk-admin-pin", pin);
+      } else if (pin !== stored) {
+        return { ok: false };
+      }
+      const users = readUsers();
+      let u = users.find(x => x.admin);
+      if (!u) {
+        u = { name: "Admin", avatar: "🛠️", admin: true, created: new Date().toISOString() };
+        users.push(u);
+        writeUsers(users);
+      }
+      localStorage.setItem(CURRENT_KEY, u.name);
+      return { ok: true };
+    },
     progressKey() {
       const u = this.current();
       return "realtalk-progress::" + (u ? u.name : "guest");
@@ -4847,9 +4920,9 @@ window.LEARN_EXTRA = {
         <div class="login-card">
           <div class="login-brand">🎬 <b>RealTalk</b><span>real life english</span></div>
           <h2>${isPT ? "Quem está aprendendo hoje?" : "Who's learning today?"}</h2>
-          ${users.length ? `
+          ${users.filter(u => !u.admin).length ? `
             <div class="login-users">
-              ${users.map(u => `<button class="login-user" data-name="${u.name.replace(/"/g, "&quot;")}"><span>${u.avatar}</span>${u.name}</button>`).join("")}
+              ${users.filter(u => !u.admin).map(u => `<button class="login-user" data-name="${u.name.replace(/"/g, "&quot;")}"><span>${u.avatar}</span>${u.name}</button>`).join("")}
             </div>
             <div class="login-or">${isPT ? "ou crie um novo perfil" : "or create a new profile"}</div>` : `
             <p class="login-sub">${isPT ? "Crie seu perfil — seu progresso fica salvo neste aparelho." : "Create your profile — your progress is saved on this device."}</p>`}
@@ -4871,6 +4944,27 @@ window.LEARN_EXTRA = {
       });
       const go = () => {
         const name = ov.querySelector("#login-name").value;
+        // typing "admin" opens the PIN flow instead of a normal profile
+        if (name.trim().toLowerCase() === "admin") {
+          const hasPin = !!localStorage.getItem("realtalk-admin-pin");
+          const card = ov.querySelector(".login-card");
+          card.innerHTML = `
+            <div class="login-brand">🛠️ <b>Admin</b><span>realtalk studio</span></div>
+            <h2>${hasPin ? (isPT ? "Digite o PIN" : "Enter your PIN") : (isPT ? "Crie um PIN de admin" : "Create an admin PIN")}</h2>
+            <p class="login-sub">${hasPin ? (isPT ? "Acesso ao painel de edição da plataforma." : "Access to the platform editing panel.") : (isPT ? "Mínimo 4 dígitos. Guarde bem — fica salvo só neste navegador." : "Min 4 digits. It's stored in this browser only.")}</p>
+            <input class="login-input" id="admin-pin" type="password" inputmode="numeric" maxlength="12" placeholder="PIN">
+            <div class="login-sub" id="admin-err" style="color:var(--coral);display:none">${isPT ? "PIN errado." : "Wrong PIN."}</div>
+            <button class="btn cta login-go" id="admin-go">${isPT ? "Entrar como Admin" : "Enter as Admin"}</button>`;
+          const tryPin = () => {
+            const r = RTAuth.loginAdmin(card.querySelector("#admin-pin").value);
+            if (r.ok) { ov.remove(); onDone && onDone(); }
+            else { card.querySelector("#admin-err").style.display = "block"; card.querySelector("#admin-pin").select(); }
+          };
+          card.querySelector("#admin-go").onclick = tryPin;
+          card.querySelector("#admin-pin").addEventListener("keydown", e => { if (e.key === "Enter") tryPin(); });
+          setTimeout(() => card.querySelector("#admin-pin").focus(), 100);
+          return;
+        }
         if (!RTAuth.login(name, picked)) {
           ov.querySelector("#login-name").focus();
           return;
@@ -4892,6 +4986,213 @@ window.LEARN_EXTRA = {
   };
 
   window.RTAuth = RTAuth;
+})();
+
+</script>
+<script>
+// RealTalk — admin override layer + in-app editing panel.
+// Edits are stored in localStorage ("realtalk-admin-overrides") and merged over
+// the shipped content at load time, so the admin changes the platform in the
+// platform. Export downloads the overrides as JSON to make them permanent.
+(function () {
+  const KEY = "realtalk-admin-overrides";
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+    catch { return {}; }
+  }
+  function save(data) { localStorage.setItem(KEY, JSON.stringify(data)); }
+
+  const RTAdmin = {
+    data: load(),
+
+    // Merge overrides into the shipped content (runs before the app builds its lists).
+    apply() {
+      const d = this.data;
+      const allScenes = [...(window.SCENARIOS_A || []), ...(window.SCENARIOS_B || []), ...(window.SCENARIOS_C || [])];
+      if (d.meta) {
+        for (const [id, m] of Object.entries(d.meta)) {
+          const s = allScenes.find(x => x.id === id);
+          if (s && m.title) s.title = m.title;
+          if (s && m.blurb) s.blurb = m.blurb;
+          if (window.PT_META && window.PT_META[id]) {
+            if (m.titlePt) window.PT_META[id].title = m.titlePt;
+            if (m.blurbPt) window.PT_META[id].blurb = m.blurbPt;
+          }
+        }
+      }
+      if (d.vocab && window.VOCAB) {
+        for (const [id, words] of Object.entries(d.vocab)) {
+          if (Array.isArray(words)) window.VOCAB[id] = { words };
+        }
+      }
+      this.hidden = Array.isArray(d.hidden) ? d.hidden : [];
+    },
+
+    setMeta(id, meta) {
+      this.data.meta = this.data.meta || {};
+      this.data.meta[id] = meta;
+      save(this.data);
+    },
+    setVocab(id, words) {
+      this.data.vocab = this.data.vocab || {};
+      this.data.vocab[id] = words;
+      save(this.data);
+    },
+    setHidden(id, hide) {
+      const set = new Set(this.data.hidden || []);
+      hide ? set.add(id) : set.delete(id);
+      this.data.hidden = [...set];
+      save(this.data);
+    },
+    isHidden(id) { return (this.data.hidden || []).includes(id); },
+
+    exportJson() {
+      const blob = new Blob([JSON.stringify(this.data, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "realtalk-overrides.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    },
+    importJson(file, cb) {
+      const r = new FileReader();
+      r.onload = () => {
+        try {
+          this.data = JSON.parse(r.result) || {};
+          save(this.data);
+          cb && cb(true);
+        } catch { cb && cb(false); }
+      };
+      r.readAsText(file);
+    },
+    reset() {
+      localStorage.removeItem(KEY);
+      this.data = {};
+    },
+
+    // ---------- panel ----------
+    renderPanel(container, scenarios, refresh) {
+      const isPT = window.RT_LANG === "pt";
+      const t = (pt, en) => isPT ? pt : en;
+      const selId = this._sel || scenarios[0].id;
+      this._sel = selId;
+      const s = scenarios.find(x => x.id === selId) || scenarios[0];
+      const pm = (window.PT_META && window.PT_META[s.id]) || {};
+      const words = (window.VOCAB && window.VOCAB[s.id] && window.VOCAB[s.id].words) || [];
+
+      container.innerHTML = `
+        <div class="page-head">
+          <div class="page-kicker">🛠️ Admin</div>
+          <div class="page-title">${t("Painel da Plataforma", "Platform Panel")}</div>
+          <p class="page-blurb">${t(
+            "Suas edições valem na hora, salvas neste navegador. Use Exportar para baixar o arquivo de mudanças e torná-las permanentes no site publicado.",
+            "Your edits apply instantly and are saved in this browser. Use Export to download the changes file and make them permanent on the published site."
+          )}</p>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <label class="admin-label">${t("Cena para editar", "Scene to edit")}</label>
+          <select class="admin-select" id="adm-scene">
+            ${scenarios.map(x => `<option value="${x.id}" ${x.id === s.id ? "selected" : ""}>${x.emoji} ${x.title}${RTAdmin.isHidden(x.id) ? " (oculta)" : ""}</option>`).join("")}
+          </select>
+          <label class="admin-check"><input type="checkbox" id="adm-hidden" ${RTAdmin.isHidden(s.id) ? "checked" : ""}> ${t("Ocultar esta cena da plataforma", "Hide this scene from the platform")}</label>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3 style="margin-bottom:10px">${t("Título e descrição", "Title & description")}</h3>
+          <label class="admin-label">${t("Título (inglês)", "Title (English)")}</label>
+          <input class="admin-input" id="adm-title" value="${(s.title || "").replace(/"/g, "&quot;")}">
+          <label class="admin-label">${t("Título (português)", "Title (Portuguese)")}</label>
+          <input class="admin-input" id="adm-title-pt" value="${(pm.title || "").replace(/"/g, "&quot;")}">
+          <label class="admin-label">${t("Descrição (português)", "Blurb (Portuguese)")}</label>
+          <input class="admin-input" id="adm-blurb-pt" value="${(pm.blurb || "").replace(/"/g, "&quot;")}">
+          <button class="btn" id="adm-save-meta" style="margin-top:10px">${t("Salvar título/descrição", "Save title/blurb")}</button>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <h3 style="margin-bottom:4px">${t("Vocabulário desta cena", "This scene's vocabulary")} (${words.length})</h3>
+          <p style="font-size:12.5px;color:var(--ink-faint);margin-bottom:10px">${t("Edite, apague ou adicione palavras — inglês · português · exemplo.", "Edit, delete or add words — English · Portuguese · example.")}</p>
+          <div id="adm-vocab">
+            ${words.map((w, i) => `
+              <div class="admin-vocab-row" data-i="${i}">
+                <input class="admin-input v-en" value="${(w.en || "").replace(/"/g, "&quot;")}" placeholder="English">
+                <input class="admin-input v-pt" value="${(w.pt || "").replace(/"/g, "&quot;")}" placeholder="Português">
+                <input class="admin-input v-ex" value="${(w.ex || "").replace(/"/g, "&quot;")}" placeholder="${t("Exemplo", "Example")}">
+                <button class="admin-del" title="${t("Apagar", "Delete")}">✕</button>
+              </div>`).join("")}
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <button class="btn ghost" id="adm-add-word">＋ ${t("Adicionar palavra", "Add word")}</button>
+            <button class="btn" id="adm-save-vocab">${t("Salvar vocabulário", "Save vocabulary")}</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom:8px">${t("Mudanças da plataforma", "Platform changes")}</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" id="adm-export">⬇ ${t("Exportar mudanças (JSON)", "Export changes (JSON)")}</button>
+            <label class="btn ghost" style="cursor:pointer">⬆ ${t("Importar", "Import")}<input type="file" id="adm-import" accept=".json" style="display:none"></label>
+            <button class="btn ghost" id="adm-reset" style="color:var(--wrong-text);border-color:var(--coral)">${t("Zerar tudo", "Reset all")}</button>
+          </div>
+          <p style="font-size:12.5px;color:var(--ink-faint);margin-top:10px">${t(
+            "O arquivo exportado é o pacote das suas edições — me envie para publicar de forma permanente, ou importe em outro navegador.",
+            "The exported file is your edit bundle — send it to be published permanently, or import it in another browser."
+          )}</p>
+        </div>`;
+
+      const $ = (q) => container.querySelector(q);
+      $("#adm-scene").onchange = (e) => { this._sel = e.target.value; refresh(); };
+      $("#adm-hidden").onchange = (e) => { RTAdmin.setHidden(s.id, e.target.checked); refresh(); };
+      $("#adm-save-meta").onclick = () => {
+        RTAdmin.setMeta(s.id, {
+          title: $("#adm-title").value.trim(),
+          titlePt: $("#adm-title-pt").value.trim(),
+          blurbPt: $("#adm-blurb-pt").value.trim()
+        });
+        RTAdmin.apply();
+        refresh(true);
+      };
+      $("#adm-add-word").onclick = () => {
+        const row = document.createElement("div");
+        row.className = "admin-vocab-row";
+        row.innerHTML = `<input class="admin-input v-en" placeholder="English"><input class="admin-input v-pt" placeholder="Português"><input class="admin-input v-ex" placeholder="Ex."><button class="admin-del">✕</button>`;
+        row.querySelector(".admin-del").onclick = () => row.remove();
+        $("#adm-vocab").appendChild(row);
+        row.querySelector(".v-en").focus();
+      };
+      container.querySelectorAll(".admin-del").forEach(b => {
+        b.onclick = () => b.closest(".admin-vocab-row").remove();
+      });
+      $("#adm-save-vocab").onclick = () => {
+        const rows = [...container.querySelectorAll(".admin-vocab-row")];
+        const newWords = rows.map(r => ({
+          en: r.querySelector(".v-en").value.trim(),
+          pt: r.querySelector(".v-pt").value.trim(),
+          ex: r.querySelector(".v-ex").value.trim()
+        })).filter(w => w.en);
+        RTAdmin.setVocab(s.id, newWords);
+        RTAdmin.apply();
+        refresh(true);
+      };
+      $("#adm-export").onclick = () => RTAdmin.exportJson();
+      $("#adm-import").onchange = (e) => {
+        if (e.target.files[0]) RTAdmin.importJson(e.target.files[0], ok => {
+          if (ok) { RTAdmin.apply(); location.reload(); }
+          else alert(isPT ? "Arquivo inválido." : "Invalid file.");
+        });
+      };
+      $("#adm-reset").onclick = () => {
+        if (confirm(isPT ? "Apagar TODAS as edições de admin?" : "Delete ALL admin edits?")) {
+          RTAdmin.reset();
+          location.reload();
+        }
+      };
+    }
+  };
+
+  RTAdmin.apply();
+  window.RTAdmin = RTAdmin;
 })();
 
 </script>
@@ -5095,7 +5396,179 @@ window.LEARN_EXTRA = {
     }
   }
 
-  window.RTAnime = { Character, CAST };
+  // ============ Scene environments — cel-style backgrounds per scenario ============
+  const O = OUTLINE;
+  function frame(wall, floor, extra) {
+    return `<rect x="0" y="0" width="320" height="122" fill="${wall}"/>
+            <rect x="0" y="122" width="320" height="58" fill="${floor}"/>
+            <line x1="0" y1="122" x2="320" y2="122" stroke="${O}" stroke-width="2.5"/>${extra || ""}`;
+  }
+  const win = (x, y, night) => `<rect x="${x}" y="${y}" width="52" height="40" rx="4" fill="${night ? "#2a3560" : "#bfe3f2"}" stroke="${O}" stroke-width="2.5"/>
+    <line x1="${x + 26}" y1="${y}" x2="${x + 26}" y2="${y + 40}" stroke="${O}" stroke-width="2"/>
+    <line x1="${x}" y1="${y + 20}" x2="${x + 52}" y2="${y + 20}" stroke="${O}" stroke-width="2"/>
+    ${night ? `<circle cx="${x + 40}" cy="${y + 10}" r="5" fill="#f5e9b8"/>` : ""}`;
+  const board = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="#3d3a45" stroke="${O}" stroke-width="2.5"/>
+    <line x1="${x + 8}" y1="${y + 9}" x2="${x + w - 8}" y2="${y + 9}" stroke="#e8e4d8" stroke-width="2"/>
+    <line x1="${x + 8}" y1="${y + 17}" x2="${x + w - 14}" y2="${y + 17}" stroke="#b8b4a8" stroke-width="2"/>
+    <line x1="${x + 8}" y1="${y + 25}" x2="${x + w - 10}" y2="${y + 25}" stroke="#b8b4a8" stroke-width="2"/>`;
+  const steam = (x, y) => `<g class="env-steam"><path d="M${x} ${y} Q${x - 4} ${y - 8} ${x} ${y - 14} Q${x + 4} ${y - 20} ${x} ${y - 26}" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></g>`;
+  const cloud = (x, y, s) => `<g class="env-cloud" style="animation-duration:${18 + s * 6}s"><ellipse cx="${x}" cy="${y}" rx="${16 * s}" ry="${7 * s}" fill="#fff" opacity=".9"/><ellipse cx="${x + 10 * s}" cy="${y - 4 * s}" rx="${10 * s}" ry="${6 * s}" fill="#fff" opacity=".9"/></g>`;
+  const shelfBottles = (x, y) => `<rect x="${x}" y="${y}" width="64" height="5" fill="#8a6742" stroke="${O}" stroke-width="2"/>
+    ${[0, 1, 2, 3].map(i => `<rect x="${x + 5 + i * 15}" y="${y - 14}" width="9" height="14" rx="2" fill="${["#7fb8a0", "#e0a050", "#a0b8e0", "#d98a8a"][i]}" stroke="${O}" stroke-width="1.8"/>`).join("")}`;
+  const counterFront = (fill, prop) => `<rect x="0" y="130" width="320" height="50" fill="${fill}" stroke="${O}" stroke-width="2.5"/>
+    <rect x="0" y="130" width="320" height="8" fill="rgba(0,0,0,.15)"/>${prop || ""}`;
+  const cup = (x) => `<path d="M${x} 118 L${x + 16} 118 L${x + 14} 130 L${x + 2} 130 Z" fill="#fff" stroke="${O}" stroke-width="2"/>${steam(x + 8, 114)}`;
+
+  const ENV = {
+    coffee: {
+      back: frame("#e8d5b8", "#8a6742", `
+        ${board(18, 14, 70, 34)}
+        <rect x="230" y="52" width="74" height="52" rx="4" fill="#c2c8cc" stroke="${O}" stroke-width="2.5"/>
+        <rect x="238" y="60" width="20" height="26" rx="3" fill="#5c6266" stroke="${O}" stroke-width="2"/>
+        <rect x="266" y="70" width="26" height="16" rx="2" fill="#8a9296" stroke="${O}" stroke-width="2"/>
+        ${steam(250, 56)}
+        <rect x="120" y="20" width="80" height="4" fill="#8a6742" stroke="${O}" stroke-width="1.8"/>
+        ${[0, 1, 2].map(i => `<path d="M${130 + i * 24} 20 L${142 + i * 24} 20 L${140 + i * 24} 10 L${132 + i * 24} 10 Z" fill="#fff" stroke="${O}" stroke-width="1.8"/>`).join("")}`),
+      front: counterFront("#a0764a", cup(46) + `<ellipse cx="262" cy="126" rx="18" ry="8" fill="#f0e0c8" stroke="${O}" stroke-width="2"/><path d="M250 122 Q262 108 274 122" fill="#e8c89a" stroke="${O}" stroke-width="2"/>`)
+    },
+    food: {
+      back: frame("#d8c4a0", "#6b4a34", `
+        ${board(210, 12, 92, 38)}
+        ${[0, 1, 2].map(i => `<rect x="${26 + i * 22}" y="86" width="10" height="30" rx="3" fill="${["#c8a038", "#3d3a45", "#b05252"][i]}" stroke="${O}" stroke-width="2"/><rect x="${24 + i * 22}" y="82" width="14" height="8" rx="2" fill="#d8d4c8" stroke="${O}" stroke-width="2"/>`).join("")}
+        <rect x="16" y="112" width="76" height="8" fill="#5c4630" stroke="${O}" stroke-width="2"/>`),
+      front: counterFront("#7a5638", `<path d="M40 108 L56 108 L54 130 L42 130 Z" fill="#f0c860" stroke="${O}" stroke-width="2"/><rect x="38" y="104" width="20" height="6" rx="2" fill="#fff" opacity=".9" stroke="${O}" stroke-width="1.5"/>`)
+    },
+    directions: {
+      back: frame("#a8d8e8", "#7a7a72", `
+        ${cloud(60, 26, 1)} ${cloud(210, 40, 1.4)}
+        <circle cx="288" cy="24" r="14" fill="#f5d76a" stroke="${O}" stroke-width="2.5"/>
+        <rect x="10" y="44" width="52" height="78" fill="#b8a890" stroke="${O}" stroke-width="2.5"/>
+        <rect x="70" y="60" width="40" height="62" fill="#98a8b8" stroke="${O}" stroke-width="2.5"/>
+        <rect x="240" y="50" width="48" height="72" fill="#c0b0a0" stroke="${O}" stroke-width="2.5"/>
+        ${[0, 1].map(r => [0, 1].map(c => `<rect x="${20 + c * 20}" y="${54 + r * 22}" width="12" height="14" fill="#f5e9b8" stroke="${O}" stroke-width="1.8"/>`).join("")).join("")}
+        ${[0, 1].map(r => `<rect x="${250 + r * 20}" y="60" width="12" height="14" fill="#f5e9b8" stroke="${O}" stroke-width="1.8"/>`).join("")}
+        <rect x="298" y="64" width="6" height="58" fill="#4a4a45" stroke="${O}" stroke-width="2"/>
+        <rect x="292" y="42" width="18" height="26" rx="4" fill="#3d3a45" stroke="${O}" stroke-width="2"/>
+        <circle cx="301" cy="50" r="4" fill="#e05a3a"/><circle cx="301" cy="60" r="4" fill="#7fd48a"/>
+        <path d="M0 150 L40 150 M70 150 L110 150 M140 150 L180 150 M210 150 L250 150 M280 150 L320 150" stroke="#f0e8d0" stroke-width="4" stroke-dasharray="1"/>`)
+    },
+    smalltalk: {
+      back: frame("#dce8dc", "#b0a890", `
+        ${win(22, 24)}
+        <circle cx="160" cy="30" r="13" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        <line x1="160" y1="30" x2="160" y2="21" stroke="${O}" stroke-width="2"/><line x1="160" y1="30" x2="166" y2="30" stroke="${O}" stroke-width="2"/>
+        <rect x="240" y="40" width="52" height="82" rx="4" fill="#e8e8e8" stroke="${O}" stroke-width="2.5"/>
+        <line x1="240" y1="70" x2="292" y2="70" stroke="${O}" stroke-width="2"/>
+        <rect x="262" y="52" width="10" height="6" rx="2" fill="#8a9296" stroke="${O}" stroke-width="1.5"/>`),
+      front: counterFront("#c8b898", `<path d="M50 112 Q50 106 56 106 L64 106 Q70 106 70 112 L68 130 L52 130 Z" fill="#7fb8d4" stroke="${O}" stroke-width="2"/>${steam(60, 102)}` + cup(240))
+    },
+    phone: {
+      back: frame("#e0d8e8", "#8a8296", `
+        <rect x="20" y="20" width="44" height="56" rx="3" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        ${[0, 1, 2].map(r => [0, 1, 2].map(c => `<rect x="${25 + c * 12}" y="${36 + r * 12}" width="9" height="9" fill="${r === 1 && c === 1 ? "#f4587a" : "#e0dce8"}" stroke="${O}" stroke-width="1.2"/>`).join("")).join("")}
+        <rect x="20" y="20" width="44" height="12" rx="3" fill="#7381d9" stroke="${O}" stroke-width="2.5"/>
+        <circle cx="272" cy="34" r="13" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        <line x1="272" y1="34" x2="272" y2="25" stroke="${O}" stroke-width="2"/><line x1="272" y1="34" x2="279" y2="37" stroke="${O}" stroke-width="2"/>
+        <path d="M244 78 Q252 64 262 78 Q270 64 280 78 Q288 64 296 78 L296 116 L244 116 Z" fill="#7fb87f" stroke="${O}" stroke-width="2.5"/>
+        <rect x="256" y="116" width="28" height="10" fill="#c86a4a" stroke="${O}" stroke-width="2"/>`),
+      front: counterFront("#9a90a8", `<rect x="38" y="106" width="34" height="22" rx="4" fill="#3d3a45" stroke="${O}" stroke-width="2.5"/><path d="M42 106 Q55 94 68 106" fill="none" stroke="${O}" stroke-width="4" stroke-linecap="round"/>`)
+    },
+    haircut: {
+      back: frame("#d8e0e8", "#8a7a6a", `
+        <ellipse cx="160" cy="58" rx="44" ry="50" fill="#c8e8f0" stroke="${O}" stroke-width="3.5"/>
+        <ellipse cx="160" cy="58" rx="36" ry="42" fill="#e0f2f8" opacity=".8"/>
+        <g class="env-pole"><rect x="24" y="30" width="14" height="66" rx="7" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        ${[0, 1, 2].map(i => `<rect x="24" y="${36 + i * 20}" width="14" height="8" fill="${i % 2 ? "#5a7fd9" : "#e05a5a"}"/>`).join("")}</g>
+        ${shelfBottles(232, 96)}
+        <rect x="240" y="30" width="48" height="34" rx="3" fill="#f0e8d8" stroke="${O}" stroke-width="2.5"/>
+        <path d="M252 44 L262 54 M262 44 L252 54" stroke="${O}" stroke-width="2.5"/><circle cx="252" cy="44" r="3" fill="none" stroke="${O}" stroke-width="2"/><circle cx="252" cy="54" r="3" fill="none" stroke="${O}" stroke-width="2"/>`)
+    },
+    doctor: {
+      back: frame("#e0f0e8", "#a8b8b0", `
+        <rect x="22" y="18" width="34" height="34" rx="4" fill="#3faa74" stroke="${O}" stroke-width="2.5"/>
+        <rect x="34" y="24" width="10" height="22" fill="#fff"/><rect x="28" y="30" width="22" height="10" fill="#fff"/>
+        ${shelfBottles(84, 52)} ${shelfBottles(84, 86)} ${shelfBottles(232, 52)} ${shelfBottles(232, 86)}`),
+      front: counterFront("#c8d8d0", `<rect x="44" y="108" width="16" height="22" rx="3" fill="#7fb8a0" stroke="${O}" stroke-width="2"/><rect x="42" y="104" width="20" height="7" rx="2" fill="#fff" stroke="${O}" stroke-width="1.8"/>`)
+    },
+    renting: {
+      back: frame("#e8e0d0", "#b09878", `
+        ${win(36, 26)}
+        <path d="M32 26 L32 70 L28 70 L28 26 Z M92 26 L92 70 L96 70 L96 26 Z" fill="#d98a6a" stroke="${O}" stroke-width="2"/>
+        <rect x="240" y="34" width="52" height="88" rx="3" fill="#c8a078" stroke="${O}" stroke-width="2.5"/>
+        <circle cx="284" cy="80" r="3.5" fill="#8a6742" stroke="${O}" stroke-width="1.5"/>
+        <rect x="150" y="34" width="36" height="28" rx="3" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        <path d="M154 56 L164 44 L172 52 L178 40 L182 56 Z" fill="#7fb8a0" stroke="${O}" stroke-width="1.8"/>
+        <circle cx="176" cy="42" r="3" fill="#f5d76a"/>
+        <path d="M0 180 L0 130 L320 130" fill="none" stroke="${O}" stroke-width="1.5" opacity=".3"/>`)
+    },
+    setup: {
+      back: frame("#e0e8f0", "#8a92a0", `
+        ${[0, 1].map(r => `<rect x="24" y="${24 + r * 42}" width="120" height="6" fill="#b8c0c8" stroke="${O}" stroke-width="2"/>
+        ${[0, 1, 2, 3].map(c => `<rect x="${32 + c * 28}" y="${24 + r * 42 - 26}" width="16" height="26" rx="3" fill="#2b2430" stroke="${O}" stroke-width="2"/><rect x="${34 + c * 28}" y="${24 + r * 42 - 23}" width="12" height="18" rx="1.5" fill="${["#7fb8d4", "#f4a0b8", "#a0d4a8", "#f5d76a"][c]}"/>`).join("")}`).join("")}
+        <rect x="248" y="30" width="44" height="30" rx="4" fill="#f4587a" stroke="${O}" stroke-width="2.5"/>
+        <text x="270" y="50" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">SIM</text>`),
+      front: counterFront("#a8b0bc", `<rect x="42" y="108" width="26" height="18" rx="2" fill="#fff" stroke="${O}" stroke-width="2"/><rect x="47" y="112" width="8" height="10" rx="1" fill="#f5d76a" stroke="${O}" stroke-width="1.5"/>`)
+    },
+    interview: {
+      back: frame("#e0e4ec", "#7a828c", `
+        <rect x="20" y="20" width="70" height="52" rx="3" fill="#c8d8e8" stroke="${O}" stroke-width="2.5"/>
+        ${[0, 1, 2, 3, 4].map(i => `<line x1="20" y1="${26 + i * 9}" x2="90" y2="${26 + i * 9}" stroke="#fff" stroke-width="3.5"/>`).join("")}
+        <rect x="238" y="26" width="42" height="32" rx="3" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        <circle cx="259" cy="38" r="7" fill="#f5d76a" stroke="${O}" stroke-width="1.8"/>
+        <line x1="248" y1="50" x2="270" y2="50" stroke="${O}" stroke-width="2"/>
+        <path d="M286 80 Q292 62 300 80 Q306 66 312 82 L312 116 L286 116 Z" fill="#7fb87f" stroke="${O}" stroke-width="2.5"/>`),
+      front: counterFront("#5c646e", `<path d="M44 130 L52 108 L96 108 L92 130 Z" fill="#8a929c" stroke="${O}" stroke-width="2.5"/><rect x="56" y="112" width="30" height="3" fill="#2b2430"/>`)
+    },
+    flirting: {
+      back: frame("#4a3d66", "#6a5a80", `
+        ${win(230, 30, true)}
+        <path d="M10 20 Q80 44 160 22 Q240 44 310 20" fill="none" stroke="#3d3450" stroke-width="3"/>
+        ${[0, 1, 2, 3, 4, 5, 6].map(i => `<circle class="env-light" style="animation-delay:${i * .3}s" cx="${28 + i * 44}" cy="${26 + Math.abs(3 - i) * -2 + 12}" r="5" fill="${["#f5d76a", "#f4a0b8", "#7fd4d4"][i % 3]}" stroke="${O}" stroke-width="1.5"/>`).join("")}
+        ${shelfBottles(24, 84)}`),
+      front: counterFront("#5a4a74", `${[0, 1, 2].map(i => `<path d="M${40 + i * 26} 110 L${54 + i * 26} 110 L${52 + i * 26} 130 L${42 + i * 26} 130 Z" fill="#e05a5a" stroke="${O}" stroke-width="2"/>`).join("")}`)
+    },
+    casual: {
+      back: frame("#a8d8e8", "#8aa86a", `
+        <circle cx="42" cy="28" r="15" fill="#f5d76a" stroke="${O}" stroke-width="2.5"/>
+        ${cloud(150, 24, 1.1)}
+        ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<rect x="${i * 42}" y="64" width="34" height="58" fill="#c8a078" stroke="${O}" stroke-width="2"/>`).join("")}
+        <ellipse cx="60" cy="62" rx="34" ry="26" fill="#6aa85a" stroke="${O}" stroke-width="2.5"/>
+        <rect x="54" y="80" width="12" height="34" fill="#8a6742" stroke="${O}" stroke-width="2"/>
+        <rect x="240" y="84" width="56" height="30" rx="4" fill="#3d3a45" stroke="${O}" stroke-width="2.5"/>
+        <rect x="248" y="78" width="40" height="8" rx="2" fill="#5c5866" stroke="${O}" stroke-width="2"/>
+        <rect x="262" y="114" width="6" height="16" fill="#2b2430"/><rect x="272" y="114" width="6" height="16" fill="#2b2430"/>
+        <g class="env-smoke"><path d="M262 74 Q256 62 264 52 Q258 42 266 34" fill="none" stroke="#d8d8d8" stroke-width="4" stroke-linecap="round" opacity=".8"/></g>`)
+    },
+    worktalk: {
+      back: frame("#e8ecf0", "#9aa2ac", `
+        <rect x="18" y="20" width="90" height="58" rx="3" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        <path d="M26 34 Q48 30 60 38 M26 48 L84 48 M26 60 L70 60" fill="none" stroke="#7381d9" stroke-width="2.5"/>
+        <path d="M64 30 L94 30" stroke="#f4587a" stroke-width="2.5"/>
+        <circle cx="268" cy="32" r="13" fill="#fff" stroke="${O}" stroke-width="2.5"/>
+        <line x1="268" y1="32" x2="268" y2="23" stroke="${O}" stroke-width="2"/><line x1="268" y1="32" x2="275" y2="35" stroke="${O}" stroke-width="2"/>
+        <rect x="234" y="70" width="52" height="36" rx="3" fill="#3d3a45" stroke="${O}" stroke-width="2.5"/>
+        <rect x="238" y="74" width="44" height="26" rx="2" fill="#7fb8d4"/>
+        <rect x="252" y="106" width="16" height="8" fill="#5c5866" stroke="${O}" stroke-width="2"/>`),
+      front: counterFront("#b0b8c2", cup(250))
+    }
+  };
+
+  function mountEnv(sceneEl, sceneId) {
+    const env = ENV[sceneId];
+    if (!env || !sceneEl) return;
+    const back = document.createElement("div");
+    back.className = "vp-env vp-env-back";
+    back.innerHTML = `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMax slice">${env.back}</svg>`;
+    sceneEl.insertBefore(back, sceneEl.firstChild);
+    if (env.front) {
+      const front = document.createElement("div");
+      front.className = "vp-env vp-env-front";
+      front.innerHTML = `<svg viewBox="0 0 320 180" preserveAspectRatio="xMidYMax slice">${env.front}</svg>`;
+      sceneEl.appendChild(front);
+    }
+  }
+
+  window.RTAnime = { Character, CAST, mountEnv };
 })();
 
 </script>
@@ -5269,6 +5742,7 @@ window.LEARN_EXTRA = {
       this.$avatar = this.root.querySelector("#vp-avatar");
       this.anime = window.RTAnime ? new RTAnime.Character(this.$avatar, this.sc.id) : null;
       if (!this.anime) this.$avatar.textContent = CAST[this.sc.id] || "🙂";
+      if (window.RTAnime && RTAnime.mountEnv) RTAnime.mountEnv(this.root.querySelector(".vp-scene"), this.sc.id);
       this.$video = this.root.querySelector("#vp-video");
       this.$mood = this.root.querySelector("#vp-mood");
       this.$speaker = this.root.querySelector("#vp-speaker");
@@ -5780,6 +6254,8 @@ window.LEARN_EXTRA = {
   let activePlayer = null;
 
   const accentMeta = () => window.ACCENTS[window.RT_ACCENT];
+  const isAdmin = () => window.RTAuth && RTAuth.isAdmin();
+  const visibleScenarios = () => SCENARIOS.filter(s => !(window.RTAdmin && RTAdmin.isHidden(s.id)) || isAdmin());
   const isPT = () => window.RT_LANG === "pt";
   const ptMeta = (id) => (isPT() && window.PT_META && window.PT_META[id]) || null;
   const levelLabel = (lv) => isPT() ? (LEVEL_PT[lv] || lv) : lv;
@@ -5909,8 +6385,11 @@ window.LEARN_EXTRA = {
   function renderNav() {
     const nav = document.getElementById("scenario-nav");
     let html = "";
+    if (isAdmin()) {
+      html += `<a class="nav-item admin-nav" href="#/admin" data-route="admin"><span class="nav-emoji">🛠️</span> ${isPT() ? "Painel Admin" : "Admin Panel"}</a>`;
+    }
     GROUP_ORDER.forEach(g => {
-      const items = SCENARIOS.filter(s => (s.group || "Daily Life") === g);
+      const items = visibleScenarios().filter(s => (s.group || "Daily Life") === g);
       if (!items.length) return;
       html += `<div class="nav-label sub">${groupLabel(g)}</div>`;
       html += items.map(s => {
@@ -5963,7 +6442,7 @@ window.LEARN_EXTRA = {
       </div>
 
       ${GROUP_ORDER.map(g => {
-        const items = SCENARIOS.filter(s => (s.group || "Daily Life") === g);
+        const items = visibleScenarios().filter(s => (s.group || "Daily Life") === g);
         if (!items.length) return "";
         return `
           <div class="section-title">${groupLabel(g)}</div>
@@ -6273,6 +6752,14 @@ window.LEARN_EXTRA = {
     const parts = (location.hash.replace(/^#\//, "") || "home").split("/");
     window.scrollTo(0, 0);
     switch (parts[0]) {
+      case "admin":
+        if (isAdmin() && window.RTAdmin) {
+          RTAdmin.renderPanel($main, SCENARIOS, (contentChanged) => {
+            if (contentChanged) renderChrome();
+            route(); // re-renders the panel with fresh data (selection is kept)
+          });
+        } else pageHome();
+        break;
       case "grammar": parts[1] ? pageLesson(parts[1]) : pageGrammar(); break;
       case "exercises": parts[1] ? pageQuiz(parts[1]) : pageExercises(); break;
       case "scenario": pageScenario(parts[1], parts[2]); break;
