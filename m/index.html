@@ -240,6 +240,21 @@ a { color: var(--green-deep); }
   transition: background .18s, color .18s;
 }
 .lang-btn.active { background: var(--green-wash); color: var(--green-deep); }
+.ai-voice-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-left: 8px;
+  background: rgba(255, 255, 255, .55);
+  border: 1.5px dashed rgba(51, 40, 58, .22);
+  border-radius: 999px;
+  padding: 5px 13px;
+  font-size: 12px; font-weight: 700; color: var(--ink-soft);
+  transition: background .1s linear, border-color .1s linear, color .1s linear;
+}
+.ai-voice-btn:hover { border-color: var(--cta); color: var(--cta); }
+.ai-voice-btn.active {
+  background: var(--cta); border-color: var(--cta); border-style: solid; color: #fff;
+  box-shadow: 0 3px 10px rgba(244, 88, 122, .35);
+}
 
 /* ============ Shared elements ============ */
 .page-head { margin-bottom: 26px; }
@@ -7279,8 +7294,12 @@ Object.assign(window.LEARN_EXTRA, {
   const qualityTag = (q) => q === "natural" ? L("fbNatural") : q === "awkward" ? L("fbAwkward") : L("fbWrong");
 
   // ---------- speech synthesis ----------
+  const AI_VOICES = ["nova", "alloy", "shimmer", "echo", "fable", "coral"];
   const speech = {
     enabled: true,
+    aiEnabled: localStorage.getItem("realtalk-aivoice") === "on",
+    aiCache: new Map(),
+    aiAudio: null,
     voices: [],
     load() {
       if (!window.speechSynthesis) return;
@@ -7317,7 +7336,52 @@ Object.assign(window.LEARN_EXTRA, {
       this.lastPicked = best;
       return best;
     },
-    speak(text, { isYou = false, onEnd, character } = {}) {
+    // ---------- AI neural voices (Pollinations / OpenAI audio, keyless beta) ----------
+    aiVoiceFor(character, isYou) {
+      if (isYou) return "onyx";
+      let h = 0;
+      const s = character || "x";
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 997;
+      return AI_VOICES[h % AI_VOICES.length];
+    },
+    stopAI() {
+      if (this.aiAudio) {
+        try { this.aiAudio.pause(); this.aiAudio.onended = this.aiAudio.onerror = null; } catch {}
+        this.aiAudio = null;
+      }
+    },
+    speakAI(text, { isYou = false, onEnd, character } = {}) {
+      const acc = (window.ACCENTS && window.ACCENTS[window.RT_ACCENT]) || { name: "Australian" };
+      const clean = text.replace(/\(.*?\)/g, "").trim();
+      if (!clean) { onEnd && onEnd(false); return; }
+      // requires a configured TTS endpoint (e.g. a Cloudflare Worker proxying
+      // ElevenLabs/OpenAI/Azure) — set window.RT_TTS_URL to enable
+      if (!window.RT_TTS_URL) { this.speakSynth(text, { isYou, character, onEnd }); return; }
+      const voice = this.aiVoiceFor(character, isYou);
+      const key = window.RT_ACCENT + "|" + voice + "|" + clean;
+      const url = this.aiCache.get(key) ||
+        window.RT_TTS_URL + (window.RT_TTS_URL.includes("?") ? "&" : "?") +
+        "text=" + encodeURIComponent(clean) + "&voice=" + voice + "&accent=" + encodeURIComponent(acc.name);
+      let settled = false;
+      const fallback = () => {
+        if (settled) return;
+        settled = true;
+        this.stopAI();
+        this.speakSynth(text, { isYou, character, onEnd });
+      };
+      const a = new Audio(url);
+      this.aiAudio = a;
+      a.onended = () => { if (!settled) { settled = true; onEnd && onEnd(true); } };
+      a.onerror = fallback;
+      const guard = setTimeout(() => { if (!settled && (a.readyState < 3 || a.paused)) fallback(); }, 9000);
+      a.onplaying = () => { clearTimeout(guard); this.aiCache.set(key, url); };
+      a.play().catch(fallback);
+    },
+    speak(text, opts = {}) {
+      if (this.aiEnabled && this.enabled && text) return this.speakAI(text, opts);
+      return this.speakSynth(text, opts);
+    },
+    speakSynth(text, { isYou = false, onEnd, character } = {}) {
       if (!this.enabled || !window.speechSynthesis || !text) { onEnd && onEnd(false); return null; }
       speechSynthesis.cancel();
       const clean = text.replace(/\(.*?\)/g, "").trim();
@@ -7345,7 +7409,10 @@ Object.assign(window.LEARN_EXTRA, {
       speechSynthesis.speak(u);
       return u;
     },
-    stop() { if (window.speechSynthesis) speechSynthesis.cancel(); }
+    stop() {
+      if (window.speechSynthesis) speechSynthesis.cancel();
+      this.stopAI();
+    }
   };
   speech.load();
 
@@ -8035,6 +8102,10 @@ Object.assign(window.LEARN_EXTRA, {
         <button class="lang-btn ${isPT() ? "active" : ""}" data-lang="pt" title="Interface em português">🇧🇷 PT</button>
         <button class="lang-btn ${!isPT() ? "active" : ""}" data-lang="en" title="Interface in English">EN</button>
       </span>
+      ${window.RT_TTS_URL ? `<button class="ai-voice-btn ${RealTalkPlayer.speech.aiEnabled ? "active" : ""}" id="ai-voice-btn"
+        title="${isPT() ? "Vozes de IA (beta) — mais reais, precisam de internet e podem demorar 1-3s" : "AI voices (beta) — more realistic, needs internet, 1-3s delay"}">
+        🤖 ${isPT() ? "Vozes IA" : "AI voices"}${RealTalkPlayer.speech.aiEnabled ? " ✓" : ""}
+      </button>` : ""}
       <span class="accent-tagline">${accentMeta().motif} ${accentMeta().tagline}</span>
       ${window.RTAuth && RTAuth.current() ? `
         <button class="profile-chip" id="logout-btn" title="${isPT() ? "Trocar de perfil" : "Switch profile"}">
@@ -8060,6 +8131,13 @@ Object.assign(window.LEARN_EXTRA, {
     });
     const logoutBtn = bar.querySelector("#logout-btn");
     if (logoutBtn) logoutBtn.onclick = () => RTAuth.logout();
+    const aiBtn = bar.querySelector("#ai-voice-btn");
+    if (aiBtn) aiBtn.onclick = () => {
+      RealTalkPlayer.speech.aiEnabled = !RealTalkPlayer.speech.aiEnabled;
+      localStorage.setItem("realtalk-aivoice", RealTalkPlayer.speech.aiEnabled ? "on" : "off");
+      RealTalkPlayer.speech.stop();
+      renderAccentBar();
+    };
   }
 
   function navLabelHtml(emoji, pt, en) {
