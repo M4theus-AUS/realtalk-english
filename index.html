@@ -7286,19 +7286,36 @@ Object.assign(window.LEARN_EXTRA, {
       set();
       speechSynthesis.onvoiceschanged = set;
     },
+    // Rank every installed voice: right accent first, then voice quality.
+    // Edge exposes cloud "Natural" neural voices (all 6 accents!); Chrome ships
+    // "Google" voices (US/UK); legacy Microsoft David/Zira score lowest.
+    rank(v, prefs) {
+      let score = 0;
+      for (let i = 0; i < prefs.length; i++) {
+        const re = new RegExp("^" + prefs[i].replace(/-/g, "[-_]"), "i");
+        if (re.test(v.lang)) { score += (prefs.length - i) * 100; break; }
+      }
+      if (score === 0 && /^en/i.test(v.lang)) score += 20;
+      if (/natural/i.test(v.name)) score += 60;
+      else if (/online/i.test(v.name)) score += 45;
+      else if (/google/i.test(v.name)) score += 40;
+      else if (/neural|premium|enhanced/i.test(v.name)) score += 35;
+      return score;
+    },
     pick() {
       const vs = this.voices;
       if (!vs.length) return null;
       const accent = window.ACCENTS && window.ACCENTS[window.RT_ACCENT];
       const prefs = (accent && accent.voices) || ["en-AU", "en-GB"];
-      for (const lang of prefs) {
-        const re = new RegExp("^" + lang.replace(/-/g, "[-_]"), "i");
-        const hit = vs.find(v => re.test(v.lang));
-        if (hit) return hit;
+      let best = null, bestScore = -1;
+      for (const v of vs) {
+        const s = this.rank(v, prefs);
+        if (s > bestScore) { bestScore = s; best = v; }
       }
-      return vs.find(v => /^en/i.test(v.lang)) || vs[0];
+      this.lastPicked = best;
+      return best;
     },
-    speak(text, { isYou = false, onEnd }) {
+    speak(text, { isYou = false, onEnd, character } = {}) {
       if (!this.enabled || !window.speechSynthesis || !text) { onEnd && onEnd(false); return null; }
       speechSynthesis.cancel();
       const clean = text.replace(/\(.*?\)/g, "").trim();
@@ -7306,8 +7323,17 @@ Object.assign(window.LEARN_EXTRA, {
       const u = new SpeechSynthesisUtterance(clean);
       const v = this.pick();
       if (v) u.voice = v;
-      u.rate = 1.0;
-      u.pitch = isYou ? 0.8 : 1.05;
+      // each scene's character gets a stable voice personality; tiny human jitter per line
+      let charPitch = 1.05, charRate = 1.0;
+      if (character) {
+        let h = 0;
+        for (let i = 0; i < character.length; i++) h = (h * 31 + character.charCodeAt(i)) % 997;
+        charPitch = 0.96 + (h % 5) * 0.045;      // 0.96 – 1.14
+        charRate = 0.94 + ((h >> 3) % 4) * 0.03;  // 0.94 – 1.03
+      }
+      const jitter = (Math.random() - 0.5) * 0.04;
+      u.rate = (isYou ? 0.99 : charRate) + jitter;
+      u.pitch = isYou ? 0.82 : charPitch;
       let done = false;
       const finish = () => { if (!done) { done = true; onEnd && onEnd(true); } };
       u.onend = finish;
@@ -7436,10 +7462,15 @@ Object.assign(window.LEARN_EXTRA, {
         const acc = window.ACCENTS && window.ACCENTS[window.RT_ACCENT];
         const v = speech.pick();
         const noteEl = this.root.querySelector("#voice-note");
-        if (noteEl && acc && v && !acc.voices.some(l => v.lang.toLowerCase().startsWith(l.slice(0, 5).toLowerCase()))) {
+        if (!noteEl || !acc || !v) return;
+        const isNeural = /natural|online|google|neural|premium/i.test(v.name);
+        const langOk = acc.voices.some(l => v.lang.toLowerCase().startsWith(l.slice(0, 5).toLowerCase()));
+        if (langOk && isNeural) {
+          noteEl.innerHTML = (isPT() ? "🎧 voz neural: " : "🎧 neural voice: ") + v.name.replace(/Microsoft |Online |\(Natural\)/g, "").trim();
+        } else if (!langOk || !isNeural) {
           noteEl.innerHTML += isPT()
-            ? ` · voz ${acc.name} não instalada — usando a voz em inglês mais próxima (instale vozes em Configurações do Windows → Fala, ou use o Chrome)`
-            : ` · no ${acc.name} voice installed — using closest English voice`;
+            ? ` · 💡 para vozes realistas com sotaque ${acc.name}, abra este site no <b>Microsoft Edge</b> (vozes neurais grátis nos 6 sotaques)`
+            : ` · 💡 for realistic ${acc.name} voices, open this site in <b>Microsoft Edge</b> (free neural voices in all 6 accents)`;
         }
       }, 700);
     }
@@ -7490,7 +7521,7 @@ Object.assign(window.LEARN_EXTRA, {
         cb && cb();
       };
       this.later(() => { captionDone = true; maybeDone(); }, words.length * WORD_MS + 250);
-      speech.speak(text, { isYou, onEnd: () => { voiceDone = true; maybeDone(); } });
+      speech.speak(text, { isYou, character: isYou ? null : this.sc.id, onEnd: () => { voiceDone = true; maybeDone(); } });
       if (!speech.enabled || !window.speechSynthesis) voiceDone = true;
     }
 
