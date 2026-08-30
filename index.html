@@ -201,20 +201,25 @@ a { color: var(--green-deep); }
   color: var(--ink-faint); font-weight: 700; margin-right: 4px;
 }
 .accent-btn {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: rgba(255, 255, 255, .55);
-  border: 1.5px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 74px; min-height: 32px;
+  background-image: linear-gradient(rgba(255, 253, 249, .82), rgba(255, 253, 249, .82)), var(--flagimg, none);
+  background-size: cover, cover;
+  background-position: center, center;
+  border: 1.5px solid rgba(51, 40, 58, .12);
   border-radius: 999px;
-  padding: 6px 13px;
-  font-size: 13px; font-weight: 600; color: var(--ink-soft);
-  transition: background .2s, color .2s, transform .2s, border-color .2s;
+  padding: 6px 14px;
+  font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
+  transition: transform .1s linear, border-color .1s linear;
+  overflow: hidden;
 }
-.accent-btn:hover { background: #fff; transform: translateY(-1px); }
+.accent-btn:hover { transform: translateY(-1px); border-color: var(--green); }
 .accent-btn.active {
-  background: var(--green-wash);
-  border-color: color-mix(in srgb, var(--green) 45%, transparent);
-  color: var(--green-deep);
-  font-weight: 700;
+  background-image: linear-gradient(rgba(255, 253, 249, .22), rgba(255, 253, 249, .22)), var(--flagimg, none);
+  border-color: var(--green-deep);
+  border-width: 2px;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(20, 14, 28, .75), 0 0 6px rgba(20, 14, 28, .4);
 }
 .accent-flag { font-size: 15px; }
 .accent-tagline {
@@ -308,6 +313,8 @@ a { color: var(--green-deep); }
 /* ============ Home / hero — the one bold colored panel ============ */
 .hero {
   background: var(--green);
+  background-size: cover, cover;
+  background-position: center, center right;
   color: #fff;
   border-radius: 26px;
   padding: 34px 36px 30px;
@@ -317,6 +324,7 @@ a { color: var(--green-deep); }
   box-shadow: 0 18px 44px color-mix(in srgb, var(--green) 35%, transparent);
   transition: background .5s;
 }
+.hero h1, .hero p { text-shadow: 0 1px 8px rgba(20, 14, 28, .3); }
 .hero::before {
   content: "";
   position: absolute; inset: -40%;
@@ -1164,7 +1172,7 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
 
   .topbar { padding: 10px 14px 9px; gap: 5px; }
   .accent-name { display: none; }
-  .accent-btn { padding: 6px 9px; }
+  .accent-btn { padding: 6px 9px; min-width: 44px; min-height: 28px; }
   .accent-label { display: none; }
   .accent-tagline { display: none; }
   .lang-switch { margin-left: auto; }
@@ -1265,6 +1273,32 @@ window.ACCENTS = {
   ie:  { flag: "🇮🇪", name: "Irish",      greeting: "Howya",     voices: ["en-IE", "en-GB"],               recog: "en-IE", motif: "☘️", tagline: "grand-so mode",        watermark: "IRELAND",   postcards: "🍺 🎻 🐑 🌈 📚" },
   sco: { flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", name: "Scottish",   greeting: "Awright",   voices: ["en-GB-SCT", "en-SCT", "en-GB"], recog: "en-GB", motif: "🦄", tagline: "nae-bother mode",      watermark: "SCOTLAND",  postcards: "🏰 🥃 🎻 🐑 ⛰️" }
 };
+
+// Real mini-flags as SVG (Windows can't render flag emojis) — used as button backgrounds.
+(function () {
+  const S = (body) => `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'>${body}</svg>`;
+  const uj = `<rect width='60' height='40' fill='#273c8c'/>
+    <path d='M0 0 L60 40 M60 0 L0 40' stroke='white' stroke-width='9'/>
+    <path d='M0 0 L60 40 M60 0 L0 40' stroke='#cf3a4a' stroke-width='4'/>
+    <path d='M30 0 V40 M0 20 H60' stroke='white' stroke-width='13'/>
+    <path d='M30 0 V40 M0 20 H60' stroke='#cf3a4a' stroke-width='7'/>`;
+  const star = (x, y, r) => `<circle cx='${x}' cy='${y}' r='${r}' fill='white'/>`;
+  window.FLAG_SVG = {
+    au: S(`<rect width='60' height='40' fill='#273c8c'/><g transform='scale(.5)'>${uj}</g>` +
+         star(15, 30, 2.4) + star(45, 8, 2) + star(51, 16, 2.4) + star(45, 26, 2) + star(39, 15, 1.6) + star(48, 34, 1.6)),
+    us: S(`<rect width='60' height='40' fill='white'/>` +
+         [0, 1, 2, 3].map(i => `<rect y='${i * 10.5}' width='60' height='5.2' fill='#c94a52'/>`).join("") +
+         `<rect width='27' height='19' fill='#303a70'/>` +
+         [[5, 4], [13, 4], [21, 4], [9, 9], [17, 9], [5, 14], [13, 14], [21, 14]].map(p => star(p[0], p[1], 1.4)).join("")),
+    uk: S(uj),
+    ca: S(`<rect width='60' height='40' fill='white'/><rect width='15' height='40' fill='#cf3a3a'/><rect x='45' width='15' height='40' fill='#cf3a3a'/>` +
+         `<path d='M30 8 L32.5 14 L37 12 L34.5 18 L40 17 L33 24 L34 28 L30 26.5 L26 28 L27 24 L20 17 L25.5 18 L23 12 L27.5 14 Z' fill='#cf3a3a'/>`),
+    ie: S(`<rect width='20' height='40' fill='#2f9c60'/><rect x='20' width='20' height='40' fill='white'/><rect x='40' width='20' height='40' fill='#e8913f'/>`),
+    sco: S(`<rect width='60' height='40' fill='#2f56a8'/><path d='M0 0 L60 40 M60 0 L0 40' stroke='white' stroke-width='8'/>`)
+  };
+  window.flagBg = (code) =>
+    'url("data:image/svg+xml,' + encodeURIComponent(window.FLAG_SVG[code] || "").replace(/'/g, "%27") + '")';
+})();
 
 window.RT_ACCENT = localStorage.getItem("realtalk-accent") || "au";
 if (!window.ACCENTS[window.RT_ACCENT]) window.RT_ACCENT = "au";
@@ -7961,8 +7995,8 @@ Object.assign(window.LEARN_EXTRA, {
     bar.innerHTML = `
       <span class="accent-label">${L("accent")}</span>
       ${Object.entries(window.ACCENTS).map(([code, a]) => `
-        <button class="accent-btn ${code === window.RT_ACCENT ? "active" : ""}" data-accent="${code}" title="${a.name} English">
-          <span class="accent-flag">${a.flag}</span><span class="accent-name">${a.name}</span>
+        <button class="accent-btn ${code === window.RT_ACCENT ? "active" : ""}" data-accent="${code}" title="${a.name} English" style='--flagimg:${window.flagBg ? flagBg(code) : "none"}'>
+          <span class="accent-name">${a.name}</span>
         </button>`).join("")}
       <span class="lang-switch">
         <button class="lang-btn ${isPT() ? "active" : ""}" data-lang="pt" title="Interface em português">🇧🇷 PT</button>
@@ -8078,8 +8112,9 @@ Object.assign(window.LEARN_EXTRA, {
     const lessonsRead = Object.keys(store.data.lessons).length;
     const quizzesDone = Object.keys(store.data.quizzes).length;
     const a = accentMeta();
+    const heroImg = (window.RT_IMG && RT_IMG["hero-" + window.RT_ACCENT]) || "img/hero-" + window.RT_ACCENT + ".jpg";
     $main.innerHTML = `
-      <div class="hero">
+      <div class="hero" style="background-image:linear-gradient(100deg, color-mix(in srgb, var(--green) 96%, #1a1428) 0%, color-mix(in srgb, var(--green) 82%, transparent) 40%, color-mix(in srgb, var(--green) 22%, transparent) 100%), url('${heroImg}')">
         <div class="hero-emoji">${a.motif}</div>
         <h1>${a.greeting}${window.RTAuth && RTAuth.current() ? ", " + RTAuth.current().name : ""}! 👋</h1>
         <p>${L("heroP", { accent: a.name, flag: a.flag })}</p>
