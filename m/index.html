@@ -1237,6 +1237,164 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
   .quiz-q { font-size: 16px; }
 }
 
+/* ============ PTE Simulator ============ */
+.pte-mock-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  border: 2px solid color-mix(in srgb, var(--cta) 45%, transparent);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--cta) 9%, var(--panel)), var(--panel));
+  margin-bottom: 14px;
+}
+.pte-mock-cta h3 { margin-bottom: 4px; }
+.pte-mock-cta p { color: var(--ink-soft); max-width: 560px; }
+.pte-lastmock { font-size: 13px; margin-top: 6px; }
+.pte-note-card { margin-bottom: 6px; }
+.pte-note-card p { color: var(--ink-faint); font-size: 13.5px; }
+.pte-card .sc-title-pt { display: block; font-size: 12px; color: var(--ink-faint); font-weight: 600; }
+
+.pte-intro .pte-inst { margin-bottom: 12px; }
+.pte-intro .btn { margin-top: 14px; }
+.pte-inst { color: var(--ink-soft); }
+.pte-item { margin-top: 4px; }
+.pte-exam-type {
+  display: flex; align-items: baseline; gap: 8px;
+  font-weight: 800; font-size: 18px; margin: 10px 0 6px;
+}
+.pte-exam-type span { font-size: 12px; color: var(--ink-faint); font-weight: 600; }
+
+.pte-passage {
+  font-size: 18px; line-height: 1.65; font-weight: 600;
+  background: color-mix(in srgb, var(--green) 6%, var(--panel));
+  border: 1.5px solid color-mix(in srgb, var(--green) 18%, transparent);
+  border-radius: 14px; padding: 16px 18px; margin: 12px 0;
+}
+.pte-passage.long { font-size: 15.5px; font-weight: 500; }
+
+.pte-timer { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+.pte-timer-label { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 14px; }
+.pte-timer-bar {
+  flex: 1; height: 10px; border-radius: 999px; overflow: hidden;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.pte-timer-bar > div { height: 100%; border-radius: 999px; background: var(--green); transition: width 1s linear; }
+.pte-timer-bar.low > div { background: var(--cta); }
+
+.pte-rec {
+  border: 2px dashed color-mix(in srgb, var(--cta) 50%, transparent);
+  border-radius: 14px; padding: 14px 16px; margin-top: 10px;
+}
+.pte-rec-head { font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.pte-rec-dot {
+  width: 12px; height: 12px; border-radius: 50%; background: var(--cta);
+  animation: pteblink 1s ease-in-out infinite;
+}
+@keyframes pteblink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.8); } }
+.pte-rec-tx { color: var(--ink-soft); font-style: italic; min-height: 24px; margin: 8px 0; }
+.pte-rec .pte-stop, .pte-rec .btn { margin-top: 6px; }
+.pte-note { color: var(--ink-soft); font-size: 13.5px; margin-bottom: 8px; }
+
+.pte-audio {
+  font-weight: 700; color: var(--ink-soft);
+  background: color-mix(in srgb, var(--green) 8%, transparent);
+  border-radius: 12px; padding: 10px 14px; margin: 10px 0;
+}
+.pte-input {
+  width: 100%; font: inherit; font-size: 16px; color: var(--ink);
+  background: var(--panel); border: 2px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  border-radius: 12px; padding: 10px 12px; margin-top: 8px; resize: vertical;
+}
+.pte-input:focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 45%, transparent); border-color: var(--green); }
+.pte-wc { font-size: 12.5px; color: var(--ink-faint); margin: 4px 0 8px; font-weight: 700; }
+.pte-wc.bad { color: var(--cta); }
+.pte-submit { margin-top: 8px; }
+.pte-warn { color: var(--cta); font-weight: 700; margin-bottom: 8px; }
+
+.pte-img {
+  width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; margin-top: 10px;
+  background-size: cover; background-position: center;
+  border: 1.5px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.pte-img-cap { font-size: 12.5px; color: var(--ink-faint); margin: 6px 0 4px; font-weight: 600; }
+
+.pte-kw {
+  display: inline-block; margin: 3px 4px 3px 0; padding: 3px 10px;
+  border-radius: 999px; font-size: 13px; font-weight: 700;
+  background: color-mix(in srgb, var(--ink) 7%, transparent); color: var(--ink-faint);
+}
+.pte-kw.hit { background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green-deep); }
+
+.pte-marks span.ok { color: var(--green-deep); font-weight: 700; }
+.pte-marks span.miss { color: var(--cta); font-weight: 700; text-decoration: underline dotted; }
+.pte-marks, .pte-heard, .pte-key { margin: 8px 0; line-height: 1.7; }
+.pte-heard { color: var(--ink-soft); }
+
+.pte-blank {
+  font: inherit; font-size: 15px; font-weight: 700; color: var(--ink);
+  background: var(--panel); border: 2px solid color-mix(in srgb, var(--green) 40%, transparent);
+  border-radius: 8px; padding: 2px 6px; margin: 0 2px;
+}
+.pte-blank.ok { border-color: var(--green); background: color-mix(in srgb, var(--green) 14%, var(--panel)); }
+.pte-blank.miss { border-color: var(--cta); background: color-mix(in srgb, var(--cta) 12%, var(--panel)); }
+
+.pte-ro-item {
+  display: flex; gap: 10px; align-items: stretch; margin: 8px 0;
+  background: color-mix(in srgb, var(--green) 5%, var(--panel));
+  border: 1.5px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  border-radius: 12px; padding: 10px 12px;
+}
+.pte-ro-btns { display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+.pte-ro-btns button {
+  width: 30px; height: 26px; border-radius: 8px; border: none; cursor: pointer;
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+  color: var(--green-deep); font-weight: 800; font-size: 12px;
+}
+.pte-ro-btns button:hover:not(:disabled) { background: var(--green); color: #fff; }
+.pte-ro-btns button:disabled { opacity: .25; cursor: default; }
+.pte-ro-text { font-size: 14.5px; line-height: 1.55; }
+.pte-ro-key li { margin: 6px 0; font-size: 14px; color: var(--ink-soft); }
+
+.pte-hiw { line-height: 2.1; font-size: 16.5px; margin: 12px 0; }
+.pte-hiw-w { cursor: pointer; padding: 2px 3px; border-radius: 6px; transition: background .1s linear; }
+.pte-hiw-w:hover { background: color-mix(in srgb, var(--green) 14%, transparent); }
+.pte-hiw-w.sel { background: color-mix(in srgb, #e7b008 40%, transparent); box-shadow: inset 0 -2px 0 var(--ink); }
+.pte-hiw-w.was-right { background: color-mix(in srgb, var(--green) 26%, transparent); }
+.pte-hiw-w.was-missed { background: color-mix(in srgb, var(--cta) 20%, transparent); text-decoration: underline wavy var(--cta); }
+.pte-hiw-w.was-wrong { background: color-mix(in srgb, var(--ink) 14%, transparent); text-decoration: line-through; }
+
+.pte-fb { margin-top: 6px; }
+.pte-score { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.pte-score-num { font-family: "Baloo 2", sans-serif; font-size: 44px; font-weight: 800; line-height: 1; }
+.pte-score.good .pte-score-num { color: var(--green-deep); }
+.pte-score.mid .pte-score-num { color: #c98a08; }
+.pte-score.bad .pte-score-num { color: var(--cta); }
+.pte-score-cap { color: var(--ink-faint); font-weight: 700; font-size: 13px; }
+.pte-band.good { background: color-mix(in srgb, var(--green) 20%, transparent); color: var(--green-deep); }
+.pte-band.mid { background: color-mix(in srgb, #e7b008 26%, transparent); color: #7a5c04; }
+.pte-band.bad { background: color-mix(in srgb, var(--cta) 16%, transparent); color: var(--cta); }
+
+.pte-report-items { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
+.pte-secs { max-width: 460px; margin: 14px auto 0; text-align: left; }
+.pte-sec-row { display: grid; grid-template-columns: 110px 1fr 44px; gap: 10px; align-items: center; margin: 8px 0; font-weight: 700; font-size: 14px; }
+.pte-sec-row b { text-align: right; font-size: 16px; }
+.pte-sec-bar { height: 12px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 8%, transparent); overflow: hidden; }
+.pte-sec-bar > div { height: 100%; border-radius: 999px; }
+.pte-sec-bar > div.good { background: var(--green); }
+.pte-sec-bar > div.mid { background: #e7b008; }
+.pte-sec-bar > div.bad { background: var(--cta); }
+
+.pte-saved {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: #fff; font-weight: 800;
+  padding: 8px 18px; border-radius: 999px; z-index: 80;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--green) 40%, transparent);
+}
+
+@media (min-width: 0px) {
+  .mnav-item { padding: 6px 10px; }
+  .pte-passage { font-size: 16px; padding: 13px 14px; }
+  .pte-sec-row { grid-template-columns: 92px 1fr 40px; }
+  .pte-mock-cta { flex-direction: column; align-items: flex-start; }
+}
+
 </style>
 
   <div class="app">
@@ -1255,6 +1413,7 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
         <div class="nav-label" id="study-label">Study</div>
         <a class="nav-item" href="#/grammar" data-route="grammar"><span class="nav-emoji">📚</span> Grammar</a>
         <a class="nav-item" href="#/exercises" data-route="exercises"><span class="nav-emoji">✏️</span> Exercises</a>
+        <a class="nav-item" href="#/pte" data-route="pte"><span class="nav-emoji">🎓</span> PTE</a>
 
         <div class="nav-label" id="rle-label">Real Life English</div>
         <div id="scenario-nav"></div>
@@ -5967,6 +6126,237 @@ Object.assign(window.LEARN_EXTRA, {
 
 </script>
 <script>
+// RealTalk — PTE Academic practice bank (authentic-length, academic register).
+// Schema documented in the task spec / README. All content is in English;
+// the surrounding UI (labels, instructions) is PT-BR.
+
+window.PTE_BANK = {
+
+readAloud: [
+  { text: "Australia has become one of the world's leading adopters of rooftop solar power, with more than three million households now generating their own electricity. This rapid uptake has been driven by falling panel costs, generous rebates, and abundant sunshine. Researchers argue that continued investment in battery storage will be essential to manage the variability of renewable supply nationwide." },
+  { text: "Modern university libraries have evolved far beyond simple repositories of printed books. Today they function as collaborative learning hubs, offering silent study zones, group project rooms, and access to extensive digital archives. Many Australian universities have introduced twenty-four hour facilities during examination periods, recognising that students increasingly prefer flexible hours over traditional opening times for focused study." },
+  { text: "The Great Barrier Reef supports an extraordinary diversity of marine life, including more than fifteen hundred species of fish and hundreds of varieties of coral. Rising ocean temperatures, however, have triggered repeated bleaching events over the past decade, threatening the reef's long-term survival. Marine biologists continue to monitor water quality and coral resilience in order to guide conservation policy." },
+  { text: "City planners in Melbourne and Sydney face a persistent challenge: accommodating rapid population growth while preserving green space and liveability. Recent strategies have focused on increasing housing density near train stations, reducing dependence on private vehicles, and expanding cycling infrastructure. Advocates argue that these measures will make Australian cities more sustainable and affordable for future generations of residents." },
+  { text: "Australia's public healthcare system, known as Medicare, provides subsidised access to a wide range of medical services for citizens and permanent residents. Despite its broad coverage, rural communities often experience significant shortages of general practitioners and specialists. Government initiatives now offer financial incentives to encourage young doctors to relocate to regional and remote areas of the country." },
+  { text: "Between the late nineteenth and early twentieth centuries, waves of immigrants arrived in Australia seeking opportunities in agriculture, mining, and trade. This period of migration profoundly shaped the nation's cultural identity, introducing new languages, cuisines, and traditions. Historians note that understanding these early patterns of settlement remains essential to interpreting Australia's contemporary multicultural society today." }
+],
+
+repeatSentence: [
+  { text: "The lecture has been rescheduled to next Thursday afternoon." },
+  { text: "I need to renew my library card before Friday." },
+  { text: "She works part-time while finishing her degree in engineering." },
+  { text: "Can you send me the notes from yesterday's seminar?" },
+  { text: "The bus was late, so we missed the connecting train." },
+  { text: "He's been living in Brisbane for almost three years now." },
+  { text: "Most students prefer studying in the library on weekends." },
+  { text: "The forecast predicts heavy rain across the region tomorrow." },
+  { text: "They finally finished the assignment after working all night." },
+  { text: "I couldn't find a parking spot near the hospital entrance." }
+],
+
+shortQuestion: [
+  { q: "What do you call a person who studies the stars?", answers: ["astronomer"] },
+  { q: "What do you call a period of two weeks?", answers: ["fortnight", "two weeks"] },
+  { q: "What is the opposite of 'ancient'?", answers: ["modern"] },
+  { q: "What do you call a doctor who treats teeth?", answers: ["dentist"] },
+  { q: "What do you call a place where books are borrowed?", answers: ["library"] },
+  { q: "What do you call the scientific study of living organisms?", answers: ["biology"] },
+  { q: "What do you call a person who flies a plane?", answers: ["pilot"] },
+  { q: "What is the term for money paid regularly to a landlord?", answers: ["rent"] },
+  { q: "What do you call a doctor who treats animals?", answers: ["vet", "veterinarian"] },
+  { q: "What do you call the first meal of the day?", answers: ["breakfast"] }
+],
+
+describeImage: [
+  { img: "img/coffee.jpg", title: "Coffee Shop Counter", keywords: ["counter", "espresso", "machine", "menu", "cups", "barista", "coffee", "beans", "shop", "customer", "display", "order"] },
+  { img: "img/casual.jpg", title: "Backyard Barbecue", keywords: ["barbecue", "backyard", "grill", "food", "friends", "garden", "smoke", "meat", "table", "chairs", "outdoor", "gathering"] },
+  { img: "img/airport.jpg", title: "Airport Terminal", keywords: ["terminal", "passengers", "luggage", "departure", "board", "gate", "airline", "suitcase", "screen", "travellers", "check-in", "seating"] },
+  { img: "img/directions.jpg", title: "City Street Corner", keywords: ["street", "corner", "sign", "pedestrians", "crosswalk", "traffic", "buildings", "sidewalk", "intersection", "cars", "road", "signpost"] },
+  { img: "img/doctor.jpg", title: "Pharmacy Interior", keywords: ["pharmacy", "shelves", "medicine", "counter", "pharmacist", "prescription", "bottles", "products", "aisle", "customer", "sign", "packages"] }
+],
+
+dictation: [
+  { text: "The library will be closed for renovation next week." },
+  { text: "Students must submit their assignments before the deadline." },
+  { text: "The professor postponed the exam due to a scheduling conflict." },
+  { text: "All laboratory reports are due by Friday afternoon." },
+  { text: "The university offers scholarships to outstanding international students." },
+  { text: "Please bring your student card to every examination." },
+  { text: "The seminar has been moved to the main auditorium." },
+  { text: "Researchers published their findings in a leading academic journal." },
+  { text: "The campus bookstore is offering discounts on textbooks this month." },
+  { text: "New students should attend the orientation session on Monday." }
+],
+
+fibRW: [
+  {
+    text: "Over the past decade, renewable energy has {0} from a niche technology into a mainstream source of electricity. Solar and wind power now {1} for a significant proportion of the energy mix in many countries, including Australia. Governments have introduced subsidies to {2} households and businesses to install solar panels, while researchers continue to {3} more efficient battery storage systems to address the intermittency of renewable generation.",
+    options: [
+      ["revolved", "evolved", "involved", "evaluated"],
+      ["amount", "total", "account", "count"],
+      ["enforce", "encourage", "prevent", "suggest"],
+      ["invent", "expand", "develop", "evolve"]
+    ],
+    answers: [1, 2, 1, 2]
+  },
+  {
+    text: "University life requires students to {0} a considerable degree of independence, particularly when it comes to managing their own time. Unlike secondary school, lecturers rarely {1} students to complete homework on a daily basis; instead, learners must {2} their own study schedules around lectures, part-time work, and social commitments. Those who fail to {3} this balance often struggle academically during their first year.",
+    options: [
+      ["spend", "raise", "develop", "increase"],
+      ["suspect", "respect", "expect", "except"],
+      ["restructure", "instruct", "structure", "construct"],
+      ["hit", "beat", "strike", "knock"]
+    ],
+    answers: [2, 2, 2, 2]
+  },
+  {
+    text: "Regular physical activity has been shown to {0} the risk of numerous chronic conditions, including heart disease, type two diabetes, and certain cancers. Health authorities {1} that adults engage in at least one hundred and fifty minutes of moderate exercise each week. Despite this advice, a significant proportion of the population remains largely {2}, citing lack of time and access to facilities as the main {3} to regular exercise.",
+    options: [
+      ["induce", "produce", "reduce", "deduce"],
+      ["commend", "advertise", "recommend", "command"],
+      ["reactive", "active", "inactive", "interactive"],
+      ["hurdle", "wall", "barrier", "block"]
+    ],
+    answers: [2, 2, 2, 2]
+  },
+  {
+    text: "Artificial intelligence is increasingly being {0} into everyday tools, from smartphone assistants to email filters that automatically {1} unwanted messages. While these systems can significantly improve efficiency, critics warn that widespread reliance on automated decision-making may {2} human oversight in critical areas such as healthcare and finance. Ensuring that algorithms remain transparent and accountable is therefore essential to {3} public trust in these emerging technologies.",
+    options: [
+      ["integrate", "integrating", "integration", "integrated"],
+      ["raise", "note", "flag", "mark"],
+      ["undermine", "undertake", "undergo", "underline"],
+      ["reserve", "conserve", "observe", "preserve"]
+    ],
+    answers: [3, 2, 0, 3]
+  },
+  {
+    text: "As many Australian cities face increasing pressure on water supplies, local governments have begun to {0} stricter restrictions on outdoor water use during summer months. Residents are encouraged to {1} rainwater for garden irrigation rather than relying solely on mains supply. Experts argue that without long-term behavioural change, existing reservoirs may struggle to {2} demand during periods of extended drought, particularly as population growth continues to {3} pressure on limited resources.",
+    options: [
+      ["propose", "expose", "impose", "compose"],
+      ["gather", "accumulate", "collect", "harvest"],
+      ["satisfy", "fulfil", "match", "meet"],
+      ["displace", "misplace", "replace", "place"]
+    ],
+    answers: [2, 3, 3, 3]
+  }
+],
+
+reorder: [
+  { paragraphs: [
+    "Urban beekeeping has grown rapidly in Australian cities over the past decade, as residents seek sustainable ways to support local ecosystems and pollinate gardens.",
+    "City councils have responded by relaxing zoning regulations, allowing hives to be kept on rooftops, balconies, and in community gardens across metropolitan areas.",
+    "Studies show that urban bee colonies often produce higher yields of honey than their rural counterparts, due to the diversity of flowering garden plants.",
+    "As a result, many experts now view cities as unexpectedly valuable habitats for pollinators, rather than merely obstacles to biodiversity conservation efforts."
+  ]},
+  { paragraphs: [
+    "The shift toward online learning accelerated dramatically during the global pandemic, forcing universities worldwide to redesign their courses for remote delivery.",
+    "Many institutions invested heavily in video conferencing platforms, digital assessment tools, and training for academic staff unfamiliar with virtual teaching methods.",
+    "Research conducted since then suggests that students retain information differently online, often requiring more frequent breaks and interactive elements to maintain engagement.",
+    "Consequently, most universities have now adopted a hybrid model, combining the flexibility of online learning with the benefits of face-to-face instruction."
+  ]},
+  { paragraphs: [
+    "Several Australian cities have begun trialling electric buses as part of broader efforts to reduce greenhouse gas emissions from public transport networks.",
+    "Early trials indicate that electric buses are significantly quieter than diesel models and produce no tailpipe emissions during operation within busy urban areas.",
+    "However, the high upfront cost of purchasing electric fleets and building charging infrastructure remains a significant barrier for many regional transport authorities.",
+    "Despite these challenges, most transport planners agree that electrification represents the most viable long-term pathway toward sustainable urban public transport."
+  ]},
+  { paragraphs: [
+    "Researchers have long examined the relationship between sleep quality and academic performance among university students facing demanding coursework schedules.",
+    "Recent studies indicate that students who sleep fewer than six hours per night tend to perform noticeably worse on memory-based examinations.",
+    "Interestingly, the same research found that irregular sleep patterns had a greater negative impact than simply reduced total sleep duration.",
+    "These findings suggest that universities should consider promoting healthy sleep habits alongside traditional study skills programs for incoming students."
+  ]}
+],
+
+mcqSingle: [
+  {
+    passage: "Recent research into the Mediterranean diet has consistently linked it to lower rates of cardiovascular disease and improved longevity. The diet emphasises whole grains, vegetables, legumes, nuts, and olive oil, while limiting red meat and processed foods. Unlike many short-term diets, it does not focus on calorie restriction but instead promotes a sustainable pattern of eating that can be maintained over a lifetime. Nutritionists note that its benefits appear to stem not from any single ingredient, but from the overall balance of nutrients and the social, unhurried way meals are traditionally eaten in Mediterranean cultures.",
+    q: "According to the passage, why do nutritionists believe the Mediterranean diet is beneficial?",
+    options: [
+      "Because it eliminates all forms of dietary fat",
+      "Because of the overall balance of nutrients and eating habits",
+      "Because it requires strict calorie counting",
+      "Because it focuses exclusively on olive oil consumption"
+    ],
+    answer: 1
+  },
+  {
+    passage: "As children spend increasing amounts of time using digital devices, researchers have grown concerned about the potential effects on attention span and sleep quality. Several studies suggest that excessive screen use before bedtime can delay the release of melatonin, making it harder for children to fall asleep. Paediatricians generally recommend limiting recreational screen time to no more than two hours per day for school-aged children, while encouraging outdoor play and reading instead. Critics of these guidelines, however, argue that not all screen time is equal, noting that educational applications may offer genuine cognitive benefits when used in moderation.",
+    q: "What do critics of screen time guidelines argue, according to the passage?",
+    options: [
+      "That all screen time should be banned entirely",
+      "That children should spend more time outdoors than reading",
+      "That not all screen time has the same effect on children",
+      "That melatonin production is unaffected by device use"
+    ],
+    answer: 2
+  },
+  {
+    passage: "The widespread adoption of remote work has fundamentally altered expectations around workplace flexibility across many industries. Surveys conducted among Australian office workers reveal that a majority now prefer a hybrid arrangement, splitting their time between home and the office rather than committing fully to either model. Employers initially worried that remote work would reduce productivity, but numerous studies have found little evidence to support this concern, with some employees reporting increased output due to fewer workplace distractions. Nevertheless, managers continue to express concerns about maintaining company culture and mentoring junior staff in a dispersed workforce.",
+    q: "What concern do managers continue to express, according to the passage?",
+    options: [
+      "That employees are less productive when working remotely",
+      "That hybrid arrangements are illegal in most industries",
+      "That maintaining culture and mentoring junior staff is difficult remotely",
+      "That surveys of office workers are unreliable"
+    ],
+    answer: 2
+  },
+  {
+    passage: "The gold rushes of the 1850s transformed the Australian colonies both economically and socially, drawing hundreds of thousands of migrants from Britain, continental Europe, and China in search of fortune. Towns such as Ballarat and Bendigo expanded rapidly, evolving from small settlements into bustling centres of trade and industry within just a few years. The sudden wealth generated by gold also funded significant infrastructure projects, including railways and public buildings, though it simultaneously fuelled social tensions, most notably the Eureka Stockade rebellion of 1854, in which miners protested against unfair licensing fees imposed by colonial authorities.",
+    q: "According to the passage, what caused the Eureka Stockade rebellion?",
+    options: [
+      "A dispute over railway construction contracts",
+      "Miners' protest against unfair licensing fees",
+      "Competition between the towns of Ballarat and Bendigo",
+      "A shortage of gold in the colonies"
+    ],
+    answer: 1
+  }
+],
+
+highlightIncorrect: [
+  {
+    spoken: "Marine biologists have discovered that ocean temperatures around the Great Barrier Reef have risen significantly over the past three decades. This warming trend has caused widespread coral bleaching, threatening the survival of thousands of marine species that depend on healthy reef ecosystems for food and shelter.",
+    shown: "Marine biologists have discovered that motion temperaments around the Great Barrier Reef have risen significantly over the past three decades. This farming trend has caused widespread coral breaching, threatening the survival of thousands of marine species that depend on healthy reef ecosystems for food and shelter."
+  },
+  {
+    spoken: "Economists warn that rising interest rates could slow consumer spending across the retail sector in the coming months. Higher borrowing costs typically discourage households from taking out loans for major purchases such as vehicles and property, which in turn can reduce overall economic growth and business investment nationwide.",
+    shown: "Economists warn that rising internet rates could slow consumer spending across the retail sector in the coming months. Higher burrowing costs typically discourage households from taking out loans for major purchases such as vehicles and prosperity, which in turn can reduce overall economic growth and business inventory nationwide."
+  },
+  {
+    spoken: "Universities across Australia have begun integrating artificial intelligence tools into their teaching practices, particularly for grading assignments and providing personalised feedback to students. While many academics welcome the efficiency these tools provide, others express concern that overreliance on automated systems could diminish critical thinking skills among undergraduate learners over time.",
+    shown: "Universities across Australia have begun irrigating artificial intelligence tools into their teaching practices, particularly for trading assignments and providing personalised feedback to students. While many academics welcome the deficiency these tools provide, others express concern that overreliance on automated systems could diminish cynical thinking skills among undergraduate learners over time."
+  },
+  {
+    spoken: "Local councils have invested heavily in new cycling infrastructure, adding protected bike lanes along several major roads in the city centre. Advocates argue that safer cycling routes encourage residents to commute by bicycle, reducing traffic congestion and lowering carbon emissions during peak hours.",
+    shown: "Local councils have invented heavily in new cycling infrastructure, adding projected bike lanes along several major roads in the city centre. Advocates argue that safer cycling routes encourage residents to compute by bicycle, reducing traffic digestion and lowering carbon emissions during peak hours."
+  },
+  {
+    spoken: "Public health campaigns increasingly focus on reducing sugar consumption among children, linking excessive intake to rising rates of childhood obesity and dental decay. Nutritionists recommend replacing sugary drinks with water wherever possible and encourage parents to read food labels carefully before purchasing packaged snacks and cereals for their families.",
+    shown: "Public health campaigns increasingly focus on producing sugar consumption among children, linking excessive intake to rising rates of childhood anxiety and mental decay. Nutritionists recommend replacing sugary drinks with water wherever possible and encourage parents to read food ladders carefully before purchasing packaged snacks and cereals for their families."
+  }
+],
+
+swt: [
+  {
+    passage: "Australia's transition toward renewable energy has accelerated dramatically over the past fifteen years, driven by falling technology costs, strong household demand, and increasingly ambitious government targets. Rooftop solar installations have become particularly widespread, with more homes per capita adopting the technology than almost anywhere else in the world. Large-scale wind and solar farms have also expanded rapidly across regional areas, gradually displacing coal-fired power stations that once dominated the national electricity grid. Despite this progress, the shift has not been without significant challenges. Because solar and wind generation depend heavily on weather conditions, grid operators must manage considerable variability in supply throughout the day and across seasons. Battery storage technology, along with pumped hydro projects, has emerged as a critical solution, allowing excess energy generated during sunny or windy periods to be stored and released when demand is high. Transmission infrastructure has struggled to keep pace with the rapid growth of renewable projects, often located far from major population centres, creating bottlenecks that delay new developments from connecting to the grid. Policymakers now face the difficult task of balancing the urgency of reducing carbon emissions against the practical realities of maintaining a stable and affordable electricity supply. Many analysts believe that continued investment in storage and transmission, combined with clear long-term policy, will ultimately determine how smoothly Australia completes its transition to a renewable-powered future.",
+    keyPoints: ["falling technology costs", "rooftop solar growth", "battery storage solution", "transmission infrastructure challenges", "balancing emissions and reliability"]
+  },
+  {
+    passage: "The rapid shift to online learning during the global pandemic forced universities to rethink long-standing assumptions about how education should be delivered. Almost overnight, institutions that had relied primarily on face-to-face lectures were required to redesign entire courses for remote delivery, investing heavily in video conferencing platforms, digital assessment tools, and staff training. While the transition was disruptive, it also revealed unexpected benefits: recorded lectures allowed students to review material at their own pace, and online discussion forums gave quieter students a more comfortable space to participate than crowded lecture halls typically offered. However, research conducted since then has highlighted real drawbacks as well. Many students reported feeling isolated without regular in-person contact with peers and instructors, and engagement levels often dropped during purely online semesters, particularly among first-year students still adjusting to university life. Academic staff also noted that supervising practical or laboratory-based subjects remotely proved far more difficult than delivering theoretical content. As a result, most universities have now settled on hybrid models that combine the flexibility of online components with the social and practical benefits of face-to-face teaching. This blended approach appears to address many of the shortcomings identified during the fully remote period, though institutions continue to refine exactly how much of each course should be delivered online versus in person, balancing student preferences, learning outcomes, and the practical demands of different academic disciplines.",
+    keyPoints: ["shift to online learning", "self-paced recorded lectures", "student isolation and reduced engagement", "difficulty with practical subjects", "hybrid teaching models"]
+  },
+  {
+    passage: "The Great Barrier Reef, stretching more than two thousand kilometres along Australia's northeastern coast, is one of the most biologically diverse ecosystems on the planet, home to thousands of species of fish, coral, and other marine life. In recent decades, however, the reef has faced mounting pressure from rising sea temperatures, which trigger coral bleaching events when prolonged heat causes coral to expel the algae that give it colour and nutrients. Severe bleaching events in 2016, 2017, and 2020 affected large sections of the reef, raising serious concerns among scientists about its long-term resilience. In addition to climate change, the reef continues to face threats from agricultural runoff, which introduces excess nutrients and sediment into coastal waters, as well as outbreaks of coral-eating crown-of-thorns starfish. Conservation efforts have focused on multiple fronts simultaneously: improving water quality by regulating farming practices upstream, controlling starfish populations through targeted culling programs, and funding research into more heat-resistant coral strains that might be used to restore damaged sections of the reef. The Australian government has also committed significant funding toward reef management and monitoring programs, while tourism operators have adopted stricter guidelines to minimise physical damage from diving and boating activities. Despite these efforts, many marine biologists caution that meaningful long-term protection of the reef will ultimately depend on global progress in reducing greenhouse gas emissions and limiting further increases in ocean temperature.",
+    keyPoints: ["coral bleaching from rising temperatures", "agricultural runoff and water quality", "crown-of-thorns starfish outbreaks", "reef conservation and monitoring programs", "dependence on reducing emissions"]
+  }
+]
+
+};
+
+</script>
+<script>
 // RealTalk — lightweight profile system (static-site "login").
 // Profiles live in this browser's localStorage: each person gets their own
 // name, avatar and progress. Real cross-device accounts need a backend later.
@@ -7957,6 +8347,847 @@ Object.assign(window.LEARN_EXTRA, {
 
 </script>
 <script>
+// RealTalk — PTE Academic simulator. Practice every task type + a timed mini-mock.
+// Scores are UNOFFICIAL estimates (10-90 band) from browser speech recognition + keyword matching.
+(function () {
+  const isPT = () => window.RT_LANG === "pt";
+  const tx = (pt, en) => (isPT() ? pt : en);
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // ---------- live state (cleared on every route change via RTPTE.destroy) ----------
+  let active = { timers: [], rec: null, spPrev: undefined };
+
+  function destroy() {
+    active.timers.forEach(t => clearInterval(t));
+    if (active.rec) { try { active.rec.stop(); } catch {} }
+    const sp = window.RealTalkPlayer && RealTalkPlayer.speech;
+    if (sp) {
+      if (active.spPrev !== undefined) sp.enabled = active.spPrev;
+      sp.stop();
+    }
+    active = { timers: [], rec: null, spPrev: undefined };
+  }
+
+  // ---------- helpers ----------
+  const fmt = (s) => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  const norm = (s) => (s || "").toLowerCase().replace(/[^a-z0-9'\s]/g, " ").split(/\s+/).filter(Boolean);
+  const cleanW = (w) => (w || "").toLowerCase().replace(/[^a-z0-9']/g, "");
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const band = (f) => Math.max(10, Math.min(90, Math.round(10 + f * 80)));
+  const bandClass = (f) => (f >= 0.75 ? "good" : f >= 0.45 ? "mid" : "bad");
+  const shuffle = (a) => { const c = [...a]; for (let i = c.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [c[i], c[j]] = [c[j], c[i]]; } return c; };
+
+  function beep() {
+    try {
+      const ctx = window._pteAC || (window._pteAC = new (window.AudioContext || window.webkitAudioContext)());
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880; g.gain.value = 0.07;
+      o.connect(g); g.connect(ctx.destination);
+      o.start(); o.stop(ctx.currentTime + 0.18);
+    } catch {}
+  }
+
+  function say(text, voiceSeed, onEnd) {
+    const sp = RealTalkPlayer.speech;
+    if (active.spPrev === undefined) active.spPrev = sp.enabled;
+    sp.enabled = true;
+    sp.speak(text, { isYou: false, character: "pte-" + (voiceSeed || 0), onEnd: (ok) => onEnd && onEnd(ok) });
+  }
+
+  function countdown(host, seconds, onDone, label) {
+    host.innerHTML = `<div class="pte-timer"><span class="pte-timer-label"></span><div class="pte-timer-bar"><div></div></div></div>`;
+    let left = seconds;
+    const lab = host.querySelector(".pte-timer-label");
+    const bar = host.querySelector(".pte-timer-bar > div");
+    const wrap = host.querySelector(".pte-timer-bar");
+    const paint = () => {
+      lab.textContent = (label ? label + " · " : "⏱ ") + fmt(Math.max(0, left));
+      bar.style.width = (100 * Math.max(0, left) / seconds) + "%";
+      wrap.classList.toggle("low", left <= Math.min(10, seconds / 4));
+    };
+    paint();
+    const iv = setInterval(() => {
+      left--;
+      if (left <= 0) { clearInterval(iv); paint(); onDone && onDone(); } else paint();
+    }, 1000);
+    active.timers.push(iv);
+    return { cancel: () => clearInterval(iv) };
+  }
+
+  // word-coverage grading: how many words of `target` appear in `said`
+  function coverage(target, said) {
+    const tw = norm(target), sw = norm(said);
+    const pool = [...sw]; let hit = 0;
+    const marks = tw.map(w => {
+      const i = pool.indexOf(w);
+      if (i >= 0) { pool.splice(i, 1); hit++; return true; }
+      return false;
+    });
+    return { f: tw.length ? hit / tw.length : 0, marks, words: target.split(/\s+/) };
+  }
+  const marksHtml = (cov) =>
+    `<p class="pte-marks">${cov.words.map((w, i) => `<span class="${cov.marks[i] ? "ok" : "miss"}">${esc(w)}</span>`).join(" ")}</p>`;
+  const heardHtml = (said) =>
+    `<p class="pte-heard"><b>${tx("Ouvimos:", "We heard:")}</b> ${said ? esc(said) : tx("(nada)", "(nothing)")}</p>`;
+
+  // ---------- speech capture (continuous, auto-restart) with typed fallback ----------
+  function typedCapture(host, seconds, cb, note) {
+    host.innerHTML = `
+      <div class="pte-rec typed">
+        ${note ? `<p class="pte-note">${note}</p>` : ""}
+        <div class="pte-rec-timer"></div>
+        <textarea class="pte-input" rows="3" placeholder="${tx("Digite aqui em inglês…", "Type here in English…")}"></textarea>
+        <button class="btn pte-stop">${tx("Enviar ▸", "Submit ▸")}</button>
+      </div>`;
+    const ta = host.querySelector("textarea");
+    let done = false;
+    const finish = () => { if (done) return; done = true; cb(ta.value.trim()); };
+    countdown(host.querySelector(".pte-rec-timer"), seconds, finish);
+    host.querySelector(".pte-stop").onclick = finish;
+    ta.focus();
+  }
+
+  function captureSpeech(host, seconds, cb) {
+    if (!SR) {
+      return typedCapture(host, seconds, cb,
+        tx("🎙 Reconhecimento de voz não disponível neste navegador (use Chrome ou Edge). Digite o que você falaria:",
+           "🎙 Speech recognition unavailable in this browser (use Chrome or Edge). Type what you would say:"));
+    }
+    host.innerHTML = `
+      <div class="pte-rec">
+        <div class="pte-rec-head"><span class="pte-rec-dot"></span>${tx("Gravando — fale agora", "Recording — speak now")}</div>
+        <div class="pte-rec-timer"></div>
+        <div class="pte-rec-tx">…</div>
+        <button class="btn ghost pte-stop">${tx("✔ Terminei", "✔ Done")}</button>
+      </div>`;
+    beep();
+    let finals = "", interim = "", stopped = false;
+    const txEl = host.querySelector(".pte-rec-tx");
+    const r = new SR();
+    const acc = window.ACCENTS[window.RT_ACCENT];
+    r.lang = (acc && acc.recog) || "en-US";
+    r.continuous = true; r.interimResults = true; r.maxAlternatives = 1;
+    r.onresult = (e) => {
+      interim = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) finals += " " + t; else interim += " " + t;
+      }
+      txEl.textContent = (finals + " " + interim).trim() || "…";
+    };
+    r.onerror = (e) => {
+      if (e.error === "not-allowed" || e.error === "service-not-allowed" || e.error === "audio-capture") finish("blocked");
+    };
+    r.onend = () => { if (!stopped) { try { r.start(); } catch {} } };
+    const tm = countdown(host.querySelector(".pte-rec-timer"), seconds, () => finish());
+    const finish = (err) => {
+      if (stopped) return;
+      stopped = true;
+      try { r.onend = null; r.abort(); } catch {}
+      tm.cancel();
+      active.rec = null;
+      const text = (finals + " " + interim).trim();
+      if (err === "blocked") {
+        return typedCapture(host, seconds, cb,
+          tx("🎙 Microfone bloqueado — permita o acesso no navegador, ou digite sua resposta:",
+             "🎙 Microphone blocked — allow mic access in the browser, or type your answer:"));
+      }
+      cb(text);
+    };
+    active.rec = { stop: () => { if (!stopped) { stopped = true; try { r.onend = null; r.abort(); } catch {} tm.cancel(); } } };
+    host.querySelector(".pte-stop").onclick = () => finish();
+    try { r.start(); } catch { finish("blocked"); }
+  }
+
+  function pteImg(path) {
+    const m = /img\/(.+)\.(jpg|png)/.exec(path || "");
+    return (window.RT_IMG && m && RT_IMG[m[1]]) || path;
+  }
+
+  // ---------- task renderers ----------
+  // each receives (body, item, ctx) and calls ctx.done(f, feedbackHtml) exactly once
+  function prepStage(stage, seconds, label, go) {
+    const host = document.createElement("div");
+    stage.appendChild(host);
+    const btnRow = document.createElement("div");
+    btnRow.innerHTML = `<button class="btn pte-go">🎙 ${tx("Gravar agora", "Record now")}</button>`;
+    btnRow.style.marginTop = "10px";
+    stage.appendChild(btnRow);
+    let went = false;
+    const tm = countdown(host, seconds, () => start(), label);
+    const start = () => {
+      if (went) return; went = true;
+      tm.cancel();
+      stage.innerHTML = "";
+      const rec = document.createElement("div");
+      stage.appendChild(rec);
+      go(rec);
+    };
+    btnRow.querySelector(".pte-go").onclick = start;
+  }
+
+  function renderReadAloud(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Estude o texto. Quando a gravação começar, leia em voz alta com naturalidade.",
+          "Study the text. When recording starts, read it aloud naturally.")}</p>
+        <div class="pte-passage">${esc(item.text)}</div>
+        <div class="pte-stage"></div>
+      </div>`;
+    prepStage(body.querySelector(".pte-stage"), ctx.exam ? 25 : 35, tx("Preparação", "Preparation"),
+      (rec) => captureSpeech(rec, 40, (said) => {
+        const cov = coverage(item.text, said);
+        ctx.done(cov.f, heardHtml(said) + marksHtml(cov));
+      }));
+  }
+
+  function renderRepeatSentence(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Você vai ouvir uma frase UMA vez. Repita exatamente o que ouvir.",
+          "You will hear a sentence ONCE. Repeat exactly what you hear.")}</p>
+        <div class="pte-audio">🎧 ${tx("Ouvindo…", "Listening…")}</div>
+        <div class="pte-stage"></div>
+      </div>`;
+    say(item.text, ctx.seed, () => {
+      const au = body.querySelector(".pte-audio");
+      if (au) au.textContent = "🎧 " + tx("Áudio encerrado — sua vez", "Audio finished — your turn");
+      const stage = body.querySelector(".pte-stage");
+      if (stage) captureSpeech(stage, 15, (said) => {
+        const cov = coverage(item.text, said);
+        const f = cov.f >= 0.85 ? 1 : cov.f;
+        ctx.done(f, heardHtml(said) + `<p class="pte-key"><b>${tx("A frase era:", "The sentence was:")}</b></p>` + marksHtml(cov));
+      });
+    });
+  }
+
+  function renderDescribeImage(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Descreva a imagem em detalhes: o que é, o que tem nela, o que está acontecendo.",
+          "Describe the image in detail: what it is, what's in it, what's happening.")}</p>
+        <div class="pte-img" style="background-image:url('${pteImg(item.img)}')"></div>
+        <div class="pte-img-cap">${esc(item.title || "")}</div>
+        <div class="pte-stage"></div>
+      </div>`;
+    prepStage(body.querySelector(".pte-stage"), 25, tx("Preparação", "Preparation"),
+      (rec) => captureSpeech(rec, 40, (said) => {
+        const sw = norm(said);
+        const hits = item.keywords.filter(k => norm(k).every(w => sw.includes(w)));
+        const contentF = Math.min(1, hits.length / 6);
+        const lengthF = Math.min(1, sw.length / 25);
+        const f = contentF * 0.8 + lengthF * 0.2;
+        const chips = item.keywords.map(k =>
+          `<span class="pte-kw ${hits.includes(k) ? "hit" : ""}">${esc(k)}</span>`).join("");
+        ctx.done(f, heardHtml(said) +
+          `<p class="pte-key"><b>${tx("Palavras que a banca esperava:", "Words the scorer listens for:")}</b></p><p>${chips}</p>`);
+      }));
+  }
+
+  function renderShortQuestion(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Ouça a pergunta e responda com uma ou poucas palavras.",
+          "Listen to the question and answer in one or a few words.")}</p>
+        <div class="pte-audio">🎧 ${tx("Ouvindo…", "Listening…")}</div>
+        <div class="pte-stage"></div>
+      </div>`;
+    say(item.q, ctx.seed, () => {
+      const stage = body.querySelector(".pte-stage");
+      if (stage) captureSpeech(stage, 10, (said) => {
+        const sn = " " + norm(said).join(" ") + " ";
+        const ok = item.answers.some(a => sn.includes(" " + norm(a).join(" ") + " "));
+        ctx.done(ok ? 1 : 0, heardHtml(said) +
+          `<p><b>${tx("Pergunta:", "Question:")}</b> ${esc(item.q)}</p>` +
+          `<p><b>${tx("Resposta aceita:", "Accepted answer:")}</b> ${item.answers.map(esc).join(" / ")}</p>`);
+      });
+    });
+  }
+
+  function renderSWT(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Resuma o texto em UMA frase de 5 a 75 palavras.",
+          "Summarize the text in ONE sentence of 5-75 words.")}</p>
+        <div class="pte-passage long">${esc(item.passage)}</div>
+        <div class="pte-swt-timer"></div>
+        <textarea class="pte-input" rows="3" placeholder="${tx("Sua frase-resumo em inglês…", "Your one-sentence summary…")}"></textarea>
+        <div class="pte-wc">0 ${tx("palavras", "words")}</div>
+        <button class="btn pte-submit">${tx("Enviar ▸", "Submit ▸")}</button>
+      </div>`;
+    const ta = body.querySelector("textarea");
+    const wc = body.querySelector(".pte-wc");
+    ta.oninput = () => {
+      const n = norm(ta.value).length;
+      wc.textContent = n + " " + tx("palavras", "words");
+      wc.classList.toggle("bad", n > 75 || (n > 0 && n < 5));
+    };
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      const text = ta.value.trim();
+      const n = norm(text).length;
+      const sentences = (text.match(/[.!?]+(?=\s|$)/g) || []).length || (text ? 1 : 0);
+      const formOK = n >= 5 && n <= 75 && sentences <= 1;
+      const tn = " " + norm(text).join(" ") + " ";
+      const hits = item.keyPoints.filter(k => tn.includes(" " + norm(k).join(" ") + " ") ||
+        norm(k).filter(w => tn.includes(" " + w + " ")).length >= Math.ceil(norm(k).length * 0.6));
+      const content = item.keyPoints.length ? hits.length / item.keyPoints.length : 0;
+      const f = formOK ? 0.25 + 0.75 * content : content * 0.3;
+      const chips = item.keyPoints.map(k => `<span class="pte-kw ${hits.includes(k) ? "hit" : ""}">${esc(k)}</span>`).join("");
+      ctx.done(f,
+        (formOK ? "" : `<p class="pte-warn">⚠️ ${tx("Regra da prova: UMA frase, 5-75 palavras. Fora disso a nota despenca.",
+          "Exam rule: ONE sentence, 5-75 words. Break it and the score collapses.")}</p>`) +
+        `<p class="pte-key"><b>${tx("Pontos-chave do texto:", "Key points of the passage:")}</b></p><p>${chips}</p>`);
+    };
+    countdown(body.querySelector(".pte-swt-timer"), ctx.exam ? 300 : 600, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  function renderFIB(body, item, ctx) {
+    let html = esc(item.text);
+    for (let b = 0; b < 4; b++) {
+      const sel = `<select class="pte-blank" data-b="${b}"><option value="-1">▾ …</option>${item.options[b].map((o, i) => `<option value="${i}">${esc(o)}</option>`).join("")}</select>`;
+      html = html.replace(`{${b}}`, sel);
+    }
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Escolha a palavra certa pra cada lacuna.", "Pick the right word for each blank.")}</p>
+        <div class="pte-fib-timer"></div>
+        <div class="pte-passage long">${html}</div>
+        <button class="btn pte-submit">${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      const sels = [...body.querySelectorAll(".pte-blank")];
+      let right = 0;
+      sels.forEach(s => {
+        const b = +s.dataset.b, v = +s.value;
+        s.disabled = true;
+        if (v === item.answers[b]) { right++; s.classList.add("ok"); }
+        else { s.classList.add("miss"); }
+      });
+      const key = sels.map(s => {
+        const b = +s.dataset.b;
+        return `<span class="pte-kw hit">${b + 1}. ${esc(item.options[b][item.answers[b]])}</span>`;
+      }).join(" ");
+      ctx.done(right / 4, `<p class="pte-key"><b>${tx("Respostas certas:", "Correct answers:")}</b></p><p>${key}</p>`);
+    };
+    countdown(body.querySelector(".pte-fib-timer"), 120, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  function renderReorder(body, item, ctx) {
+    let order = shuffle(item.paragraphs.map((_, i) => i));
+    if (order.every((v, i) => v === i)) order.reverse();
+    const paint = () => {
+      body.querySelector(".pte-ro-list").innerHTML = order.map((orig, pos) => `
+        <div class="pte-ro-item">
+          <div class="pte-ro-btns">
+            <button data-pos="${pos}" data-dir="-1" ${pos === 0 ? "disabled" : ""}>▲</button>
+            <button data-pos="${pos}" data-dir="1" ${pos === order.length - 1 ? "disabled" : ""}>▼</button>
+          </div>
+          <div class="pte-ro-text">${esc(item.paragraphs[orig])}</div>
+        </div>`).join("");
+      body.querySelectorAll(".pte-ro-btns button").forEach(b => {
+        b.onclick = () => {
+          const p = +b.dataset.pos, d = +b.dataset.dir;
+          [order[p], order[p + d]] = [order[p + d], order[p]];
+          paint();
+        };
+      });
+    };
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Use as setas pra colocar os parágrafos na ordem certa.",
+          "Use the arrows to put the paragraphs in the right order.")}</p>
+        <div class="pte-ro-timer"></div>
+        <div class="pte-ro-list"></div>
+        <button class="btn pte-submit">${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    paint();
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      let pairs = 0;
+      for (let i = 0; i < order.length - 1; i++) if (order[i + 1] === order[i] + 1) pairs++;
+      const f = pairs / (order.length - 1);
+      ctx.done(f, `<p class="pte-key"><b>${tx("Ordem correta:", "Correct order:")}</b></p><ol class="pte-ro-key">${item.paragraphs.map(p => `<li>${esc(p)}</li>`).join("")}</ol>` +
+        `<p>${tx("Pares adjacentes certos (é assim que o PTE pontua):", "Correct adjacent pairs (that's how PTE scores it):")} <b>${pairs}/${order.length - 1}</b></p>`);
+    };
+    countdown(body.querySelector(".pte-ro-timer"), 150, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  function renderMCQ(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <div class="pte-mcq-timer"></div>
+        <div class="pte-passage long">${esc(item.passage)}</div>
+        <p class="pte-inst" style="margin-top:12px"><b>${esc(item.q)}</b></p>
+        <div class="pte-opts">${item.options.map((o, i) => `<button class="quiz-option" data-i="${i}">${esc(o)}</button>`).join("")}</div>
+      </div>`;
+    let done = false;
+    const grade = (chosen) => {
+      if (done) return; done = true;
+      body.querySelectorAll(".quiz-option").forEach((b, i) => {
+        b.disabled = true;
+        if (i === item.answer) b.classList.add("correct");
+        else if (i === chosen) b.classList.add("incorrect");
+      });
+      ctx.done(chosen === item.answer ? 1 : 0,
+        `<p><b>${tx("Resposta certa:", "Correct answer:")}</b> ${esc(item.options[item.answer])}</p>`);
+    };
+    countdown(body.querySelector(".pte-mcq-timer"), 90, () => grade(-1));
+    body.querySelectorAll(".quiz-option").forEach(b => { b.onclick = () => grade(+b.dataset.i); });
+  }
+
+  function hiwDiffs(item) {
+    const a = item.spoken.split(/\s+/), b = item.shown.split(/\s+/);
+    const idx = [];
+    for (let i = 0; i < Math.min(a.length, b.length); i++) if (cleanW(a[i]) !== cleanW(b[i])) idx.push(i);
+    return idx;
+  }
+
+  function renderHIW(body, item, ctx) {
+    const words = item.shown.split(/\s+/);
+    const spokenWords = item.spoken.split(/\s+/);
+    const diffs = hiwDiffs(item);
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("O áudio vai ler o texto. Clique nas palavras do texto que forem DIFERENTES do que você ouvir.",
+          "The audio reads the passage. Click the words on screen that are DIFFERENT from what you hear.")}</p>
+        <div class="pte-audio">🎧 ${tx("O áudio começa em 3 segundos…", "Audio starts in 3 seconds…")}</div>
+        <p class="pte-hiw">${words.map((w, i) => `<span class="pte-hiw-w" data-i="${i}">${esc(w)}</span>`).join(" ")}</p>
+        <button class="btn pte-submit" disabled>${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    const sel = new Set();
+    body.querySelectorAll(".pte-hiw-w").forEach(sp => {
+      sp.onclick = () => {
+        const i = +sp.dataset.i;
+        if (sel.has(i)) { sel.delete(i); sp.classList.remove("sel"); }
+        else { sel.add(i); sp.classList.add("sel"); }
+      };
+    });
+    const submitBtn = body.querySelector(".pte-submit");
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      let good = 0, badSel = 0;
+      sel.forEach(i => { if (diffs.includes(i)) good++; else badSel++; });
+      const f = Math.max(0, good - badSel) / (diffs.length || 1);
+      body.querySelectorAll(".pte-hiw-w").forEach(sp => {
+        const i = +sp.dataset.i;
+        if (diffs.includes(i)) { sp.classList.add(sel.has(i) ? "was-right" : "was-missed"); sp.title = spokenWords[i]; }
+        else if (sel.has(i)) sp.classList.add("was-wrong");
+      });
+      const key = diffs.map(i => `<span class="pte-kw hit">${esc(words[i])} → ${esc(spokenWords[i])}</span>`).join(" ");
+      ctx.done(f, `<p class="pte-key"><b>${tx("Trocas no áudio:", "Swapped words:")}</b></p><p>${key}</p>` +
+        `<p>${tx("Certas", "Right")}: <b>${good}</b> · ${tx("cliques errados (descontam!)", "wrong clicks (they subtract!)")}: <b>${badSel}</b></p>`);
+    };
+    let c = 3;
+    const au = body.querySelector(".pte-audio");
+    const pre = setInterval(() => {
+      c--;
+      if (c <= 0) {
+        clearInterval(pre);
+        au.textContent = "🎧 " + tx("Tocando… clique nas palavras trocadas", "Playing… click the swapped words");
+        say(item.spoken, ctx.seed, () => {
+          au.textContent = "🎧 " + tx("Áudio encerrado — confira suas marcações", "Audio finished — check your picks");
+          submitBtn.disabled = false;
+          countdownAfter();
+        });
+      } else au.textContent = "🎧 " + tx("O áudio começa em " + c + "…", "Audio starts in " + c + "…");
+    }, 1000);
+    active.timers.push(pre);
+    const countdownAfter = () => {
+      const host = document.createElement("div");
+      submitBtn.parentElement.insertBefore(host, submitBtn);
+      countdown(host, 20, grade);
+    };
+    submitBtn.onclick = grade;
+  }
+
+  function renderWFD(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Você vai ouvir uma frase UMA vez. Escreva exatamente o que ouvir.",
+          "You will hear a sentence ONCE. Type exactly what you hear.")}</p>
+        <div class="pte-audio">🎧 ${tx("O áudio começa em 3 segundos…", "Audio starts in 3 seconds…")}</div>
+        <div class="pte-wfd-timer"></div>
+        <textarea class="pte-input" rows="2" placeholder="${tx("Escreva a frase aqui…", "Type the sentence here…")}"></textarea>
+        <button class="btn pte-submit">${tx("Enviar ▸", "Submit ▸")}</button>
+      </div>`;
+    const ta = body.querySelector("textarea");
+    const au = body.querySelector(".pte-audio");
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      const cov = coverage(item.text, ta.value);
+      ctx.done(cov.f, `<p><b>${tx("Você escreveu:", "You wrote:")}</b> ${ta.value.trim() ? esc(ta.value.trim()) : tx("(nada)", "(nothing)")}</p>` +
+        `<p class="pte-key"><b>${tx("A frase era:", "The sentence was:")}</b></p>` + marksHtml(cov));
+    };
+    let c = 3;
+    const pre = setInterval(() => {
+      c--;
+      if (c <= 0) {
+        clearInterval(pre);
+        au.textContent = "🎧 " + tx("Tocando…", "Playing…");
+        say(item.text, ctx.seed, () => {
+          au.textContent = "🎧 " + tx("Áudio encerrado — escreva a frase", "Audio finished — type the sentence");
+          countdown(body.querySelector(".pte-wfd-timer"), 60, grade);
+          ta.focus();
+        });
+      } else au.textContent = "🎧 " + tx("O áudio começa em " + c + "…", "Audio starts in " + c + "…");
+    }, 1000);
+    active.timers.push(pre);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  // ---------- task registry ----------
+  const SECTIONS = {
+    speaking: { emoji: "🎙️", name: () => tx("Fala", "Speaking") },
+    writing: { emoji: "✍️", name: () => tx("Escrita", "Writing") },
+    reading: { emoji: "📖", name: () => tx("Leitura", "Reading") },
+    listening: { emoji: "🎧", name: () => tx("Escuta", "Listening") }
+  };
+
+  const TASKS = {
+    "read-aloud": {
+      emoji: "📢", section: "speaking", bank: "readAloud", n: 3, en: "Read Aloud", mic: true,
+      name: () => tx("Leitura em Voz Alta", "Read Aloud"),
+      desc: () => tx("35s pra estudar o texto, 40s pra ler em voz alta. Conta pra Fala E Leitura na prova real.",
+        "35s to study the text, 40s to read aloud. Counts for Speaking AND Reading in the real exam."),
+      facts: () => "⏱ 35s + 40s · 🎙"
+    },
+    "repeat-sentence": {
+      emoji: "🔁", section: "speaking", bank: "repeatSentence", n: 5, en: "Repeat Sentence", mic: true,
+      name: () => tx("Repita a Frase", "Repeat Sentence"),
+      desc: () => tx("Ouça uma frase UMA vez e repita. Uma das tarefas que mais pesam na nota de Fala e Escuta.",
+        "Hear a sentence ONCE and repeat it. One of the heaviest tasks for Speaking and Listening."),
+      facts: () => "⏱ 15s · 🎙 🎧"
+    },
+    "describe-image": {
+      emoji: "🖼️", section: "speaking", bank: "describeImage", n: 2, en: "Describe Image", mic: true,
+      name: () => tx("Descreva a Imagem", "Describe Image"),
+      desc: () => tx("25s pra observar, 40s pra descrever. O segredo: falar sem parar e cobrir os elementos principais.",
+        "25s to look, 40s to describe. The secret: keep talking and cover the main elements."),
+      facts: () => "⏱ 25s + 40s · 🎙"
+    },
+    "short-question": {
+      emoji: "💬", section: "speaking", bank: "shortQuestion", n: 5, en: "Answer Short Question", mic: true,
+      name: () => tx("Pergunta Rápida", "Answer Short Question"),
+      desc: () => tx("Ouça uma pergunta de conhecimento geral e responda com uma palavra. Rápido e direto.",
+        "Hear a general-knowledge question and answer in a word. Quick and direct."),
+      facts: () => "⏱ 10s · 🎙 🎧"
+    },
+    "swt": {
+      emoji: "📝", section: "writing", bank: "swt", n: 1, en: "Summarize Written Text", mic: false,
+      name: () => tx("Resuma o Texto", "Summarize Written Text"),
+      desc: () => tx("Leia um texto acadêmico e resuma em UMA frase de 5-75 palavras. 10 minutos.",
+        "Read an academic passage and summarize it in ONE 5-75 word sentence. 10 minutes."),
+      facts: () => "⏱ 10min · ✍️"
+    },
+    "fib-rw": {
+      emoji: "🧩", section: "reading", bank: "fibRW", n: 3, en: "Fill in the Blanks", mic: false,
+      name: () => tx("Complete as Lacunas", "Fill in the Blanks"),
+      desc: () => tx("Escolha a palavra certa pra cada lacuna do texto. Colocações e preposições são as pegadinhas.",
+        "Pick the right word for each blank. Collocations and prepositions are the traps."),
+      facts: () => "⏱ 2min · 📖"
+    },
+    "reorder": {
+      emoji: "🔀", section: "reading", bank: "reorder", n: 3, en: "Re-order Paragraphs", mic: false,
+      name: () => tx("Reordene os Parágrafos", "Re-order Paragraphs"),
+      desc: () => tx("Coloque os parágrafos embaralhados na ordem lógica. O PTE pontua por pares adjacentes certos.",
+        "Put the shuffled paragraphs in logical order. PTE scores correct adjacent pairs."),
+      facts: () => "⏱ 2min30 · 📖"
+    },
+    "mcq": {
+      emoji: "☑️", section: "reading", bank: "mcqSingle", n: 3, en: "Multiple Choice", mic: false,
+      name: () => tx("Múltipla Escolha", "Multiple Choice"),
+      desc: () => tx("Leia o texto e escolha a única resposta certa.", "Read the passage and pick the single right answer."),
+      facts: () => "⏱ 1min30 · 📖"
+    },
+    "highlight": {
+      emoji: "🔎", section: "listening", bank: "highlightIncorrect", n: 3, en: "Highlight Incorrect Words", mic: false,
+      name: () => tx("Marque as Palavras Erradas", "Highlight Incorrect Words"),
+      desc: () => tx("O áudio lê o texto com 4 palavras trocadas — clique nelas. Cliques errados DESCONTAM ponto.",
+        "The audio reads the text with 4 swapped words — click them. Wrong clicks LOSE points."),
+      facts: () => "🎧 + 20s"
+    },
+    "dictation": {
+      emoji: "⌨️", section: "listening", bank: "dictation", n: 5, en: "Write From Dictation", mic: false,
+      name: () => tx("Escreva o Ditado", "Write From Dictation"),
+      desc: () => tx("Ouça UMA vez, escreva exatamente. A tarefa que mais pesa na Escuta — cada palavra vale ponto.",
+        "Hear it ONCE, type it exactly. The heaviest Listening task — every word scores."),
+      facts: () => "🎧 + 60s · ✍️"
+    }
+  };
+  const RENDERERS = {
+    "read-aloud": renderReadAloud, "repeat-sentence": renderRepeatSentence,
+    "describe-image": renderDescribeImage, "short-question": renderShortQuestion,
+    "swt": renderSWT, "fib-rw": renderFIB, "reorder": renderReorder, "mcq": renderMCQ,
+    "highlight": renderHIW, "dictation": renderWFD
+  };
+
+  // ---------- storage ----------
+  const pteStore = {
+    key() { return "realtalk-pte::" + ((window.RTAuth && RTAuth.current()) ? RTAuth.current().name : "anon"); },
+    load() { try { return JSON.parse(localStorage.getItem(this.key())) || {}; } catch { return {}; } },
+    save(d) { localStorage.setItem(this.key(), JSON.stringify(d)); },
+    best(task, b) { const d = this.load(); d.best = d.best || {}; if (!d.best[task] || b > d.best[task]) { d.best[task] = b; this.save(d); } },
+    addMock(m) { const d = this.load(); d.mocks = d.mocks || []; d.mocks.push(m); this.save(d); }
+  };
+
+  const bankOf = (t) => (window.PTE_BANK && PTE_BANK[t.bank]) || [];
+
+  // ---------- pages ----------
+  function hubHead() {
+    return `
+      <div class="page-head">
+        <div class="page-kicker">${tx("Estudo · Simulador", "Study · Simulator")}</div>
+        <div class="page-title">🎓 ${tx("Simulador PTE Academic", "PTE Academic Simulator")}</div>
+        <p class="page-blurb">${tx(
+          "O PTE Academic é o teste de inglês mais usado pra vistos da Austrália. Treine cada tipo de tarefa do jeito que cai na prova — com tempo correndo, microfone e correção na hora. As vozes seguem o sotaque escolhido ali em cima.",
+          "PTE Academic is the English test most used for Australian visas. Train every task type the way it appears in the exam — with running clocks, microphone and instant marking. Voices follow the accent you picked up top.")}</p>
+      </div>`;
+  }
+
+  function renderHub($main) {
+    const d = pteStore.load();
+    const best = d.best || {};
+    const lastMock = (d.mocks || [])[d.mocks ? d.mocks.length - 1 : -1];
+    const secBlocks = Object.entries(SECTIONS).map(([sec, meta]) => {
+      const tasks = Object.entries(TASKS).filter(([, t]) => t.section === sec);
+      return `
+        <div class="section-title">${meta.emoji} ${meta.name()}</div>
+        <div class="grid grid-2">
+          ${tasks.map(([id, t]) => `
+            <a class="card scenario-card pte-card" href="#/pte/t/${id}">
+              <span class="sc-emoji">${t.emoji}</span>
+              <span class="sc-title">${t.name()}${t.name() !== t.en ? `<span class="sc-title-pt">${t.en}</span>` : ""}</span>
+              <span class="sc-blurb">${t.desc()}</span>
+              <span class="sc-meta">
+                <span class="chip">${t.facts()}</span>
+                ${bankOf(t).length ? "" : `<span class="chip gold">${tx("em breve", "soon")}</span>`}
+                ${best[id] ? `<span class="chip pte-band ${bandClass((best[id] - 10) / 80)}">${tx("melhor:", "best:")} ${best[id]}</span>` : ""}
+              </span>
+            </a>`).join("")}
+        </div>`;
+    }).join("");
+    $main.innerHTML = `
+      ${hubHead()}
+      <div class="card pte-mock-cta">
+        <div>
+          <h3>⚡ ${tx("Simulado Rápido", "Quick Mock Test")}</h3>
+          <p>${tx("13 tarefas de todos os tipos, sem feedback no meio — igual à prova. No final: nota estimada de 10 a 90 por seção.",
+            "13 tasks across every type, no mid-exam feedback — just like the real thing. At the end: an estimated 10-90 score per section.")}</p>
+          ${lastMock ? `<p class="pte-lastmock">${tx("Último simulado:", "Last mock:")} <b>${lastMock.overall}</b> · ${new Date(lastMock.date).toLocaleDateString(isPT() ? "pt-BR" : "en-AU")}</p>` : ""}
+        </div>
+        <a class="btn" href="#/pte/mock">▶ ${tx("Começar simulado", "Start mock test")}</a>
+      </div>
+      <div class="card pte-note-card">
+        <p>ℹ️ ${tx("Nota estimada, não oficial: usamos o reconhecimento de voz do navegador e análise de palavras-chave — bom pra treinar formato, ritmo e tempo. Use Chrome ou Edge pro microfone funcionar.",
+          "Unofficial estimate: we use the browser's speech recognition and keyword analysis — great for training format, pace and timing. Use Chrome or Edge for the microphone.")}</p>
+      </div>
+      ${secBlocks}`;
+  }
+
+  function feedbackScreen($main, headHtml, f, fbHtml, nextLabel, onNext) {
+    $main.innerHTML = `
+      ${headHtml}
+      <div class="card pte-fb">
+        <div class="pte-score ${bandClass(f)}">
+          <span class="pte-score-num">${band(f)}</span>
+          <span class="pte-score-cap">${tx("nesta tarefa (10-90)", "on this task (10-90)")}</span>
+        </div>
+        <div class="pte-fb-body">${fbHtml}</div>
+        <button class="btn continue-btn" id="pte-next">${nextLabel}</button>
+      </div>`;
+    document.getElementById("pte-next").onclick = onNext;
+  }
+
+  function renderTask($main, typeId) {
+    const t = TASKS[typeId];
+    if (!t) return renderHub($main);
+    const bank = bankOf(t);
+    const head = (extra) => `
+      <a class="back-link" href="#/pte">← ${tx("Simulador PTE", "PTE Simulator")}</a>
+      <div class="page-head">
+        <div class="page-kicker">PTE · ${SECTIONS[t.section].emoji} ${SECTIONS[t.section].name()}${extra ? " · " + extra : ""}</div>
+        <div class="page-title">${t.emoji} ${t.name()}</div>
+      </div>`;
+    if (!bank.length) {
+      $main.innerHTML = head() + `<div class="card"><p style="color:var(--ink-soft)">${tx("Conteúdo chegando em breve.", "Content coming soon.")}</p></div>`;
+      return;
+    }
+    const items = shuffle(bank).slice(0, Math.min(t.n, bank.length));
+    let i = 0; const scores = [];
+
+    const report = () => {
+      const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+      const b = band(avg);
+      pteStore.best(typeId, b);
+      $main.innerHTML = head() + `
+        <div class="card quiz-score pte-report">
+          <div style="font-size:40px">${t.emoji}</div>
+          <div class="big">${b}</div>
+          <p style="color:var(--ink-soft)">${tx("nota estimada nesta rodada (escala 10-90)", "estimated score this round (10-90 scale)")}</p>
+          <div class="pte-report-items">${scores.map((f, k) => `<span class="chip pte-band ${bandClass(f)}">${k + 1}: ${band(f)}</span>`).join("")}</div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+            <button class="btn" id="pte-again">↻ ${tx("Treinar de novo", "Train again")}</button>
+            <a class="btn ghost" href="#/pte">${tx("Todas as tarefas", "All tasks")}</a>
+          </div>
+        </div>`;
+      document.getElementById("pte-again").onclick = () => renderTask($main, typeId);
+    };
+
+    const step = () => {
+      destroy();
+      if (i >= items.length) return report();
+      const headHtml = head(`${i + 1} ${tx("de", "of")} ${items.length}`);
+      $main.innerHTML = headHtml + `
+        <div class="progress-bar"><div style="width:${(i / items.length) * 100}%"></div></div>
+        <div id="pte-body"></div>`;
+      let answered = false;
+      RENDERERS[typeId](document.getElementById("pte-body"), items[i], {
+        exam: false, seed: i,
+        done: (f, fb) => {
+          if (answered) return; answered = true;
+          destroy();
+          scores.push(f);
+          feedbackScreen($main, headHtml, f, fb,
+            i + 1 < items.length ? tx("Próxima ▸", "Next ▸") : tx("Ver resultado ▸", "See result ▸"),
+            () => { i++; step(); });
+        }
+      });
+      window.scrollTo(0, 0);
+    };
+
+    // intro screen
+    $main.innerHTML = head() + `
+      <div class="card pte-intro">
+        <p class="pte-inst">${t.desc()}</p>
+        <p><span class="chip">${t.facts()}</span> <span class="chip">${items.length} ${tx("tarefas", "tasks")}</span>
+        ${t.mic ? `<span class="chip ${SR ? "" : "coral"}">${SR ? "🎙 " + tx("microfone pronto", "microphone ready") : "⌨️ " + tx("sem microfone — modo digitado", "no mic — typed mode")}</span>` : ""}</p>
+        <button class="btn" id="pte-start">▶ ${tx("Começar", "Start")}</button>
+      </div>`;
+    document.getElementById("pte-start").onclick = step;
+  }
+
+  // ---------- mock ----------
+  const MOCK_PLAN = [
+    ["read-aloud", 1], ["repeat-sentence", 2], ["describe-image", 1], ["short-question", 2],
+    ["swt", 1], ["fib-rw", 1], ["reorder", 1], ["mcq", 1],
+    ["highlight", 1], ["dictation", 2]
+  ];
+
+  function renderMock($main) {
+    const seq = [];
+    MOCK_PLAN.forEach(([typeId, count]) => {
+      const t = TASKS[typeId];
+      shuffle(bankOf(t)).slice(0, count).forEach(item => seq.push({ typeId, item }));
+    });
+    if (!seq.length) return renderHub($main);
+    const head = (extra) => `
+      <a class="back-link" href="#/pte">← ${tx("Simulador PTE", "PTE Simulator")}</a>
+      <div class="page-head">
+        <div class="page-kicker">PTE · ${tx("Simulado", "Mock test")}${extra ? " · " + extra : ""}</div>
+        <div class="page-title">⚡ ${tx("Simulado Rápido", "Quick Mock Test")}</div>
+      </div>`;
+    let i = 0; const results = [];
+
+    const report = () => {
+      destroy();
+      const bySec = {};
+      results.forEach(r => {
+        const sec = TASKS[r.typeId].section;
+        (bySec[sec] = bySec[sec] || []).push(r.f);
+      });
+      const secRows = Object.entries(SECTIONS).map(([sec, meta]) => {
+        const arr = bySec[sec] || [];
+        if (!arr.length) return "";
+        const avg = arr.reduce((a, b) => a + b, 0) / arr.length;
+        return `<div class="pte-sec-row">
+          <span>${meta.emoji} ${meta.name()}</span>
+          <div class="pte-sec-bar"><div class="${bandClass(avg)}" style="width:${((band(avg) - 10) / 80) * 100}%"></div></div>
+          <b>${band(avg)}</b>
+        </div>`;
+      }).join("");
+      const overallF = results.reduce((a, r) => a + r.f, 0) / results.length;
+      const overall = band(overallF);
+      pteStore.addMock({ date: Date.now(), overall, sections: Object.fromEntries(Object.entries(bySec).map(([s, arr]) => [s, band(arr.reduce((a, b) => a + b, 0) / arr.length)])) });
+      const msg = overall >= 79
+        ? tx("Nível de 189/190 pontos máximos de visto. Monstro. 🏆", "Top visa-points territory. Beast mode. 🏆")
+        : overall >= 65
+          ? tx("Na faixa do Proficient (65+) — a nota que a maioria dos vistos pede. 💪", "In Proficient range (65+) — what most visas ask for. 💪")
+          : overall >= 50
+            ? tx("Na faixa do Competent (50+). Treine as tarefas mais fracas abaixo e suba pro 65. 🎯", "Competent range (50+). Drill your weakest tasks below and push for 65. 🎯")
+            : tx("Ainda esquentando — treine tarefa por tarefa no modo prática e repita o simulado. 🔁", "Still warming up — drill task by task in practice mode, then retake the mock. 🔁");
+      $main.innerHTML = head() + `
+        <div class="card quiz-score pte-report">
+          <div style="font-size:40px">🎓</div>
+          <div class="big">${overall}</div>
+          <p style="color:var(--ink-soft)">${tx("nota geral estimada (escala 10-90, não oficial)", "estimated overall score (10-90 scale, unofficial)")}</p>
+          <div class="pte-secs">${secRows}</div>
+          <p style="color:var(--ink-soft);margin:14px 0 4px">${msg}</p>
+          <div class="pte-report-items">
+            ${results.map((r, k) => `<span class="chip pte-band ${bandClass(r.f)}" title="${TASKS[r.typeId].en}">${TASKS[r.typeId].emoji} ${band(r.f)}</span>`).join("")}
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+            <a class="btn" href="#/pte/mock" onclick="location.reload()">↻ ${tx("Refazer simulado", "Retake mock")}</a>
+            <a class="btn ghost" href="#/pte">${tx("Treinar tarefas", "Train tasks")}</a>
+          </div>
+        </div>`;
+    };
+
+    const step = () => {
+      destroy();
+      if (i >= seq.length) return report();
+      const { typeId, item } = seq[i];
+      const t = TASKS[typeId];
+      $main.innerHTML = head(`${i + 1} ${tx("de", "of")} ${seq.length}`) + `
+        <div class="progress-bar"><div style="width:${(i / seq.length) * 100}%"></div></div>
+        <div class="pte-exam-type">${t.emoji} ${t.name()} <span>${t.en}</span></div>
+        <div id="pte-body"></div>`;
+      let answered = false;
+      RENDERERS[typeId](document.getElementById("pte-body"), item, {
+        exam: true, seed: i,
+        done: (f) => {
+          if (answered) return; answered = true;
+          destroy();
+          results.push({ typeId, f });
+          const note = document.createElement("div");
+          note.className = "pte-saved";
+          note.textContent = "✓ " + tx("Resposta registrada", "Answer recorded");
+          $main.appendChild(note);
+          setTimeout(() => { i++; step(); }, 700);
+        }
+      });
+      window.scrollTo(0, 0);
+    };
+
+    $main.innerHTML = head() + `
+      <div class="card pte-intro">
+        <p class="pte-inst">${tx(
+          "13 tarefas seguidas, sem feedback até o final — como na prova real. Reserve uns 15 minutos, use fone de ouvido e microfone.",
+          "13 tasks back to back, no feedback until the end — like the real exam. Set aside ~15 minutes, use headphones and a microphone.")}</p>
+        <p>
+          <span class="chip">${seq.length} ${tx("tarefas", "tasks")}</span>
+          <span class="chip">~15 min</span>
+          <span class="chip ${SR ? "" : "coral"}">${SR ? "🎙 " + tx("microfone pronto", "microphone ready") : "⌨️ " + tx("sem microfone — modo digitado", "no mic — typed mode")}</span>
+        </p>
+        <button class="btn" id="pte-start">▶ ${tx("Começar o simulado", "Start the mock")}</button>
+      </div>`;
+    document.getElementById("pte-start").onclick = step;
+  }
+
+  window.RTPTE = { renderHub, renderTask, renderMock, destroy };
+})();
+
+</script>
+<script>
 // RealTalk — motion layer: reveal-on-scroll with stagger + count-up stats.
 // Called after each route render. Respects prefers-reduced-motion.
 (function () {
@@ -8151,6 +9382,7 @@ Object.assign(window.LEARN_EXTRA, {
     document.querySelector('.nav-item[data-route="home"]').innerHTML = navLabelHtml("🏠", L("home"), "Home");
     document.querySelector('.nav-item[data-route="grammar"]').innerHTML = navLabelHtml("📚", L("grammar"), "Grammar");
     document.querySelector('.nav-item[data-route="exercises"]').innerHTML = navLabelHtml("✏️", L("exercises"), "Exercises");
+    document.querySelector('.nav-item[data-route="pte"]').innerHTML = navLabelHtml("🎓", isPT() ? "Simulador PTE" : "PTE Simulator", "PTE Simulator");
     document.getElementById("study-label").textContent = L("study");
     document.getElementById("rle-label").textContent = isPT() ? "Inglês da Vida Real" : "Real Life English";
     renderMobileNav();
@@ -8167,6 +9399,7 @@ Object.assign(window.LEARN_EXTRA, {
       <a class="mnav-item" href="#/home" data-mroute="home"><span class="mn-emoji">🏠</span>${L("home")}</a>
       <a class="mnav-item" href="#/grammar" data-mroute="grammar"><span class="mn-emoji">📚</span>${L("grammar")}</a>
       <a class="mnav-item" href="#/exercises" data-mroute="exercises"><span class="mn-emoji">✏️</span>${L("exercises")}</a>
+      <a class="mnav-item" href="#/pte" data-mroute="pte"><span class="mn-emoji">🎓</span>PTE</a>
       <button class="mnav-item" id="mnav-voice"><span class="mn-emoji">${RealTalkPlayer.speech.enabled ? "🔊" : "🔇"}</span>${isPT() ? "Voz" : "Voice"}</button>`;
     mn.querySelector("#mnav-voice").onclick = () => {
       RealTalkPlayer.speech.enabled = !RealTalkPlayer.speech.enabled;
@@ -8262,7 +9495,7 @@ Object.assign(window.LEARN_EXTRA, {
       }).join("")}
 
       <div class="section-title">${L("study")}</div>
-      <div class="grid grid-2">
+      <div class="grid grid-3">
         <a class="card scenario-card" href="#/grammar">
           <span class="sc-emoji">📚</span><span class="sc-title">${L("grammar")}</span>
           <span class="sc-blurb">${L("grammarBlurb")}</span>
@@ -8270,6 +9503,12 @@ Object.assign(window.LEARN_EXTRA, {
         <a class="card scenario-card" href="#/exercises">
           <span class="sc-emoji">✏️</span><span class="sc-title">${L("exercises")}</span>
           <span class="sc-blurb">${L("exercisesBlurb")}</span>
+        </a>
+        <a class="card scenario-card" href="#/pte">
+          <span class="sc-emoji">🎓</span><span class="sc-title">${isPT() ? "Simulador PTE" : "PTE Simulator"}</span>
+          <span class="sc-blurb">${isPT()
+            ? "Treine o teste de inglês dos vistos australianos: 10 tipos de tarefa com tempo, microfone e nota estimada de 10 a 90."
+            : "Train the English test behind Australian visas: 10 task types with timers, microphone and an estimated 10-90 score."}</span>
         </a>
       </div>`;
   }
@@ -8547,6 +9786,7 @@ Object.assign(window.LEARN_EXTRA, {
   // ---------- router ----------
   function route() {
     if (activePlayer) { activePlayer.destroy(); activePlayer = null; }
+    if (window.RTPTE) RTPTE.destroy();
     const parts = (location.hash.replace(/^#\//, "") || "home").split("/");
     window.scrollTo(0, 0);
     switch (parts[0]) {
@@ -8560,6 +9800,13 @@ Object.assign(window.LEARN_EXTRA, {
         break;
       case "grammar": parts[1] ? pageLesson(parts[1]) : pageGrammar(); break;
       case "exercises": parts[1] ? pageQuiz(parts[1]) : pageExercises(); break;
+      case "pte":
+        if (window.RTPTE) {
+          if (parts[1] === "t" && parts[2]) RTPTE.renderTask($main, parts[2]);
+          else if (parts[1] === "mock") RTPTE.renderMock($main);
+          else RTPTE.renderHub($main);
+        } else pageHome();
+        break;
       case "scenario": pageScenario(parts[1], parts[2]); break;
       default: pageHome();
     }
