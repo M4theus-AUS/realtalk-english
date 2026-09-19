@@ -1237,6 +1237,16 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
   .quiz-q { font-size: 16px; }
 }
 
+/* 🔊 listen button inside grammar-lesson tables (pronunciation lesson) */
+.lesson-say {
+  border: none; cursor: pointer; font-size: 13px;
+  background: color-mix(in srgb, var(--green) 14%, transparent);
+  border-radius: 8px; padding: 2px 7px; margin-right: 6px;
+  transition: background .1s linear, transform .1s linear;
+}
+.lesson-say:hover { background: color-mix(in srgb, var(--green) 26%, transparent); }
+.lesson-say:active { transform: scale(.88); }
+
 /* ============ PTE Simulator ============ */
 .pte-mock-cta {
   display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
@@ -5145,6 +5155,133 @@ window.GRAMMAR_EXTRA = [
 
 </script>
 <script>
+// RealTalk — grammar-extra2.js: three more lessons, same rule: real Brazilian-learner traps only.
+// Lesson schema: { id, emoji, title, sub, sections: [{ h, p, rows:[[wrong, right, why]] (or [[wrong, right, why, say]] when say:true), say, callout, list }] }
+
+window.GRAMMAR_EXTRA = (window.GRAMMAR_EXTRA || []).concat([
+{
+  id: "the-article",
+  emoji: "👑",
+  title: "\"The Matheus?\" — Why English 'The' Isn't Portuguese 'O'",
+  sub: "Portuguese slaps an article on almost everything; English is way pickier",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Portuguese puts 'o' or 'a' in front of almost every noun, including people's names ('o Matheus', 'a Maria') and big general ideas ('a vida', 'a música', 'o amor'). English 'the' means something much narrower: 'this exact one, and we both already know which one.' Say a name, talk about life in general, or mention a language or a meal in the abstract, and English wants zero article at all. The flip side catches people off guard too: a handful of country names, regions, rivers, oceans and superlatives actually require 'the' every single time — skipping it there is just as wrong as adding it where it doesn't belong."
+    },
+    {
+      h: "The trap list",
+      rows: [
+        ["The Matheus is my friend.", "Matheus is my friend.", "Names never take 'the' in English — Portuguese 'o Matheus' doesn't carry over. People's names stand completely alone."],
+        ["I live in the Brazil.", "I live in Brazil.", "Most country names take zero article — Brazil, Portugal, Australia, Japan. 'The' only shows up for a handful of special names."],
+        ["I want to visit USA next year.", "I want to visit the USA next year.", "A country name that's plural, or that hides a common noun like 'states', 'kingdom' or 'republic', always keeps 'the' — the USA, the UK, the Netherlands, the Philippines, the Czech Republic."],
+        ["The life is beautiful.", "Life is beautiful.", "General, abstract ideas drop 'the' in English — Portuguese 'a vida' doesn't map onto 'the life'."],
+        ["I'm learning the English.", "I'm learning English.", "Language names stand alone. 'The English' would mean the English people, or one specific version of it — not the language itself."],
+        ["The breakfast is ready.", "Breakfast is ready.", "Meals go bare when you're speaking generally. 'The' only comes back for one specific meal you've already mentioned: 'the breakfast I made you.'"],
+        ["This is the my house.", "This is my house.", "Articles and possessives never stack in English. Pick one: 'the house' or 'my house' — never both at once."],
+        ["I love the music.", "I love music.", "A general love of music as a hobby or art form drops 'the'. It only returns for one specific song or performance: 'I love the music in this movie.'"],
+        ["This is best restaurant in town.", "This is the best restaurant in town.", "Superlatives always take 'the' — there's only one 'best', which makes it specific and unique by definition."],
+        ["Sun is very hot today.", "The sun is very hot today.", "One-of-a-kind things in the world — the sun, the moon, the sky, the internet — take 'the' because there's only one of them to talk about."]
+      ],
+      callout: "🇧🇷 The trap: Portuguese hands out 'o'/'a' to basically every noun, names and abstract ideas included, so your brain never learns to treat 'the' as special. The flagship tell is a name — 'The Matheus called me' — no native speaker's brain can process that as anything but a direct translation. Names get zero article. Always."
+    },
+    {
+      h: "The decision list",
+      list: [
+        "A person's name? Never 'the' — Matheus, not the Matheus.",
+        "A singular country, most cities, languages, meals, or a general idea (life, music, love)? No 'the'.",
+        "A plural or 'united' country name (the USA, the UK, the Netherlands, the Philippines), a region (the Middle East), or a river/ocean/mountain range (the Amazon, the Pacific, the Andes)? Always 'the'.",
+        "A superlative or an 'only one exists' noun (the best, the sun, the internet, the government)? Always 'the'.",
+        "One specific thing you and the listener already both know which one? 'The' — 'Close the door' means that exact door, right there."
+      ]
+    }
+  ]
+},
+{
+  id: "for-vs-to",
+  emoji: "🎯",
+  title: "For vs To — Splitting Portuguese 'Para' in Two",
+  sub: "Same little word in Portuguese, two completely different jobs in English",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Portuguese hands almost every 'destination' idea to one word: para. Vim aqui para estudar, isso é para você, fui à loja para comprar leite — 'para' doesn't care. English splits that job in two. TO marks direction and movement, the recipient of giving ('give to', 'send to'), and — this is the one that trips up almost everyone — the purpose right before a VERB ('I came here to study'). FOR marks the benefit or recipient of a favor ('this is for you'), a stretch of time ('for two years'), and an exchange or price — and when a verb comes right after FOR, it has to be the -ing form ('thanks for helping me'). Mix them up and 'for study' or 'thanks for help me' slips out instead."
+    },
+    {
+      h: "The mix-up list",
+      rows: [
+        ["I came here for study.", "I came here to study.", "Purpose right before a VERB always takes TO — 'to study', never 'for study'. This is the single most common 'para' mistake in Brazilian English."],
+        ["I went to the store for buy milk.", "I went to the store to buy milk.", "Same rule again: purpose before a verb is TO + base verb, not FOR + verb."],
+        ["This gift is to you.", "This gift is for you.", "The recipient or beneficiary of a favor or gift takes FOR, not TO — 'for you' means 'for your benefit'."],
+        ["Thanks for help me with this.", "Thanks for helping me with this.", "A verb placed right after FOR always takes the -ing form — 'help' can't follow 'for' in its base form. The 'to' in 'to study' is a different animal: that's an infinitive, not a preposition, so it takes the bare verb."],
+        ["I lived in London for to study English.", "I lived in London to study English.", "TO by itself already marks purpose before a verb — stacking 'for to' is a leftover of 'para' that doesn't exist in English."],
+        ["I'll give this book for my brother.", "I'll give this book to my brother.", "The recipient of give/send/show/tell takes TO — the person receiving the thing being handed over."],
+        ["I waited to two hours.", "I waited for two hours.", "A stretch of time always takes FOR, not TO — 'for two years', 'for a while', 'for a moment'."],
+        ["I paid 50 dollars to this shirt.", "I paid 50 dollars for this shirt.", "Exchange or price takes FOR — you're trading money for an object."],
+        ["She sent an email for her boss.", "She sent an email to her boss.", "Sending something toward a recipient takes TO, not FOR — the email travels TO the boss."],
+        ["Can you translate this to me?", "Can you translate this for me?", "'Translate for someone' means doing that person a favor. When you name the language, English uses INTO — 'translate this into Portuguese'."]
+      ],
+      callout: "🇧🇷 The trap: 'para' covers both jobs in Portuguese, so FOR and TO feel like interchangeable synonyms — in English they aren't remotely close. The fastest tell of a direct translation is FOR sitting in front of a bare verb where purpose is meant: 'for study', 'for buy milk', 'for learn English'. Purpose in front of a verb is always TO, no exceptions. Fix that one rule alone and you erase the most common preposition mistake in Brazilian English."
+    },
+    {
+      h: "The cheat sheet",
+      list: [
+        "TO = direction and movement, the recipient of giving (give/send/show/tell someone → TO them), and purpose right before a bare VERB (to study, to learn, to help).",
+        "FOR = the beneficiary of a favor ('this is for you'), duration ('for two years'), exchange or price ('I paid $10 for it') — and any verb you put straight after FOR has to be -ing ('thanks for helping', 'sorry for being late').",
+        "Quick test: are you saying WHY you did something, with a plain verb coming next (study, learn, help)? TO. Are you putting a verb straight after FOR? Then it has to be -ing (helping, being).",
+        "'Para' hides both jobs at once — English never does. When in doubt, ask: is this direction or purpose (TO), or benefit and exchange (FOR)?"
+      ]
+    }
+  ]
+},
+{
+  id: "br-pronunciation",
+  emoji: "👄",
+  title: "The Brazilian Accent — Why 'Gym' Comes Out as 'Geen'",
+  sub: "How Portuguese mouth habits sneak into your English pronunciation",
+  sections: [
+    {
+      h: "The core problem",
+      p: "Grammar isn't the only place Portuguese leaks into your English — your mouth does it too, automatically, without you noticing. In Portuguese a final 'm' isn't really a consonant at all; it just nasalizes the vowel in front of it and the lips never close, so English words ending in 'm' come out sounding like they end in 'n'. Most Brazilian accents soften 't' and 'd' before an 'i' sound, so English 'city' and 'did' pick up a 'tch'/'dj' that isn't there. Portuguese almost never ends a word on a bare consonant, so your mouth glues an extra vowel onto the end of words like 'internet'. And Brazilian 'l' and 'r' are made in completely different places from the English ones, while 'th' doesn't exist in Portuguese at all. None of this is a grammar mistake — it's your mouth defaulting to sounds it already knows how to make, applied to words that don't use them."
+    },
+    {
+      h: "The accent shift list",
+      say: true,
+      rows: [
+        ["geen", "gym — press your lips fully together at the end and let the sound finish there; the 'm' only exists if your lips actually close", "In Portuguese a final 'm' isn't a consonant at all — it just nasalizes the vowel in front of it, so the lips never close. English ears hear that open ending as an 'n', and 'gym' drifts into 'geen'.", "gym"],
+        ["teen", "team — same fix, close your lips completely on the 'm' instead of leaving your mouth open for 'n'", "Any English word ending in 'm' gets the same nasal swap. 'Team' sliding into 'teen' is also a real English word, so context has to save you.", "team"],
+        ["ci-tchee", "city — keep the 't' a plain, dry 't', don't let it soften into 'tch'", "In most Brazilian accents, 't' before an 'i' sound automatically becomes 'tch' (like in 'tio'). Your mouth does the same thing to English 't', so 'city' turns into 'ci-tchee'.", "city"],
+        ["stu-den-tchee", "student — stop dead on the final 't'; no vowel after it, and no 'tch'", "Two habits stack up here. Nothing in 'student' should sound like 'i' at the end — your mouth adds that vowel itself, and then the 'tch' habit from 'city' fires on the 't' in front of it.", "student"],
+        ["djid", "did — keep the 'd' hard, don't let it soften into 'dj'", "'D' before an 'i' sound slides into 'dj' in most Brazilian accents (like in 'dia'). The same slide happens to English 'did', which comes out as 'djid'.", "did"],
+        ["facebookee", "Facebook — stop right at the final 'k', don't add any vowel sound after it", "Portuguese words almost never end on a bare consonant, so your mouth glues on an extra 'ee' out of habit — 'Facebook' becomes 'Facebookee'.", "Facebook"],
+        ["internetchee", "internet — stop at the final 't', no extra vowel, and keep the 't' plain, not 'tch'", "Two habits stack here at once: the added final vowel, plus the same 't-before-i-sound' softening from 'city' — together they turn 'internet' into 'internetchee'.", "internet"],
+        ["Braziw", "Brazil — finish with your tongue up behind your top teeth, not rounded like a 'w'", "In Brazilian Portuguese an 'l' at the end of a syllable turns into a 'w' sound made by rounding the lips, with the tongue never arriving — so 'Brazil' comes out sounding like 'Braziw'.", "Brazil"],
+        ["schoow", "school — same fix, keep the tongue tip up for the 'l' instead of rounding your lips", "Any English word ending in 'l' picks up the same shift — 'school' slides toward 'schoow' when the lips round instead of the tongue lifting.", "school"],
+        ["hed", "red — curl the tongue back in the middle of your mouth without touching anything, and keep your throat completely out of it", "In most of Brazil the 'r' that starts a word ('rato', 'rua') is made back in the throat and comes out as a breathy 'h'. English 'r' is nothing like that — it's shaped by the tongue, with no friction at all. Use the Brazilian one and 'red' turns into 'hed', dangerously close to the real word 'head'.", "red"],
+        ["tink", "think — put the tongue tip between your teeth and push air through, it isn't a 't' or an 'f'", "Portuguese has no 'th' sound at all, so your mouth reaches for the closest thing it owns. For Brazilians that's almost always 't' (sometimes 's' or 'f'), and 'think' becomes 'tink'.", "think"],
+        ["dis", "this — tongue between the teeth again, but with your voice on this time, not a 'd'", "The voiced version of 'th' gets swapped for 'd', the closest sound Portuguese has, so 'this' comes out as 'dis'.", "this"],
+        ["wok", "walked — don't drop the ending, it needs a light final 't' sound", "Portuguese words rarely end in consonant clusters, so your mouth wants to swallow the '-ed' entirely — 'walked' collapses down to just 'wok'.", "walked"],
+        ["eats", "it's — keep it short and clipped, just 'its', don't stretch the vowel into a long 'ee'", "Portuguese has no short, relaxed 'i' like the one in 'it' — the only 'i' it owns is the long, tense one in 'eats'. Your mouth reaches for that one by default, which is the same swap that turns 'ship' into 'sheep' and 'live' into 'leave'.", "its"]
+      ]
+    },
+    {
+      h: "Mouth tips",
+      list: [
+        "Word ends in 'm' (gym, team, problem)? Bring your lips together and finish the sound there — in Portuguese the lips never close, which is exactly why it lands as 'n'.",
+        "'T' or 'd' right before an 'ee' or 'i' sound (city, teacher, TV, did, candy)? Keep it a hard, dry sound — resist the pull toward 'tch'/'dj'.",
+        "Word ends in a consonant (internet, Facebook, want)? Stop right there — no extra vowel glued onto the end.",
+        "Final 'l' (Brazil, school, deal)? Lift your tongue tip behind your top teeth — don't round your lips like you're saying 'w'.",
+        "Word starts with 'r' (red, right, real)? Shape it with the tongue pulled back, touching nothing, and keep your throat out of it — the breathy 'r' from 'rato' is what turns 'red' into 'hed'.",
+        "'Th' (think, this, both)? Put your tongue between your teeth and push air out — it's not an 'f', a 't', or a 'd'. Add your voice for 'this' and 'the'; leave it off for 'think'.",
+        "'-ed' at the end of a verb (walked, talked, watched)? Don't drop it — there's always a light final consonant sound sitting at the end."
+      ]
+    }
+  ]
+}
+]);
+
+</script>
+<script>
 // RealTalk — extra exercise banks. Same schema as exercises.js: { id, emoji, title, sub, questions: [{q, options, answer, explain}] }
 // answer = index into options.
 
@@ -7915,6 +8052,127 @@ window.PT_GRAMMAR = Object.assign(window.PT_GRAMMAR || {}, {
           "TELL + person + something, sem 'to' nenhum — 'She told me hello.' TELL também é dono de jokes, stories, lies, the truth, the time.",
           "SPEAK — mais formal, ou combinado com um IDIOMA: 'Do you speak Portuguese?', 'May I speak with the manager?'",
           "TALK — casual, combinado com uma PESSOA ou TÓPICO: 'Let's talk.', 'We talked about work.'"
+        ]
+      }
+    ]
+  }
+});
+
+</script>
+<script>
+// RealTalk — Portuguese overlay for grammar-extra2.js.
+// Same schema shape as pt-grammar-2.js: PT text keyed by lesson id, index-aligned with the English source.
+// whys = PT translation of row[2] (the "why") for each entry in the source section's rows, same length/order.
+
+window.PT_GRAMMAR = Object.assign(window.PT_GRAMMAR || {}, {
+  "the-article": {
+    title: "\"The Matheus?\" — Por Que o 'The' do Inglês Não é o 'O' do Português",
+    sub: "O português bota artigo em quase tudo; o inglês é bem mais seletivo",
+    sections: [
+      {
+        h: "O problema central",
+        p: "O português coloca 'o' ou 'a' na frente de quase todo substantivo, incluindo nomes de pessoa ('o Matheus', 'a Maria') e ideias gerais bem grandes ('a vida', 'a música', 'o amor'). O 'the' do inglês significa uma coisa bem mais específica: 'esse exato aqui, e nós dois já sabemos qual é'. Fale um nome, fale sobre a vida em geral, mencione um idioma ou uma refeição de forma abstrata, e o inglês quer zero artigo. O outro lado da moeda também pega as pessoas de surpresa: um punhado de nomes de país, regiões, rios, oceanos e superlativos realmente exige 'the' toda santa vez — pular ele ali é um erro tão grande quanto colocar ele onde não devia."
+      },
+      {
+        h: "A lista de armadilhas",
+        whys: [
+          "Nomes nunca levam 'the' em inglês — o 'o Matheus' do português não passa pro inglês. Nomes de pessoa ficam completamente sozinhos.",
+          "A maioria dos nomes de país não leva artigo nenhum — Brazil, Portugal, Australia, Japan. O 'the' só aparece pra um punhado de nomes especiais.",
+          "Um nome de país que é plural, ou que esconde um substantivo comum tipo 'states', 'kingdom' ou 'republic', sempre mantém o 'the' — the USA, the UK, the Netherlands, the Philippines, the Czech Republic.",
+          "Ideias gerais e abstratas não levam 'the' em inglês — o 'a vida' do português não vira 'the life'.",
+          "Nomes de idioma ficam sozinhos. 'The English' significaria o povo inglês, ou uma versão específica dele — não o idioma em si.",
+          "Refeições ficam sem artigo quando você fala de forma geral. O 'the' só volta pra uma refeição específica que você já mencionou: 'the breakfast I made you.'",
+          "Artigo e possessivo nunca se empilham em inglês. Escolha um: 'the house' ou 'my house' — nunca os dois juntos.",
+          "Um amor geral por música, como hobby ou forma de arte, não leva 'the'. Ele só volta pra uma música ou apresentação específica: 'I love the music in this movie.'",
+          "Superlativos sempre levam 'the' — só existe um 'melhor', o que já torna a coisa específica e única por definição.",
+          "Coisas únicas no mundo — the sun, the moon, the sky, the internet — levam 'the' porque só existe uma delas pra se falar."
+        ],
+        callout: "🇧🇷 A armadilha: o português distribui 'o'/'a' pra basicamente todo substantivo, nomes e ideias abstratas incluídos, então seu cérebro nunca aprende a tratar o 'the' como algo especial. O maior entregador é um nome — 'The Matheus called me' — nenhum cérebro nativo consegue processar isso como outra coisa além de uma tradução direta. Nome não leva artigo. Nunca."
+      },
+      {
+        h: "A lista de decisão",
+        list: [
+          "Nome de pessoa? Nunca 'the' — Matheus, não the Matheus.",
+          "Um país no singular, a maioria das cidades, idiomas, refeições, ou uma ideia geral (life, music, love)? Sem 'the'.",
+          "Um nome de país plural ou 'unido' (the USA, the UK, the Netherlands, the Philippines), uma região (the Middle East), ou um rio/oceano/cadeia de montanhas (the Amazon, the Pacific, the Andes)? Sempre 'the'.",
+          "Um superlativo ou um substantivo do tipo 'só existe um' (the best, the sun, the internet, the government)? Sempre 'the'.",
+          "Uma coisa específica que você e quem tá ouvindo já sabem qual é? 'The' — 'Close the door' significa aquela porta exata, ali."
+        ]
+      }
+    ]
+  },
+  "for-vs-to": {
+    title: "For vs To — o 'Para' do Português se Divide em Dois",
+    sub: "A mesma palavrinha em português, duas funções bem diferentes em inglês",
+    sections: [
+      {
+        h: "O problema central",
+        p: "O português entrega quase toda ideia de 'destino' pra uma palavra só: para. Vim aqui para estudar, isso é para você, fui à loja para comprar leite — pro 'para', tanto faz. O inglês divide essa função em duas. TO marca direção e movimento, o destinatário de quem dá algo ('give to', 'send to'), e — essa é a que derruba quase todo mundo — o propósito bem na frente de um VERBO ('I came here to study'). FOR marca o benefício ou destinatário de um favor ('this is for you'), um período de tempo ('for two years'), e uma troca ou preço — e, quando vem um verbo logo depois do FOR, ele tem que estar na forma -ing ('thanks for helping me'). Misture os dois e sai 'for study' ou 'thanks for help me' em vez do certo."
+      },
+      {
+        h: "A lista das trocas",
+        whys: [
+          "Propósito bem na frente de um VERBO sempre leva TO — 'to study', nunca 'for study'. Esse é o erro de 'para' mais comum no inglês brasileiro.",
+          "Mesma regra de novo: propósito antes de um verbo é TO + verbo na base, não FOR + verbo.",
+          "O destinatário ou beneficiário de um favor ou presente leva FOR, não TO — 'for you' significa 'em benefício seu'.",
+          "Um verbo colocado logo depois do FOR sempre vai na forma -ing — 'help' não pode vir depois de 'for' na forma base. Já o 'to' de 'to study' é outra coisa: ali ele é infinitivo, não preposição, então pede o verbo na base.",
+          "TO sozinho já marca propósito antes de um verbo — empilhar 'for to' é um resquício do 'para' que não existe em inglês.",
+          "O destinatário de give/send/show/tell leva TO — a pessoa que recebe a coisa sendo entregue.",
+          "Um período de tempo sempre leva FOR, não TO — 'for two years', 'for a while', 'for a moment'.",
+          "Troca ou preço leva FOR — você está trocando dinheiro por um objeto.",
+          "Enviar algo em direção a um destinatário leva TO, não FOR — o email vai na direção do chefe dela, por isso TO.",
+          "'Translate for someone' significa fazer um favor pra essa pessoa. Quando você cita o idioma, o inglês usa INTO — 'translate this into Portuguese'."
+        ],
+        callout: "🇧🇷 A armadilha: 'para' cobre as duas funções em português, então FOR e TO parecem sinônimos intercambiáveis — em inglês eles não têm nada a ver um com o outro. O sinal mais rápido de tradução direta é o FOR na frente de um verbo na base quando o sentido é propósito: 'for study', 'for buy milk', 'for learn English'. Propósito na frente de um verbo é sempre TO, sem exceção. Conserte só essa regra e você já apaga o erro de preposição mais comum do brasileiro."
+      },
+      {
+        h: "A cola",
+        list: [
+          "TO = direção e movimento, o destinatário de quem dá algo (give/send/show/tell someone → TO them), e propósito bem na frente de um VERBO na base (to study, to learn, to help).",
+          "FOR = o beneficiário de um favor ('this is for you'), duração ('for two years'), troca ou preço ('I paid $10 for it') — e qualquer verbo que você colocar logo depois do FOR tem que estar em -ing ('thanks for helping', 'sorry for being late').",
+          "Teste rápido: você tá dizendo POR QUE fez algo, e vem um verbo na base logo em seguida (study, learn, help)? TO. Você vai colocar um verbo logo depois do FOR? Então ele tem que estar em -ing (helping, being).",
+          "'Para' esconde as duas funções ao mesmo tempo — o inglês nunca faz isso. Na dúvida, pergunte: isso é direção ou propósito (TO), ou benefício e troca (FOR)?"
+        ]
+      }
+    ]
+  },
+  "br-pronunciation": {
+    title: "O Sotaque Brasileiro — Por Que 'Gym' Sai Como 'Geen'",
+    sub: "Como os hábitos da boca do português se infiltram na sua pronúncia em inglês",
+    sections: [
+      {
+        h: "O problema central",
+        p: "Gramática não é o único lugar onde o português vaza pro seu inglês — sua boca também faz isso, automaticamente, sem você perceber. Em português, o 'm' no final nem é uma consoante de verdade: ele só nasaliza a vogal que vem antes, e os lábios nunca fecham — por isso palavras em inglês terminadas em 'm' saem soando como se terminassem em 'n'. A maioria dos sotaques brasileiros amolece o 't' e o 'd' antes de um som de 'i', então 'city' e 'did' em inglês ganham um 'tch'/'dj' que não deveria estar ali. O português quase nunca termina uma palavra numa consoante pura, então sua boca gruda uma vogal extra no final de palavras como 'internet'. E o 'l' e o 'r' brasileiros são feitos em lugares completamente diferentes dos do inglês, enquanto o 'th' simplesmente não existe em português. Nada disso é erro de gramática — é sua boca usando por padrão os sons que ela já sabe fazer, aplicados em palavras que não usam esses sons."
+      },
+      {
+        h: "A lista de mudanças de sotaque",
+        whys: [
+          "Em português, o 'm' no final não é consoante — ele só nasaliza a vogal que vem antes, e seus lábios nunca chegam a fechar. Ouvido inglês interpreta esse final aberto como 'n', e 'gym' escorrega pra 'geen'.",
+          "Qualquer palavra em inglês terminada em 'm' sofre a mesma troca nasal. 'Team' escorregar pra 'teen' também é uma palavra real em inglês, então o contexto tem que te salvar.",
+          "Na maioria dos sotaques brasileiros, o 't' antes de um som de 'i' vira 'tch' automaticamente (tipo em 'tio'). Sua boca faz a mesma coisa com o 't' do inglês, então 'city' vira 'ci-tchee'.",
+          "Aqui dois hábitos se empilham. Nada em 'student' deveria soar como 'i' no final — é sua própria boca que adiciona essa vogal, e aí o hábito do 'tch' de 'city' dispara no 't' que está bem na frente dela.",
+          "O 'd' antes de um som de 'i' escorrega pra 'dj' na maioria dos sotaques brasileiros (tipo em 'dia'). A mesma escorregada acontece com o 'did' do inglês, que sai como 'djid'.",
+          "Palavras em português quase nunca terminam numa consoante pura, então sua boca gruda um 'ee' extra por hábito — 'Facebook' vira 'Facebookee'.",
+          "Dois hábitos se empilham aqui: a vogal extra no final, mais o mesmo amolecimento de 't antes de i' de 'city' — juntos, eles transformam 'internet' em 'internetchee'.",
+          "No português brasileiro, o 'l' no final de sílaba vira um som de 'w' feito arredondando os lábios, com a língua nunca chegando lá — então 'Brazil' sai soando como 'Braziw'.",
+          "Qualquer palavra em inglês terminada em 'l' sofre a mesma mudança — 'school' escorrega pra 'schoow' quando os lábios arredondam em vez da língua subir.",
+          "Na maior parte do Brasil, o 'r' que começa palavra ('rato', 'rua') é feito lá atrás, na garganta, e sai como um 'h' soprado. O 'r' do inglês não tem nada a ver com isso — ele é moldado pela língua, sem nenhuma fricção. Use o brasileiro e 'red' vira 'hed', perigosamente perto da palavra real 'head'.",
+          "O português não tem o som de 'th' de jeito nenhum, então sua boca busca o som mais parecido que ela conhece. Pro brasileiro, esse som é quase sempre o 't' (às vezes 's' ou 'f'), e 'think' vira 'tink'.",
+          "A versão sonora do 'th' é trocada por 'd', o som mais parecido que o português tem, então 'this' sai como 'dis'.",
+          "Palavras em português raramente terminam em encontro consonantal, então sua boca quer engolir o '-ed' inteiro — 'walked' colapsa pra só 'wok'.",
+          "O português não tem um 'i' curto e relaxado como o de 'it' — o único 'i' que ele tem é o longo e tenso de 'eats'. Sua boca puxa pra esse por padrão, que é a mesma troca que transforma 'ship' em 'sheep' e 'live' em 'leave'."
+        ]
+      },
+      {
+        h: "Dicas de boca",
+        list: [
+          "Palavra termina em 'm' (gym, team, problem)? Junte os lábios e deixe o som terminar ali — em português os lábios nunca fecham, e é exatamente por isso que sai 'n'.",
+          "'T' ou 'd' logo antes de um som de 'i' ou 'ee' (city, teacher, TV, did, candy)? Mantenha um som seco e duro — resista à vontade de puxar pro 'tch'/'dj'.",
+          "Palavra termina em consoante (internet, Facebook, want)? Pare ali mesmo — nenhuma vogal extra grudada no final.",
+          "'L' final (Brazil, school, deal)? Levante a ponta da língua atrás dos dentes de cima — não arredonde os lábios como se estivesse dizendo 'w'.",
+          "Palavra começa com 'r' (red, right, real)? Molde com a língua puxada pra trás, sem encostar em nada, e deixe a garganta fora disso — o 'r' soprado de 'rato' é justamente o que transforma 'red' em 'hed'.",
+          "'Th' (think, this, both)? Coloque a ponta da língua entre os dentes e solte o ar — não é um 'f', nem um 't', nem um 'd'. Use a voz em 'this' e 'the'; deixe sem voz em 'think'.",
+          "'-ed' no final de um verbo (walked, talked, watched)? Não solte ele — sempre tem um som leve de consoante sentado ali no final."
         ]
       }
     ]
@@ -11751,7 +12009,7 @@ swt: [
                 : `<th>${L("dontSay")}</th><th>${L("say")}</th><th>${L("why")}</th>`}</tr>
               ${s.rows.map((r, ri) => id === "local-slang"
                 ? `<tr><td class="right">${r[0]}</td><td>${r[1]}</td><td style="color:var(--ink-faint)">${r[2] || ""}</td></tr>`
-                : `<tr><td class="wrong">${r[0]}</td><td class="right">${r[1]}</td><td>${(o.whys && o.whys[ri]) || r[2]}</td></tr>`).join("")}
+                : `<tr><td class="wrong">${r[0]}</td><td class="right">${s.say && r[3] ? `<button class="lesson-say" data-say="${String(r[3]).replace(/"/g, "&quot;")}" title="${isPT() ? "Ouvir" : "Listen"}">🔊</button> ` : ""}${r[1]}</td><td>${(o.whys && o.whys[ri]) || r[2]}</td></tr>`).join("")}
             </table>` : ""}
           ${s.callout ? `<div class="callout br">${o.callout || s.callout}</div>` : ""}
           ${s.list ? `<ul style="padding-left:22px;color:var(--ink-soft)">${(o.list || s.list).map(i => `<li style="margin:5px 0">${i}</li>`).join("")}</ul>` : ""}
@@ -11760,6 +12018,9 @@ swt: [
           <a class="btn" href="#/exercises">${L("practiceCta")}</a>
         </div>
       </div>`;
+    $main.querySelectorAll(".lesson-say").forEach(b => {
+      b.onclick = () => RealTalkPlayer.speech.speak(b.dataset.say, { isYou: false });
+    });
   }
 
   function pageExercises() {
