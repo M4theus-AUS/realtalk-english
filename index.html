@@ -1396,11 +1396,66 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
   box-shadow: 0 8px 20px color-mix(in srgb, var(--green) 40%, transparent);
 }
 
+/* ============ Progress charts (PTE + IELTS) ============ */
+.rt-progress h3 { margin-bottom: 8px; }
+.rt-prog-stats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.rt-up { color: var(--green-deep); }
+.rt-down { color: var(--cta); }
+.rt-prog-charts { display: flex; flex-wrap: wrap; gap: 18px; }
+.rt-prog-charts > div { flex: 1 1 240px; max-width: 320px; }
+.rt-spark { width: 100%; height: 70px; display: block; }
+.rt-spark-val { font: 700 13px "Baloo 2", sans-serif; fill: var(--green-deep); }
+.rt-spark-cap { font-size: 12px; font-weight: 700; color: var(--ink-faint); margin-bottom: 2px; }
+
+/* ============ IELTS Simulator ============ */
+.ielts-form { margin: 10px 0; }
+.ielts-form-row { display: grid; grid-template-columns: minmax(130px, 40%) 1fr; gap: 10px; align-items: center; margin: 7px 0; font-weight: 600; font-size: 14.5px; }
+.ielts-gap { margin-top: 0; padding: 7px 10px; font-size: 15px; }
+.ielts-gap.inline { display: inline-block; width: 150px; padding: 3px 8px; margin: 0 3px; }
+.ielts-gap.ok { border-color: var(--green); background: color-mix(in srgb, var(--green) 12%, var(--panel)); }
+.ielts-gap.miss { border-color: var(--cta); background: color-mix(in srgb, var(--cta) 10%, var(--panel)); }
+.ielts-timer { margin: 8px 0; }
+.ielts-sc-row { margin: 10px 0; font-size: 15px; line-height: 1.8; }
+.tfng-row {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between;
+  padding: 9px 10px; margin: 6px 0; border-radius: 12px;
+  background: color-mix(in srgb, var(--green) 5%, var(--panel));
+  border: 1.5px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.tfng-row.ok { border-color: var(--green); }
+.tfng-row.miss { border-color: var(--cta); }
+.tfng-s { flex: 1 1 280px; font-size: 14.5px; }
+.tfng-btns { display: flex; gap: 5px; }
+.tfng-btns button {
+  border: 1.5px solid color-mix(in srgb, var(--ink) 18%, transparent); cursor: pointer;
+  background: var(--panel); border-radius: 999px; padding: 4px 10px;
+  font: 700 11.5px "Baloo 2", sans-serif; color: var(--ink-soft);
+}
+.tfng-btns button.sel { background: var(--green); border-color: var(--green); color: #fff; }
+.tfng-btns button.answer { box-shadow: 0 0 0 2px var(--green); }
+.tfng-btns button:disabled { cursor: default; opacity: .85; }
+.ielts-para { margin: 12px 0; }
+.ielts-para-head { display: flex; gap: 10px; align-items: center; margin-bottom: 4px; font-size: 16px; }
+.ielts-para-text { font-size: 14.5px; line-height: 1.6; color: var(--ink-soft); }
+.ielts-points { padding-left: 22px; margin: 8px 0; color: var(--ink-soft); }
+.ielts-points li { margin: 4px 0; }
+.ielts-cue {
+  border: 2px solid color-mix(in srgb, var(--green) 35%, transparent);
+  background: color-mix(in srgb, var(--green) 7%, var(--panel));
+  border-radius: 14px; padding: 14px 16px; margin: 10px 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.ielts-cue b { font-size: 17px; }
+.ielts-cue span { font-size: 13px; color: var(--ink-faint); font-weight: 700; }
+.ielts-cue ul { padding-left: 20px; margin: 0; color: var(--ink-soft); }
+
 @media (max-width: 900px) {
-  .mnav-item { padding: 6px 10px; }
+  .mnav-item { padding: 6px 8px; font-size: 10px; }
   .pte-passage { font-size: 16px; padding: 13px 14px; }
   .pte-sec-row { grid-template-columns: 92px 1fr 40px; }
   .pte-mock-cta { flex-direction: column; align-items: flex-start; }
+  .ielts-form-row { grid-template-columns: 1fr; gap: 3px; }
+  .tfng-row { flex-direction: column; align-items: flex-start; }
 }
 
 </style>
@@ -1422,6 +1477,7 @@ body.building .scenario-card:hover { outline: 2px dashed rgba(244, 88, 122, .5);
         <a class="nav-item" href="#/grammar" data-route="grammar"><span class="nav-emoji">📚</span> Grammar</a>
         <a class="nav-item" href="#/exercises" data-route="exercises"><span class="nav-emoji">✏️</span> Exercises</a>
         <a class="nav-item" href="#/pte" data-route="pte"><span class="nav-emoji">🎓</span> PTE</a>
+        <a class="nav-item" href="#/ielts" data-route="ielts"><span class="nav-emoji">📘</span> IELTS</a>
 
         <div class="nav-label" id="rle-label">Real Life English</div>
         <div id="scenario-nav"></div>
@@ -8795,6 +8851,641 @@ swt: [
 
 </script>
 <script>
+// RealTalk — IELTS General Training practice bank 1 (listening + reading).
+// All content is in English (Australian-flavoured, everyday contexts).
+// Schema:
+//   formCompletion:     { intro, script, form: [{ label, answers: [lowercase; answers[0] said verbatim in script, extras = accepted equivalents] }] }
+//                       form gaps follow the order the answers are heard in the script (as in the real test).
+//   mcqListening:       { script, q, options: [4], answer: index }
+//   tfng:               { passage, statements: [{ s, a: "T" | "F" | "NG" }] }
+//   headings:           { paragraphs: [4], headings: [6], answers: [heading index per paragraph] }
+//   sentenceCompletion: { passage, sentences: [{ text with ___, answers: [lowercase, max 2 words; answers[0] verbatim in passage,
+//                         extras = figures-vs-words or US spelling, which the real test also accepts] }] }
+
+window.IELTS_BANK = Object.assign(window.IELTS_BANK || {}, {
+
+formCompletion: [
+  {
+    intro: "A caller leaves a voicemail message for a gym in Brisbane.",
+    script: "Hello, this message is for the membership team at Bayside Fitness. My name is Patricia Nowak, that's N, O, W, A, K, and I'm calling about joining your gym. I saw your website this morning, and I'm interested in the off-peak membership. The standard membership costs $39 a fortnight, but I only train before nine in the morning, so the off-peak option suits me better. I think it's $29 a fortnight, so please confirm that when you ring me back. I'd like to start on Monday rather than Saturday, because I'm away this weekend, and I'd also like to book a free induction session before then. You can reach me on my mobile, which is 0431 872 560. I'm at work until five, so please call me after that. Thanks very much, and I look forward to hearing from you.",
+    form: [
+      { label: "Surname", answers: ["nowak"] },
+      { label: "Type of membership", answers: ["off-peak", "off-peak membership"] },
+      { label: "Cost per fortnight ($)", answers: ["29", "$29"] },
+      { label: "Day to start", answers: ["monday"] },
+      { label: "Mobile number", answers: ["0431 872 560", "0431872560"] }
+    ]
+  },
+  {
+    intro: "A real estate agent leaves a message for someone who wants to rent a unit.",
+    script: "Hi Daniel, it's Karen from Harbour Realty, returning your call about the unit for rent. My surname is Whitfield, that's W, H, I, T, F, I, E, L, D, in case you need to look me up. The unit is at 14 Elm Street, not Elm Road, which is a common mix-up, and it has two bedrooms and a small balcony. The advertised rent was $450 a week, but the owner has just reduced it to $420, with a bond of four weeks' rent. I could show you the unit on Wednesday, but I know you work late, so I've booked the inspection for Thursday at 4:15 instead. Please bring photo ID and your last three payslips. If that time doesn't suit you, call the office on weekdays between nine and five. Otherwise, I'll meet you outside the front entrance on Thursday. Thanks, Daniel, and have a great afternoon.",
+    form: [
+      { label: "Agent's surname", answers: ["whitfield"] },
+      { label: "Address of unit", answers: ["14 elm street", "14 elm st"] },
+      { label: "Rent per week ($)", answers: ["420", "$420"] },
+      { label: "Day of inspection", answers: ["thursday"] },
+      { label: "Time of inspection (pm)", answers: ["4:15", "4:15 pm", "4:15pm"] }
+    ]
+  },
+  {
+    intro: "A recorded message explains how to join an evening course at a community college.",
+    script: "Welcome to the information line for Northside Community College. This recording explains how to enrol in our evening photography course. The course is called Digital Photography for Beginners, and it runs for eight weeks. Classes are held every Tuesday evening, though a Thursday class is available if the first one fills up. The full fee is $180, but pensioners and students pay only $120. Your teacher will be Mr Okafor, that's O, K, A, F, O, R, who has worked as a newspaper photographer for twenty years. Classes take place in room 204, on the second floor of the main building. You'll need to bring your own camera, although a phone camera is fine for the first lesson. To enrol, visit our website or go to the front desk before the first class on the fourteenth of May. We hope to see you soon.",
+    form: [
+      { label: "Name of course", answers: ["digital photography for beginners", "digital photography"] },
+      { label: "Class day", answers: ["tuesday"] },
+      { label: "Full fee ($)", answers: ["180", "$180"] },
+      { label: "Teacher's surname", answers: ["okafor"] },
+      { label: "Room number", answers: ["204"] }
+    ]
+  },
+  {
+    intro: "A tour company employee leaves a voicemail confirming a day trip from Melbourne.",
+    script: "Good afternoon, this is Tom from Coastline Day Tours, confirming your booking for the Great Ocean Road trip. I have the booking under the name Alvarez, that's A, L, V, A, R, E, Z. The tour leaves on Saturday the 21st, and the bus departs at 7:45, so please arrive ten minutes early. The pick-up point is Southern Cross Station, not Flinders Street Station, which is where some of our other tours begin. You've booked for 4 adults, and the price is $85 each, so the total comes to $340. That includes lunch, but not the optional wildlife park, which costs another $15 per person. If you need to change your booking, please call us at least 48 hours before the tour. Otherwise, you'll lose your deposit. We're looking forward to showing you the coastline.",
+    form: [
+      { label: "Surname", answers: ["alvarez"] },
+      { label: "Date of tour (Saturday)", answers: ["21st", "21", "the 21st", "saturday 21st", "saturday the 21st"] },
+      { label: "Pick-up point", answers: ["southern cross station", "southern cross"] },
+      { label: "Number of adults", answers: ["4", "four"] },
+      { label: "Total cost ($)", answers: ["340", "$340"] }
+    ]
+  },
+  {
+    intro: "A passenger phones the lost property office after leaving a bag on a tram.",
+    script: "Hello, I'd like to report a lost item. My name is Isabel Fernandes, that's F, E, R, N, A, N, D, E, S. Yesterday afternoon, I left my laptop bag on a tram, at about half past five, I think. It was the number 96 tram heading towards St Kilda, and I got off at the Fitzroy Street stop. The bag is dark green, not black, although it looks quite dark under street lights, and it has a silver zip. Inside, there's a laptop, a blue folder with university notes, and a water bottle. I'd be really grateful if someone could check with the driver. You can contact me on 0422 618 037. I can also come into your lost property office on Collins Street, any day after twelve, if you find it. Thank you very much for your help.",
+    form: [
+      { label: "Surname", answers: ["fernandes"] },
+      { label: "Item lost", answers: ["laptop bag"] },
+      { label: "Tram route number", answers: ["96"] },
+      { label: "Colour of item", answers: ["dark green"] },
+      { label: "Contact phone number", answers: ["0422 618 037", "0422618037"] }
+    ]
+  }
+],
+
+mcqListening: [
+  {
+    script: "Attention library members. From next Monday, the Riverside Library will change its weekday hours. We'll now open at 9 a.m. instead of 10, but we'll close at 6 p.m. rather than 8 p.m., because of staff shortages. The weekend hours stay the same, and the children's section will still open on Saturday mornings. If you need to use a computer after six on weekdays, you can still do so at the Central Library, which stays open until nine. Thank you for your understanding.",
+    q: "What is the main change to the library's weekday hours?",
+    options: ["It will open an hour later.", "It will close earlier in the evening.", "It will close on Saturday mornings.", "It will stay open until nine."],
+    answer: 1
+  },
+  {
+    script: "Hi everyone, it's Maria from the community garden group. A reminder about this month's meeting. Normally we meet at the clubhouse, and last month we met in my backyard, but the clubhouse roof is being repaired. Instead, we'll meet at the Henderson Street primary school hall, only five minutes' walk from the garden. The meeting starts at seven on Wednesday evening. Please bring ideas for the spring planting, and a plate of food if you can. We'll also be voting on the new tool shed.",
+    q: "Where will the meeting be held this month?",
+    options: ["At the usual clubhouse", "At Maria's home", "At a local school", "In the garden shed"],
+    answer: 2
+  },
+  {
+    script: "Passengers travelling on the number 11 tram, please note that services between Victoria Street and the city will not run this weekend because of track maintenance. Replacement buses will leave from the stop outside the supermarket, not from the tram stop itself. The buses are expected every ten minutes and will add about fifteen minutes to your journey. Passengers with mobility needs should speak to a staff member at the stop, who can arrange a taxi. Normal tram services will resume on Monday morning.",
+    q: "What should passengers with mobility needs do?",
+    options: ["Take the number 11 tram.", "Wait for a replacement bus.", "Travel on Monday morning.", "Ask a staff member to arrange a taxi."],
+    answer: 3
+  },
+  {
+    script: "Hi team, a quick update about the quarterly planning meeting. It was originally scheduled for Tuesday, but Sandra from head office can't make it that day, so we've moved it to Thursday at ten o'clock. It'll be in the large meeting room on level three, not the boardroom, because we're expecting around thirty people. Please read the attached report beforehand. Lunch will be provided afterwards, and the meeting should finish by noon, though it could run a little over if the discussion is lively.",
+    q: "Why was the date of the meeting changed?",
+    options: ["A colleague could not attend on Tuesday.", "The boardroom was not available.", "More people were coming than expected.", "The report was not finished."],
+    answer: 0
+  },
+  {
+    script: "Welcome to orientation week. Before you head to your first class, there are three things to do. First, collect your student card from the Student Services desk in the main library, not from the admissions office as some of you have been told. You'll need your passport or driver's licence and the email confirming your enrolment. Second, activate your university email account. Finally, join one of our campus tours, which leave every hour from the front steps, starting at ten.",
+    q: "Where can new students collect their student card?",
+    options: ["At the admissions office", "On the front steps", "At the main library desk", "At their first class"],
+    answer: 2
+  },
+  {
+    script: "Thanks for calling Sunshine Getaways. The package you've asked about is a five-night stay on the Gold Coast, and the price includes return flights from Adelaide and breakfast each morning. It doesn't include airport transfers, which cost an extra forty dollars per person, or dinner at the hotel restaurant. If you'd like to add a theme park ticket, we can arrange a discount of ten percent. The offer ends this Friday, so I'd suggest booking soon.",
+    q: "What is included in the package price?",
+    options: ["Dinner at the hotel", "Airport transfers", "A theme park ticket", "Flights from Adelaide"],
+    answer: 3
+  },
+  {
+    script: "A reminder from Kingsford Council about the new recycling rules. From the first of July, glass bottles and jars must go in the new purple-lid bin, rather than the yellow one. The yellow bin is now only for paper, cardboard, and plastic containers, and the red-lid bin is still for general rubbish. Soft plastics, such as shopping bags, still can't be recycled at home, but you can drop them at any supermarket. Your purple bin will be delivered next week, and collection day stays the same: every second Friday.",
+    q: "According to the speaker, where should glass bottles go from 1 July?",
+    options: ["In the yellow bin", "In the purple-lid bin", "At the supermarket", "In the red-lid bin"],
+    answer: 1
+  },
+  {
+    script: "You've reached Greenfield Medical Centre. If you're calling to make an appointment, please stay on the line. For your first visit, arrive fifteen minutes early to fill in a patient form, and bring your Medicare card and any referral letters from other doctors. You don't need your passport, but if you're an international student, we'll need your health insurance card instead of a Medicare card. Test results are only given in person, so please don't call reception for them. Our surgery is open from eight until five on weekdays.",
+    q: "What do international students need to bring to their first visit?",
+    options: ["Their health insurance card", "Their test results", "Their passport", "A Medicare card"],
+    answer: 0
+  }
+],
+
+tfng: [
+  {
+    passage: "Harbourside Community Pool first opened in 1978 and has been a favourite of local families ever since. After a renovation costing 4.2 million dollars, it will reopen on 3 March. The biggest change is a new heating system, which will allow the pool to stay open throughout the year. There is also a larger children's area with shallow water and a small slide. The old kiosk has been replaced by a café run by a local family, selling coffee, sandwiches, and fruit. Opening hours will be 6 a.m. to 9 p.m. on weekdays and 8 a.m. to 6 p.m. at weekends. Entry costs 6 dollars for adults and 3 dollars for children, while seniors with a concession card swim for free before 9 a.m. Two lanes on the left side of the pool are reserved for lap swimmers between 6 and 8 a.m. Swimming lessons for all ages will be offered, and enrolments open on 15 February at the front desk. Because car parking is limited, the council encourages visitors to use public transport, and three bus routes now stop outside the main entrance.",
+    statements: [
+      { s: "The pool first opened in the 1970s.", a: "T" },
+      { s: "The renovated pool will have a diving board.", a: "NG" },
+      { s: "The café is managed by the council.", a: "F" },
+      { s: "Seniors with a concession card can swim for free at any time of day.", a: "F" },
+      { s: "Some lanes are set aside for lap swimmers in the early morning.", a: "T" },
+      { s: "Visitors can hire towels at the pool.", a: "NG" }
+    ]
+  },
+  {
+    passage: "From 1 April, Southern Cross Insurance will introduce a flexible working policy for full-time employees who have completed six months of service. Under the new arrangements, staff may work from home for up to two days each week, provided their manager agrees and their role does not require face-to-face contact with customers. Everyone must still attend the office on Tuesdays, when all team meetings take place. Employees who work from home will receive an annual allowance of 300 dollars to help cover internet costs, and the company will continue to supply equipment such as laptops. Staff who wish to take part must complete an online application, which will be reviewed within ten working days. The company says the policy follows a survey last year in which 68 per cent of employees said they wanted more flexibility. Managers will receive training in how to lead teams that work in different locations. The policy will be reviewed after twelve months. Part-time staff are not eligible at this stage, although the human resources team is considering extending the policy to them later in the year.",
+    statements: [
+      { s: "Employees must have worked for the company for six months before they can apply.", a: "T" },
+      { s: "Employees can choose to work from home on any day of the week.", a: "F" },
+      { s: "Team meetings are always held on a Tuesday.", a: "T" },
+      { s: "The company will keep providing equipment such as laptops to staff who work from home.", a: "T" },
+      { s: "Most employees who answered the survey said they were unhappy with the current office.", a: "NG" },
+      { s: "Part-time staff are already eligible to apply.", a: "F" }
+    ]
+  },
+  {
+    passage: "The new Coast Card, which replaces paper tickets on the region's trains, buses, and ferries, will be available from 1 September. Customers can buy the card at train stations, newsagents, and selected supermarkets for a one-off fee of 6 dollars, then add money online or at ticket machines. The fee is waived for students and seniors. Unlike paper tickets, the card gives passengers a discount of 20 per cent on off-peak journeys, which are trips made between 9 a.m. and 3 p.m. or after 7 p.m. Passengers must touch the card on a reader at the start and end of every trip, otherwise the maximum fare will be charged. Fares are capped at 17 dollars per day, and after eight journeys in a week, any further trips are free. Paper tickets will continue to be sold until the end of the year, but the transport authority has warned that they will cost about 10 per cent more than before. Lost cards can be replaced free of charge if they have been registered online. Children under five travel free and do not need a card.",
+    statements: [
+      { s: "The Coast Card can be bought at newsagents.", a: "T" },
+      { s: "Every customer has to pay a 6 dollar fee for the card.", a: "F" },
+      { s: "The transport authority plans to install more ticket machines.", a: "NG" },
+      { s: "The card offers a discount on off-peak journeys.", a: "T" },
+      { s: "Paper tickets will stop being sold on 1 September.", a: "F" },
+      { s: "Children under five must pay for a Coast Card.", a: "F" }
+    ]
+  },
+  {
+    passage: "The Eastside Farmers' Market began in 2009 with just eleven stalls in a church car park. Today, it attracts more than 8,000 visitors every Saturday morning and has become one of the city's most popular weekend destinations. The market is run entirely by volunteers, who set up before dawn and are responsible for choosing the stallholders. Priority is given to growers and producers who live within 150 kilometres, so visitors find seasonal fruit and vegetables, eggs, honey, and fresh bread, but no imported goods. Stallholders pay a small fee based on the size of their stall, and the money supports a school gardening program. The market has also introduced a recycling scheme: plastic bags are banned, and shoppers who bring their own bags and containers receive a small discount. Although most visitors arrive by car, organisers have installed bicycle racks near the entrance and hope that more people will cycle in future. A cooking demonstration by a local chef takes place at ten o'clock each week, and it is free to watch. The market runs from 7 a.m. until 1 p.m., but the best produce often sells out before ten.",
+    statements: [
+      { s: "The market started in a church car park.", a: "T" },
+      { s: "Volunteers decide which stallholders may take part.", a: "T" },
+      { s: "No imported products are sold at the market.", a: "T" },
+      { s: "The organisers plan to move the market to a larger site.", a: "NG" },
+      { s: "Most visitors travel to the market by bicycle.", a: "F" },
+      { s: "Live music is played at the market every week.", a: "NG" }
+    ]
+  },
+  {
+    passage: "Anyone who plans to work in Australia should apply for a tax file number, usually shortened to TFN. It is a unique number issued by the Australian Taxation Office, and applying costs nothing. Applicants who hold a visa that allows them to work can apply online, and the number is posted to their home address, normally within 28 days. When you start a new job, your employer will ask for your TFN so that the correct amount of tax is taken from your pay. If you do not provide it within 28 days, you will be taxed at the highest rate, which is much more than most people need to pay. Some students mistakenly believe they do not need a number if they only work part-time, but the requirement applies to all paid work. Your TFN should be kept private, and you should only give it to your employer, your bank, or a government agency. Scammers sometimes phone people pretending to be from the tax office and ask for the number, so you should hang up on any suspicious caller. If your number is lost or stolen, you should contact the tax office immediately. A TFN stays with you for life, even if you leave the country and return years later.",
+    statements: [
+      { s: "There is no charge for applying for a tax file number.", a: "T" },
+      { s: "Employers must keep a worker's TFN on file for seven years.", a: "NG" },
+      { s: "Applicants have to collect their number from a tax office in person.", a: "F" },
+      { s: "A worker who waits more than 28 days to give an employer their TFN will pay tax at the highest rate.", a: "T" },
+      { s: "Students who work part-time do not need a tax file number.", a: "F" },
+      { s: "Most scam calls about tax file numbers come from overseas.", a: "NG" }
+    ]
+  }
+],
+
+headings: [
+  {
+    paragraphs: [
+      "Living without a car is easier than many newcomers expect. Trams and buses run frequently along the main road, and a single smart card covers every journey. Cyclists benefit from a network of separate bike paths that link the suburb to the city centre in about twenty minutes. Although many residents still own a vehicle, the high cost of fuel and the shortage of parking mean that more of them now leave it at home during the week.",
+      "On Saturday mornings, the car park behind the library turns into a busy farmers' market, where growers sell seasonal vegetables, eggs, and fresh bread directly to local shoppers. Prices are usually lower than in the big supermarkets, especially for fruit. During the week, two small grocers near the station stock imported products, such as spices and rice, for the area's many migrant families. Both shops also deliver, which many elderly residents find extremely useful.",
+      "Newcomers often say that the friendliest part of the suburb is its clubs. There is a walking group that meets before work, a book club at the library, and a community choir that welcomes beginners. The local council publishes a monthly list of events, and many of the activities are free. Parents also find that school fundraisers and weekend sports provide an easy way to chat with neighbours and make new friends.",
+      "Crime rates in the suburb are low, but residents are still encouraged to take simple precautions. Installing sensor lights at the front and back of the house is inexpensive and effective, and neighbours often keep an eye on each other's property when somebody goes away. The council also runs a free program in which police officers visit homes and suggest improvements to locks and windows. Residents can report anything suspicious by calling the local police station."
+    ],
+    headings: [
+      "Meeting people who share your interests",
+      "The rising cost of fuel",
+      "Where to find fresh, affordable food",
+      "Getting around without a car",
+      "Choosing the right school",
+      "Keeping your home safe and secure"
+    ],
+    answers: [3, 2, 0, 5]
+  },
+  {
+    paragraphs: [
+      "Not long ago, studying part-time usually meant attending lectures at night, three or four evenings a week. Today, universities and technical colleges offer recorded lectures and online tutorials, so students can log in early in the morning, during lunch breaks, or after the children are asleep. Some courses allow students to start in any of four terms each year. This flexibility has helped thousands of people to gain qualifications that employers respect.",
+      "Course fees are the biggest worry for most part-time students. Fortunately, there are several ways to reduce the burden. Many colleges allow students to pay in monthly instalments instead of one large amount, and government loans do not have to be repaid until the student earns above a set income. Scholarships are also available for people returning to study after a long break, though applications usually close several months before the course begins.",
+      "Balancing a job with a course requires careful planning. Successful students often block out specific hours for study each week and treat them like appointments that cannot be moved. They also tell family and colleagues about their goals, so that nobody expects them to be available at those times. Many find that short, regular sessions, even thirty minutes at a time, work better than a single long session on Sunday night.",
+      "Part-time students sometimes feel isolated, but help is more widely available than they realise. Most institutions provide free tutoring in writing and mathematics, and counsellors are available for those who feel overwhelmed. Online discussion forums let students ask questions at any hour and receive answers from classmates or teaching staff. Students who fall behind are encouraged to contact their lecturer early, because extensions are much easier to arrange before a deadline than after it."
+    ],
+    headings: [
+      "Managing your time between work and study",
+      "The history of distance education",
+      "Paying for your studies",
+      "Finding support when you struggle",
+      "Why employers value qualifications",
+      "Learning at times that suit you"
+    ],
+    answers: [5, 2, 0, 3]
+  },
+  {
+    paragraphs: [
+      "Before spending any money, would-be owners should find out whether people actually want their product. Talking to potential customers, visiting similar businesses, and running a small trial at a local market can reveal problems that are cheap to fix at this stage. One baker in Perth sold only fifty loaves of her new recipe before deciding to change the flour, and she says that single decision saved her thousands of dollars.",
+      "Every Australian business needs an ABN, which can be applied for online at no cost. Owners must also register their business name, which is a separate process, and check whether their activity requires a licence, such as for food preparation. Insurance is another essential step. Public liability cover protects owners if a customer is injured on their premises, and premiums for small businesses are often lower than people expect.",
+      "Even excellent products will not sell if nobody knows about them. Most small businesses now rely on social media to reach customers, because posting photos and short videos costs almost nothing. Local Facebook groups are especially useful, as members often recommend nearby services. Owners can also offer discount codes to first-time buyers, and encourage happy customers to leave online reviews, which many shoppers read before deciding where to spend their money.",
+      "The most common reason for small business failure is not a lack of customers but a lack of cash. Invoices are often paid thirty or sixty days late, while rent and wages must be paid on time. Experts advise owners to keep three months of expenses in reserve, to send invoices immediately, and to set aside part of every sale for tax. Accounting software can track all of this automatically and send reminders to slow payers."
+    ],
+    headings: [
+      "Telling customers about your business",
+      "Hiring your first employee",
+      "Making sure the money keeps flowing",
+      "Testing your idea before you invest",
+      "Choosing a name and logo",
+      "Registering and insuring your business"
+    ],
+    answers: [3, 5, 0, 2]
+  },
+  {
+    paragraphs: [
+      "Most visitors choose to travel between May and September, when daytime temperatures are pleasantly warm and nights are cool and clear. Summer is a very different story: temperatures regularly pass forty degrees, and many tour operators and roadhouses close completely. Flies are another reason to avoid the hottest months, as they can be intolerable. Although accommodation is more expensive in winter, most people agree that the extra cost is worth paying.",
+      "Distances in the Outback are enormous, and the next petrol station may be four hundred kilometres away. Drivers should fill up at every opportunity, carry at least ten litres of drinking water per person, and take a spare tyre. Mobile phone coverage is patchy, so it is wise to tell a friend your route. If a vehicle does break down, the safest option is to stay with it, because it is much easier to spot than a person.",
+      "Wildlife is one of the highlights of any Outback journey, but animals can also be a hazard. Kangaroos are most active at dawn and dusk, and collisions with them cause thousands of accidents each year, so many experienced travellers avoid driving at those times. Snakes and lizards are often seen sunning themselves on the road, though they will usually move away if approached quietly. Visitors should never feed wild animals, as human food makes them unwell.",
+      "Large areas of central Australia are owned or managed by Aboriginal communities, whose connection with the land stretches back at least sixty thousand years. Some sacred places, such as sections of Uluru, are closed to visitors, and photographs may be restricted. Travellers are asked to obtain permits before entering communities and to stay on marked tracks. Joining a tour led by a local guide is an excellent way to learn about traditional stories, bush foods, and rock art."
+    ],
+    headings: [
+      "Understanding the history of the Outback",
+      "Sharing the land with wildlife",
+      "Choosing the best season to travel",
+      "What to do if you break down",
+      "Respecting Aboriginal sites and traditions",
+      "Taking care on remote roads"
+    ],
+    answers: [2, 5, 1, 4]
+  }
+],
+
+sentenceCompletion: [
+  {
+    passage: "Koala Haven is a wildlife rescue centre on the outskirts of Port Macquarie that cares for injured and orphaned native animals. It was founded in 1995 by a retired vet, Dr Helen Marsh, who began by treating koalas hit by cars. Today, the centre employs six full-time staff and relies on more than one hundred volunteers, who work in shifts of four hours. Volunteers are not expected to have any previous experience, but they must be over sixteen and complete a compulsory induction day. Their duties include preparing food, cleaning enclosures, and answering the emergency hotline. Many of the animals arrive after bushfires or road accidents, and the most common patients are koalas, wombats, and flying foxes. Animals that recover are released back into the wild, usually within three months, while those with permanent injuries remain at the centre. The centre is funded mainly by donations, with additional support from a government grant, and it holds an open day each October to raise money. Visitors are welcome from Wednesday to Sunday, although they cannot touch the animals.",
+    sentences: [
+      { text: "The centre was founded by a retired ___.", answers: ["vet"] },
+      { text: "Each volunteer shift lasts ___.", answers: ["four hours", "4 hours"] },
+      { text: "All volunteers must attend a compulsory ___ day before they start.", answers: ["induction"] },
+      { text: "The most common patients are koalas, wombats, and ___.", answers: ["flying foxes"] },
+      { text: "The centre holds an open day each ___ to raise money.", answers: ["october"] }
+    ]
+  },
+  {
+    passage: "Opening a bank account is one of the first tasks for newcomers to Australia, and it can usually be done within a few days. Most major banks allow international students to open an account online before they arrive, provided they have a valid passport and a letter of offer from their educational institution. Once in the country, they must visit a branch within six weeks to verify their identity. Two types of account are generally recommended. A transaction account is used for everyday spending, and comes with a debit card that is accepted almost everywhere. A savings account pays interest, but it often limits the number of withdrawals each month. Many banks waive monthly fees for students, although this offer may end after four years. Customers should be cautious about overseas transfers, as fees and exchange rates can vary significantly between providers. It is also important never to share your PIN with anyone, even a bank employee, because banks will never ask for it. Finally, switching on mobile alerts for each transaction is a quick way to spot suspicious activity.",
+    sentences: [
+      { text: "To open an account online before arriving, a student needs a passport and a letter of ___.", answers: ["offer"] },
+      { text: "After arriving, students must visit a branch within ___ to verify their identity.", answers: ["six weeks", "6 weeks"] },
+      { text: "A ___ account is used for everyday spending and comes with a debit card.", answers: ["transaction"] },
+      { text: "A savings account often limits the number of ___ each month.", answers: ["withdrawals"] },
+      { text: "Customers should never share their ___ with anyone, not even a bank employee.", answers: ["pin"] }
+    ]
+  },
+  {
+    passage: "Bushfire season in Australia generally runs from late spring until early autumn, and residents in rural areas should prepare well in advance. The first step is to create a bushfire survival plan, which should be discussed with every member of the household. The plan should state whether you will stay and defend your property or leave early, and leaving early is almost always the safest choice. Residents should clear gutters of leaves and trim overhanging branches, since burning embers can easily ignite dry material. An emergency kit, kept near the front door, should contain a torch, a battery radio, bottled water, and copies of important documents. On days of catastrophic fire danger, the authorities recommend leaving the area before noon, as roads can become blocked by smoke. Information is broadcast on local radio and through the national warnings app, which sends alerts directly to mobile phones. Pet owners should arrange accommodation for animals beforehand, because many evacuation centres cannot accept them. Following these steps will not remove all risk, but it will greatly improve a family's chances of staying safe.",
+    sentences: [
+      { text: "Bushfire season usually lasts until early ___.", answers: ["autumn"] },
+      { text: "Leaving ___ is almost always the safest choice.", answers: ["early"] },
+      { text: "Burning ___ can easily ignite dry material around a house.", answers: ["embers"] },
+      { text: "An emergency kit should be kept near the ___.", answers: ["front door"] },
+      { text: "Many ___ cannot accept pets.", answers: ["evacuation centres", "evacuation centers"] }
+    ]
+  },
+  {
+    passage: "Wattle Valley, about ninety minutes from Melbourne by train, is one of the most popular day-trip destinations in the state. The region takes its name from the golden wattle trees that cover the hills and bloom brightly each spring. The best-known landmark is Twin Falls, a waterfall that is floodlit every evening. Visitors can see it from the lookout, where a free information centre provides maps and advice. For those who enjoy walking, the Fern Gully Trail is a three-hour walk through rainforest and is rated moderate in difficulty. It is best attempted in the morning, as the path can become slippery after afternoon rain. The Treetop Adventure complex, near the main town, offers a cable car, a railway, and a skyway, and the railway is among the steepest in the country. Children under four travel free. Staying overnight is recommended because the valley is much quieter in the evening, and many guesthouses serve a traditional cooked breakfast. Warm clothing is essential, since temperatures can be ten degrees lower than in the city.",
+    sentences: [
+      { text: "Visitors travel from Melbourne to Wattle Valley by ___.", answers: ["train"] },
+      { text: "Twin Falls is ___ every evening.", answers: ["floodlit"] },
+      { text: "The Fern Gully Trail is rated ___ in difficulty.", answers: ["moderate"] },
+      { text: "The trail is best attempted in the ___ because of afternoon rain.", answers: ["morning"] },
+      { text: "Visitors should pack ___ clothing because the valley is cooler than the city.", answers: ["warm"] }
+    ]
+  },
+  {
+    passage: "A successful job interview begins long before you walk into the room. Candidates should start by researching the company, reading its website, recent news stories, and social media pages. This allows them to ask informed questions, which most employers regard as a sign of genuine interest. It is also helpful to read the job advertisement carefully and match your skills to each requirement, giving at least one specific example for each. On the day, arrive about ten minutes early; arriving much sooner can put pressure on the interviewer, while arriving late creates a poor first impression. Dress should be neat and appropriate to the workplace, but there is no need to wear an expensive suit. During the interview, maintain eye contact, speak clearly, and avoid criticising previous employers. Interviewers commonly ask, 'Where do you see yourself in five years?' and the best answers connect personal goals to the company's future. Following the interview, send a short thank-you email within 24 hours. If you have not heard anything after two weeks, it is perfectly acceptable to contact the company politely to ask for an update.",
+    sentences: [
+      { text: "Candidates should research a company by reading its website, news stories, and ___ pages.", answers: ["social media"] },
+      { text: "Employers regard informed questions as a sign of ___.", answers: ["genuine interest"] },
+      { text: "Candidates should aim to arrive about ___ early.", answers: ["ten minutes", "10 minutes"] },
+      { text: "During the interview, candidates should avoid criticising ___.", answers: ["previous employers"] },
+      { text: "A thank-you email should be sent within ___ of the interview.", answers: ["24 hours", "twenty-four hours"] }
+    ]
+  }
+]
+
+});
+
+</script>
+<script>
+// RealTalk — IELTS General Training practice bank, part 2 (writing + speaking).
+// All content is in English; the surrounding UI (labels, instructions) is PT-BR.
+// Merges into window.IELTS_BANK so it can load before or after other IELTS bank files.
+
+window.IELTS_BANK = Object.assign(window.IELTS_BANK || {}, {
+
+letters: [
+  {
+    prompt: "You have been renting a flat for six months. Since the start of winter the heating has not been working properly, even though you reported it to the real estate agency by phone two weeks ago. Write a letter to the property manager.",
+    points: [
+      "describe the problem with the heating and when it started",
+      "explain how the cold has affected you and your household",
+      "say what you would like the agency to do and by when"
+    ],
+    formal: true,
+    keyPoints: [
+      "heating has stopped working",
+      "reported the problem two weeks ago",
+      "freezing at night",
+      "difficult to sleep and study",
+      "arrange a technician to repair it",
+      "fixed within the next week"
+    ]
+  },
+  {
+    prompt: "Your neighbour in the next apartment has started playing loud music late at night. You get along with this person and say hello in the lift, but the noise is now a problem. Write a letter to your neighbour.",
+    points: [
+      "explain what the problem is and how often it happens",
+      "say how the noise is affecting you",
+      "suggest a way to solve the problem that suits you both"
+    ],
+    formal: false,
+    keyPoints: [
+      "loud music late at night",
+      "several nights a week",
+      "hard to get to sleep",
+      "tired at work",
+      "turn the music down",
+      "happy to talk in person"
+    ]
+  },
+  {
+    prompt: "A close friend from university is getting married overseas in May, and you would like to attend. You need extra time off work. Write a letter to your manager.",
+    points: [
+      "explain why you need time off and when the wedding is",
+      "say how long you would like to be away",
+      "suggest how your work could be covered while you are gone"
+    ],
+    formal: true,
+    keyPoints: [
+      "request annual leave",
+      "friend is getting married overseas",
+      "the dates of leave in may",
+      "return to work on monday",
+      "colleague can cover my shifts",
+      "finish urgent work before i leave"
+    ]
+  },
+  {
+    prompt: "Several streetlights on the road near your home have not worked for months. Walking there after dark has become unpleasant, especially for older residents and children. Write a letter to the local council.",
+    points: [
+      "describe the problem and where it is",
+      "explain why it is a concern for people in your neighbourhood",
+      "say what you think the council should do about it"
+    ],
+    formal: true,
+    keyPoints: [
+      "the lights are not working",
+      "very dark at night",
+      "unsafe for pedestrians and children",
+      "not fixed for several months",
+      "repair the lights as soon as possible",
+      "inspect the whole street regularly"
+    ]
+  },
+  {
+    prompt: "A friend from overseas is coming to stay with you for two weeks next month. This will be their first visit to Australia. Write a letter to your friend.",
+    points: [
+      "suggest what clothes and other things to bring for the weather",
+      "describe some places you plan to visit together",
+      "explain how you will meet at the airport"
+    ],
+    formal: false,
+    keyPoints: [
+      "looking forward to your visit",
+      "bring a jacket and sunscreen",
+      "the weather next month",
+      "take you to the beach and the city",
+      "pick you up at the airport",
+      "send me your flight details"
+    ]
+  }
+],
+
+essays: [
+  {
+    prompt: "Some people believe that working from home is better for employees, while others think it is better to work in an office with colleagues. Discuss both views and give your own opinion.",
+    keyPoints: [
+      "saves commuting time and money",
+      "flexible hours improve work-life balance",
+      "feeling isolated and lonely at home",
+      "harder to communicate and collaborate",
+      "distractions and no clear boundary between work and home",
+      "a hybrid model combines the benefits of both"
+    ]
+  },
+  {
+    prompt: "Many parents now give young children their own smartphones or tablets. Some people think this helps children to learn and stay safe, while others believe it does more harm than good. Discuss both views and give your own opinion.",
+    keyPoints: [
+      "educational apps and online learning",
+      "parents can contact and track their children",
+      "too much screen time harms sleep and concentration",
+      "less physical activity and face-to-face play",
+      "exposure to inappropriate content and online strangers",
+      "parents should set clear time limits and rules"
+    ]
+  },
+  {
+    prompt: "In many cities, people say that neighbours are less friendly and know each other less than they did in the past. What do you think are the causes of this, and what can be done to build a stronger sense of community?",
+    keyPoints: [
+      "long working hours leave little free time",
+      "people spend more time online than with neighbours",
+      "renters move house frequently",
+      "street parties and local community events",
+      "volunteering and joining local clubs",
+      "shared spaces such as parks and community gardens"
+    ]
+  },
+  {
+    prompt: "More and more people are leaving their home country to live and work in another country. Do the advantages of this trend outweigh the disadvantages?",
+    keyPoints: [
+      "higher wages and better career opportunities",
+      "learning a new language and culture",
+      "fills skill shortages in the host country",
+      "homesickness and separation from family",
+      "difficulty adjusting and facing discrimination",
+      "home country loses skilled workers"
+    ]
+  },
+  {
+    prompt: "Some people think that going to university is the best way to prepare for a successful career, while others believe that practical training such as an apprenticeship is more valuable. Discuss both views and give your own opinion.",
+    keyPoints: [
+      "university gives broad knowledge and recognised qualifications",
+      "graduates often earn more over a lifetime",
+      "tuition fees and student debt",
+      "vocational training teaches practical hands-on skills",
+      "apprentices earn money while they learn",
+      "employers need skilled tradespeople"
+    ]
+  }
+],
+
+speakingP1: [
+  {
+    topic: "Home",
+    questions: [
+      "Do you live in a house or an apartment?",
+      "What is your favourite room in your home, and why?",
+      "How long have you lived there?",
+      "Would you like to move to a different place in the future?"
+    ]
+  },
+  {
+    topic: "Work",
+    questions: [
+      "What do you do for work?",
+      "Why did you choose that kind of job?",
+      "What do you like most about your work?",
+      "Would you like to change your job in the future?"
+    ]
+  },
+  {
+    topic: "Food",
+    questions: [
+      "What kind of food do you enjoy most?",
+      "Do you usually cook at home or eat out?",
+      "Is there any food you really dislike?",
+      "What did you have for breakfast today?"
+    ]
+  },
+  {
+    topic: "Weather",
+    questions: [
+      "What is the weather like where you live?",
+      "Which season do you like best, and why?",
+      "Does the weather affect your mood?",
+      "What do you usually do on a rainy day?"
+    ]
+  },
+  {
+    topic: "Hobbies",
+    questions: [
+      "What do you like to do in your free time?",
+      "How did you first become interested in that hobby?",
+      "Do you prefer to spend your free time alone or with other people?",
+      "Is there a new hobby you would like to try?"
+    ]
+  },
+  {
+    topic: "Transport",
+    questions: [
+      "How do you usually get to work or school?",
+      "Do you prefer public transport or driving?",
+      "How long does your trip usually take?",
+      "Has transport in your area changed much in recent years?"
+    ]
+  }
+],
+
+cueCards: [
+  {
+    topic: "Describe a park or outdoor place you like to visit in your free time.",
+    points: [
+      "where it is",
+      "how often you go there",
+      "what you do there",
+      "and explain why you enjoy spending time there"
+    ],
+    keywords: ["park", "trees", "walk", "quiet", "relax", "friends", "weekend", "fresh", "peaceful", "playground"]
+  },
+  {
+    topic: "Describe a person who helped you when you really needed it.",
+    points: [
+      "who the person is",
+      "what the situation was",
+      "how they helped you",
+      "and explain how you felt about their help"
+    ],
+    keywords: ["helped", "difficult", "kind", "generous", "advice", "support", "grateful", "friendly", "moved", "thankful"]
+  },
+  {
+    topic: "Describe a memorable trip you have taken.",
+    points: [
+      "where you went",
+      "who you went with",
+      "what you did there",
+      "and explain why the trip was memorable"
+    ],
+    keywords: ["holiday", "trip", "beach", "hotel", "flight", "sightseeing", "family", "adventure", "souvenir", "memories"]
+  },
+  {
+    topic: "Describe a job that you would like to do in the future.",
+    points: [
+      "what the job is",
+      "what skills or qualifications you would need",
+      "what you would do each day",
+      "and explain why you would like to do this job"
+    ],
+    keywords: ["career", "salary", "skills", "qualifications", "experience", "interesting", "colleagues", "challenge", "responsibility", "passion"]
+  },
+  {
+    topic: "Describe a meal you enjoyed at a restaurant.",
+    points: [
+      "where the restaurant was",
+      "who you went with",
+      "what you ate",
+      "and explain why you enjoyed the meal"
+    ],
+    keywords: ["restaurant", "dinner", "menu", "delicious", "chef", "waiter", "dessert", "atmosphere", "tasty", "booked"]
+  },
+  {
+    topic: "Describe a piece of technology that you use every day.",
+    points: [
+      "what it is",
+      "how long you have had it",
+      "what you use it for",
+      "and explain why it is important to you"
+    ],
+    keywords: ["phone", "screen", "apps", "battery", "internet", "messages", "convenient", "useful", "camera", "daily"]
+  }
+],
+
+speakingP3: [
+  {
+    topic: "Public spaces and parks",
+    questions: [
+      "Why do you think parks and public spaces are important for a city?",
+      "Should local councils spend more money on public spaces or on housing? Why?",
+      "How have the ways people use public spaces changed over the past few decades?"
+    ]
+  },
+  {
+    topic: "Helping others",
+    questions: [
+      "Why do some people give up their free time to volunteer and help others?",
+      "Do you think people in big cities are less willing to help strangers than people in small towns?",
+      "Is it mainly the government's responsibility to support people in need, or should individuals help as well?"
+    ]
+  },
+  {
+    topic: "Travel and tourism",
+    questions: [
+      "How has tourism changed the way people experience other cultures?",
+      "What are some of the positive and negative effects of tourism on local communities?",
+      "Do you think people will travel more or less in the future? Why?"
+    ]
+  },
+  {
+    topic: "Jobs and careers",
+    questions: [
+      "What are the most important factors people consider when choosing a job?",
+      "Is it better to stay in one career for life or to change careers several times? Why?",
+      "How might automation change the kinds of jobs that are available in the future?"
+    ]
+  },
+  {
+    topic: "Food and eating habits",
+    questions: [
+      "How have people's eating habits changed in your country over the last few decades?",
+      "Do you think people should cook at home more often? Why or why not?",
+      "What can governments do to encourage people to eat more healthily?"
+    ]
+  },
+  {
+    topic: "Technology in daily life",
+    questions: [
+      "How has technology changed the way people communicate with each other?",
+      "Do you think older people find it harder to keep up with new technology? Why?",
+      "Are there any disadvantages to relying so heavily on technology in everyday life?"
+    ]
+  }
+]
+
+});
+
+</script>
+<script>
 // RealTalk — lightweight profile system (static-site "login").
 // Profiles live in this browser's localStorage: each person gets their own
 // name, avatar and progress. Real cross-device accounts need a backend later.
@@ -11068,8 +11759,12 @@ swt: [
       const sentences = (text.match(/[.!?]+(?=\s|$)/g) || []).length || (text ? 1 : 0);
       const formOK = n >= 5 && n <= 75 && sentences <= 1;
       const tn = " " + norm(text).join(" ") + " ";
-      const hits = item.keyPoints.filter(k => tn.includes(" " + norm(k).join(" ") + " ") ||
-        norm(k).filter(w => tn.includes(" " + w + " ")).length >= Math.ceil(norm(k).length * 0.6));
+      const SWT_STOP = new Set(["the", "a", "an", "to", "of", "in", "on", "for", "is", "are", "and", "or"]);
+      const hits = item.keyPoints.filter(k => {
+        if (tn.includes(" " + norm(k).join(" ") + " ")) return true;
+        const kw = norm(k).filter(w => !SWT_STOP.has(w));
+        return kw.length > 0 && kw.filter(w => tn.includes(" " + w + " ")).length >= Math.ceil(kw.length * 0.6);
+      });
       const content = item.keyPoints.length ? hits.length / item.keyPoints.length : 0;
       const f = formOK ? 0.25 + 0.75 * content : content * 0.3;
       const chips = item.keyPoints.map(k => `<span class="pte-kw ${hits.includes(k) ? "hit" : ""}">${esc(k)}</span>`).join("");
@@ -11375,10 +12070,48 @@ swt: [
     load() { try { return JSON.parse(localStorage.getItem(this.key())) || {}; } catch { return {}; } },
     save(d) { localStorage.setItem(this.key(), JSON.stringify(d)); },
     best(task, b) { const d = this.load(); d.best = d.best || {}; if (!d.best[task] || b > d.best[task]) { d.best[task] = b; this.save(d); } },
+    round(task, b) { const d = this.load(); d.hist = d.hist || []; d.hist.push({ d: Date.now(), t: task, b }); if (d.hist.length > 300) d.hist = d.hist.slice(-300); this.save(d); },
     addMock(m) { const d = this.load(); d.mocks = d.mocks || []; d.mocks.push(m); this.save(d); }
   };
 
   const bankOf = (t) => (window.PTE_BANK && PTE_BANK[t.bank]) || [];
+
+  // ---------- progress ----------
+  function sparkSvg(vals, min, max) {
+    const w = 280, h = 70, p = 9;
+    const n = vals.length;
+    const x = (i) => p + (w - 2 * p) * (n === 1 ? 0.5 : i / (n - 1));
+    const y = (v) => h - p - (h - 2 * p) * (Math.max(min, Math.min(max, v)) - min) / (max - min);
+    const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    return `<svg class="rt-spark" viewBox="0 0 ${w} ${h}">
+      <polyline points="${pts}" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${vals.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="var(--green-deep)"/>`).join("")}
+      <text x="${(x(n - 1) - 4).toFixed(1)}" y="${Math.max(13, y(vals[n - 1]) - 8).toFixed(1)}" text-anchor="end" class="rt-spark-val">${vals[n - 1]}</text>
+    </svg>`;
+  }
+
+  function progressCard(store, scaleMin, scaleMax, toClass) {
+    const d = store.load();
+    const mocks = d.mocks || [];
+    const hist = d.hist || [];
+    if (mocks.length + hist.length < 2) return "";
+    const last = mocks[mocks.length - 1];
+    const prev = mocks[mocks.length - 2];
+    const delta = last && prev ? Math.round((last.overall - prev.overall) * 10) / 10 : null;
+    return `
+      <div class="card rt-progress">
+        <h3>📈 ${tx("Seu progresso", "Your progress")}</h3>
+        <div class="rt-prog-stats">
+          <span class="chip">${hist.length} ${tx("treinos", "practice rounds")}</span>
+          <span class="chip">${mocks.length} ${tx("simulados", "mocks")}</span>
+          ${last ? `<span class="chip pte-band ${toClass(last.overall)}">${tx("último simulado:", "last mock:")} ${last.overall}${delta !== null && delta !== 0 ? ` <b class="${delta > 0 ? "rt-up" : "rt-down"}">${delta > 0 ? "▲" : "▼"}${Math.abs(delta)}</b>` : ""}</span>` : ""}
+        </div>
+        <div class="rt-prog-charts">
+          ${mocks.length >= 2 ? `<div><div class="rt-spark-cap">${tx("Evolução nos simulados", "Mock evolution")}</div>${sparkSvg(mocks.slice(-10).map(m => m.overall), scaleMin, scaleMax)}</div>` : ""}
+          ${hist.length >= 2 ? `<div><div class="rt-spark-cap">${tx("Últimos treinos por tarefa", "Recent task practice")}</div>${sparkSvg(hist.slice(-20).map(r => r.b), scaleMin, scaleMax)}</div>` : ""}
+        </div>
+      </div>`;
+  }
 
   // ---------- pages ----------
   function hubHead() {
@@ -11425,6 +12158,7 @@ swt: [
         </div>
         <a class="btn" href="#/pte/mock">▶ ${tx("Começar simulado", "Start mock test")}</a>
       </div>
+      ${progressCard(pteStore, 10, 90, (b) => bandClass((b - 10) / 80))}
       <div class="card pte-note-card">
         <p>ℹ️ ${tx("Nota estimada, não oficial: usamos o reconhecimento de voz do navegador e análise de palavras-chave — bom pra treinar formato, ritmo e tempo. Use Chrome ou Edge pro microfone funcionar.",
           "Unofficial estimate: we use the browser's speech recognition and keyword analysis — great for training format, pace and timing. Use Chrome or Edge for the microphone.")}</p>
@@ -11467,6 +12201,7 @@ swt: [
       const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
       const b = band(avg);
       pteStore.best(typeId, b);
+      pteStore.round(typeId, b);
       $main.innerHTML = head() + `
         <div class="card quiz-score pte-report">
           <div style="font-size:40px">${t.emoji}</div>
@@ -11622,6 +12357,666 @@ swt: [
   }
 
   window.RTPTE = { renderHub, renderTask, renderMock, destroy };
+  // shared exam toolkit — reused by the IELTS simulator (js/ielts.js)
+  window.RTExamKit = {
+    captureSpeech, typedCapture, countdown, say, beep,
+    coverage, marksHtml, heardHtml, norm, esc, shuffle,
+    sparkSvg, progressCard,
+    pushTimer: (iv) => active.timers.push(iv)
+  };
+})();
+
+</script>
+<script>
+// RealTalk — IELTS General Training simulator. Reuses the shared exam toolkit from pte.js
+// (window.RTExamKit) and the PTE visual components. Scores are UNOFFICIAL band estimates (1-9).
+(function () {
+  const K = window.RTExamKit;
+  const isPT = () => window.RT_LANG === "pt";
+  const tx = (pt, en) => (isPT() ? pt : en);
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const band9 = (f) => Math.max(1, Math.min(9, Math.round((1 + Math.max(0, Math.min(1, f)) * 8) * 2) / 2));
+  const fmtBand = (b) => (b % 1 ? b.toFixed(1) : String(b));
+  const classOfBand = (b) => (b >= 6.5 ? "good" : b >= 5 ? "mid" : "bad");
+  const classOfF = (f) => classOfBand(band9(f));
+  const clean = () => { if (window.RTPTE) RTPTE.destroy(); };
+
+  // ---------- storage (per profile, mirrors pteStore) ----------
+  const ieltsStore = {
+    key() { return "realtalk-ielts::" + ((window.RTAuth && RTAuth.current()) ? RTAuth.current().name : "anon"); },
+    load() { try { return JSON.parse(localStorage.getItem(this.key())) || {}; } catch { return {}; } },
+    save(d) { localStorage.setItem(this.key(), JSON.stringify(d)); },
+    best(task, b) { const d = this.load(); d.best = d.best || {}; if (!d.best[task] || b > d.best[task]) { d.best[task] = b; this.save(d); } },
+    round(task, b) { const d = this.load(); d.hist = d.hist || []; d.hist.push({ d: Date.now(), t: task, b }); if (d.hist.length > 300) d.hist = d.hist.slice(-300); this.save(d); },
+    addMock(m) { const d = this.load(); d.mocks = d.mocks || []; d.mocks.push(m); this.save(d); }
+  };
+
+  // ---------- helpers ----------
+  function playAfterCount(au, script, seed, onEnd) {
+    let c = 3;
+    const iv = setInterval(() => {
+      c--;
+      if (c <= 0) {
+        clearInterval(iv);
+        au.textContent = "🎧 " + tx("Tocando… (uma vez só, como na prova)", "Playing… (once only, like the exam)");
+        K.say(script, seed, () => {
+          au.textContent = "🎧 " + tx("Áudio encerrado", "Audio finished");
+          onEnd && onEnd();
+        });
+      } else au.textContent = "🎧 " + tx("O áudio começa em " + c + "…", "Audio starts in " + c + "…");
+    }, 1000);
+    K.pushTimer(iv);
+  }
+  const normEq = (typed, answers) => {
+    const t = K.norm(typed).join(" ");
+    return (answers || []).some(a => K.norm(a).join(" ") === t);
+  };
+  const wordCount = (s) => K.norm(s).length;
+
+  // ---------- task renderers (each calls ctx.done(f, feedbackHtml) once) ----------
+  function renderFormCompletion(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Ouça e complete o formulário enquanto o áudio toca — os detalhes passam rápido.",
+          "Listen and complete the form while the audio plays — details go by fast.")}</p>
+        <p class="pte-note">${K.esc(item.intro)}</p>
+        <div class="pte-audio">🎧 …</div>
+        <div class="ielts-form">
+          ${item.form.map((g, i) => `
+            <label class="ielts-form-row"><span>${K.esc(g.label)}</span>
+              <input class="pte-input ielts-gap" data-i="${i}" autocomplete="off"></label>`).join("")}
+        </div>
+        <div class="ielts-timer"></div>
+        <button class="btn pte-submit">${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      const inputs = [...body.querySelectorAll(".ielts-gap")];
+      let right = 0;
+      const fb = item.form.map((g, i) => {
+        const ok = normEq(inputs[i].value, g.answers);
+        if (ok) right++;
+        inputs[i].classList.add(ok ? "ok" : "miss");
+        return `<span class="pte-kw ${ok ? "hit" : ""}">${K.esc(g.label)}: ${K.esc(g.answers[0])}</span>`;
+      }).join(" ");
+      ctx.done(right / item.form.length,
+        `<p>${tx("Acertos", "Correct")}: <b>${right}/${item.form.length}</b></p><p class="pte-key"><b>${tx("Respostas:", "Answers:")}</b></p><p>${fb}</p>`);
+    };
+    playAfterCount(body.querySelector(".pte-audio"), item.script, ctx.seed, () => {
+      K.countdown(body.querySelector(".ielts-timer"), 90, grade);
+    });
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  function renderMcqListening(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Ouça o áudio e responda a pergunta.", "Listen to the audio and answer the question.")}</p>
+        <div class="pte-audio">🎧 …</div>
+        <p class="pte-inst" style="margin-top:10px"><b>${K.esc(item.q)}</b></p>
+        <div class="pte-opts">${item.options.map((o, i) => `<button class="quiz-option" data-i="${i}">${K.esc(o)}</button>`).join("")}</div>
+        <div class="ielts-timer"></div>
+      </div>`;
+    let done = false;
+    const grade = (chosen) => {
+      if (done) return; done = true;
+      body.querySelectorAll(".quiz-option").forEach((b, i) => {
+        b.disabled = true;
+        if (i === item.answer) b.classList.add("correct");
+        else if (i === chosen) b.classList.add("incorrect");
+      });
+      ctx.done(chosen === item.answer ? 1 : 0,
+        `<p><b>${tx("Resposta certa:", "Correct answer:")}</b> ${K.esc(item.options[item.answer])}</p>`);
+    };
+    playAfterCount(body.querySelector(".pte-audio"), item.script, ctx.seed, () => {
+      K.countdown(body.querySelector(".ielts-timer"), 45, () => grade(-1));
+    });
+    body.querySelectorAll(".quiz-option").forEach(b => { b.onclick = () => grade(+b.dataset.i); });
+  }
+
+  const TFNG_LABELS = [["T", "TRUE"], ["F", "FALSE"], ["NG", "NOT GIVEN"]];
+  function renderTFNG(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("TRUE = o texto afirma isso. FALSE = o texto contradiz. NOT GIVEN = o texto simplesmente não fala disso (a pegadinha clássica).",
+          "TRUE = the text states it. FALSE = the text contradicts it. NOT GIVEN = the text simply doesn't say (the classic trap).")}</p>
+        <div class="ielts-timer"></div>
+        <div class="pte-passage long">${K.esc(item.passage)}</div>
+        ${item.statements.map((st, i) => `
+          <div class="tfng-row" data-i="${i}">
+            <span class="tfng-s">${i + 1}. ${K.esc(st.s)}</span>
+            <span class="tfng-btns">${TFNG_LABELS.map(([v, lab]) => `<button data-v="${v}">${lab}</button>`).join("")}</span>
+          </div>`).join("")}
+        <button class="btn pte-submit">${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    const picks = {};
+    body.querySelectorAll(".tfng-row").forEach(row => {
+      row.querySelectorAll("button").forEach(b => {
+        b.onclick = () => {
+          picks[row.dataset.i] = b.dataset.v;
+          row.querySelectorAll("button").forEach(x => x.classList.toggle("sel", x === b));
+        };
+      });
+    });
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      let right = 0;
+      body.querySelectorAll(".tfng-row").forEach(row => {
+        const i = +row.dataset.i;
+        const ok = picks[i] === item.statements[i].a;
+        if (ok) right++;
+        row.classList.add(ok ? "ok" : "miss");
+        row.querySelectorAll("button").forEach(x => {
+          x.disabled = true;
+          if (x.dataset.v === item.statements[i].a) x.classList.add("answer");
+        });
+      });
+      ctx.done(right / item.statements.length,
+        `<p>${tx("Acertos", "Correct")}: <b>${right}/${item.statements.length}</b> — ${tx("as respostas certas ficaram marcadas acima.", "the right answers are highlighted above.")}</p>`);
+    };
+    K.countdown(body.querySelector(".ielts-timer"), 240, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  const ROMAN = ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii"];
+  function renderHeadings(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Escolha o título que resume cada parágrafo — sobram dois títulos de pegadinha.",
+          "Pick the heading that summarizes each paragraph — two headings are traps and fit nowhere.")}</p>
+        <div class="ielts-timer"></div>
+        <div class="pte-passage long" style="font-size:14px">
+          <b>${tx("Títulos:", "Headings:")}</b> ${item.headings.map((h, i) => `<span class="pte-kw">${ROMAN[i]}. ${K.esc(h)}</span>`).join(" ")}
+        </div>
+        ${item.paragraphs.map((p, i) => `
+          <div class="ielts-para">
+            <div class="ielts-para-head"><b>${String.fromCharCode(65 + i)}</b>
+              <select class="pte-blank" data-i="${i}"><option value="-1">▾ …</option>
+                ${item.headings.map((h, hi) => `<option value="${hi}">${ROMAN[hi]}. ${K.esc(h)}</option>`).join("")}
+              </select>
+            </div>
+            <p class="ielts-para-text">${K.esc(p)}</p>
+          </div>`).join("")}
+        <button class="btn pte-submit">${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      let right = 0;
+      body.querySelectorAll(".pte-blank").forEach(s => {
+        const i = +s.dataset.i;
+        s.disabled = true;
+        const ok = +s.value === item.answers[i];
+        if (ok) { right++; s.classList.add("ok"); } else s.classList.add("miss");
+      });
+      const key = item.answers.map((a, i) => `<span class="pte-kw hit">${String.fromCharCode(65 + i)} → ${ROMAN[a]}. ${K.esc(item.headings[a])}</span>`).join(" ");
+      ctx.done(right / item.paragraphs.length, `<p class="pte-key"><b>${tx("Gabarito:", "Answer key:")}</b></p><p>${key}</p>`);
+    };
+    K.countdown(body.querySelector(".ielts-timer"), 240, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  function renderSentenceCompletion(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("Complete cada frase com NO MÁXIMO DUAS PALAVRAS tiradas do texto, exatamente como aparecem.",
+          "Complete each sentence with NO MORE THAN TWO WORDS taken from the passage, exactly as they appear.")}</p>
+        <div class="ielts-timer"></div>
+        <div class="pte-passage long">${K.esc(item.passage)}</div>
+        ${item.sentences.map((s, i) => `
+          <div class="ielts-sc-row">${i + 1}. ${K.esc(s.text).replace("___", `<input class="ielts-gap inline" data-i="${i}" autocomplete="off">`)}</div>`).join("")}
+        <button class="btn pte-submit">${tx("Conferir ▸", "Check ▸")}</button>
+      </div>`;
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      const inputs = [...body.querySelectorAll(".ielts-gap")];
+      let right = 0;
+      const key = item.sentences.map((s, i) => {
+        const ok = normEq(inputs[i].value, s.answers);
+        if (ok) right++;
+        inputs[i].classList.add(ok ? "ok" : "miss");
+        return `<span class="pte-kw ${ok ? "hit" : ""}">${i + 1}. ${K.esc(s.answers[0])}</span>`;
+      }).join(" ");
+      ctx.done(right / item.sentences.length, `<p class="pte-key"><b>${tx("Respostas:", "Answers:")}</b></p><p>${key}</p>`);
+    };
+    K.countdown(body.querySelector(".ielts-timer"), 240, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+
+  function renderWriting(body, item, ctx, { minWords, seconds, isLetter }) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst"><b>${K.esc(item.prompt)}</b></p>
+        ${isLetter ? `<ul class="ielts-points">${item.points.map(p => `<li>${K.esc(p)}</li>`).join("")}</ul>
+          <p class="pte-note">${item.formal
+            ? tx("Carta FORMAL: 'Dear Sir/Madam … Yours faithfully' — ou, se souber o nome, 'Dear Ms X … Yours sincerely'.",
+                 "FORMAL letter: 'Dear Sir/Madam … Yours faithfully' — or, if you know the name, 'Dear Ms X … Yours sincerely'.")
+            : tx("Carta INFORMAL: Dear [nome] … Best wishes.", "INFORMAL letter: Dear [name] … Best wishes.")}</p>` : ""}
+        <p class="pte-note">${tx("Mínimo", "Minimum")} <b>${minWords}</b> ${tx("palavras — abaixo disso a banda despenca na prova real.", "words — below that the band collapses in the real exam.")}</p>
+        <div class="ielts-timer"></div>
+        <textarea class="pte-input" rows="${isLetter ? 8 : 11}" placeholder="${tx("Escreva em inglês…", "Write in English…")}"></textarea>
+        <div class="pte-wc">0 ${tx("palavras", "words")}</div>
+        <button class="btn pte-submit">${tx("Enviar ▸", "Submit ▸")}</button>
+      </div>`;
+    const ta = body.querySelector("textarea");
+    const wc = body.querySelector(".pte-wc");
+    ta.oninput = () => {
+      const n = wordCount(ta.value);
+      wc.textContent = n + " " + tx("palavras", "words");
+      wc.classList.toggle("bad", n > 0 && n < minWords);
+    };
+    let done = false;
+    const grade = () => {
+      if (done) return; done = true;
+      const text = ta.value;
+      const n = wordCount(text);
+      const tn = " " + K.norm(text).join(" ") + " ";
+      const STOP = new Set(["the", "a", "an", "to", "of", "in", "on", "for", "is", "are", "and", "or", "my", "your", "i", "it", "at", "be"]);
+      const hits = item.keyPoints.filter(k => {
+        if (tn.includes(" " + K.norm(k).join(" ") + " ")) return true;
+        const kw = K.norm(k).filter(w => !STOP.has(w));
+        return kw.length > 0 && kw.filter(w => tn.includes(" " + w + " ")).length >= Math.ceil(kw.length * 0.6);
+      });
+      const covered = item.keyPoints.length ? hits.length / item.keyPoints.length : 0;
+      const paras = text.split(/\n\s*\n/).filter(p => p.trim()).length;
+      const lenF = Math.min(1, n / minWords);
+      const f = lenF * 0.35 + covered * 0.55 + (paras >= 2 ? 0.1 : 0);
+      const chips = item.keyPoints.map(k => `<span class="pte-kw ${hits.includes(k) ? "hit" : ""}">${K.esc(k)}</span>`).join("");
+      ctx.done(f,
+        (n < minWords ? `<p class="pte-warn">⚠️ ${n}/${minWords} ${tx("palavras — na prova real isso já limita sua banda.", "words — in the real exam this alone caps your band.")}</p>` : "") +
+        (paras < 2 ? `<p class="pte-warn">⚠️ ${tx("Separe em parágrafos — organização conta na banda.", "Use paragraphs — organisation counts toward the band.")}</p>` : "") +
+        `<p class="pte-key"><b>${tx("Pontos que a resposta deveria cobrir:", "Points a good answer covers:")}</b></p><p>${chips}</p>`);
+    };
+    K.countdown(body.querySelector(".ielts-timer"), seconds, grade);
+    body.querySelector(".pte-submit").onclick = grade;
+  }
+  const renderLetter = (b, it, c) => renderWriting(b, it, c, { minWords: 150, seconds: c.exam ? 480 : 720, isLetter: true });
+  const renderEssay = (b, it, c) => renderWriting(b, it, c, { minWords: 250, seconds: 1200, isLetter: false });
+
+  function renderSpeakingSet(body, item, ctx, { perSec, targetWords }) {
+    const qs = item.questions;
+    let qi = 0; const results = [];
+    const step = () => {
+      if (qi >= qs.length) {
+        const avg = results.reduce((a, r) => a + r.f, 0) / results.length;
+        return ctx.done(avg, results.map((r, i) =>
+          `<p><b>${i + 1}. ${K.esc(qs[i])}</b></p>${K.heardHtml(r.said)}`).join(""));
+      }
+      body.innerHTML = `
+        <div class="card pte-item">
+          <p class="pte-inst">${tx("Tema", "Topic")}: <b>${K.esc(item.topic)}</b> · ${tx("pergunta", "question")} ${qi + 1}/${qs.length}</p>
+          <div class="pte-audio">🎧 ${tx("Ouvindo a pergunta…", "Hearing the question…")}</div>
+          <p class="pte-inst" style="margin-top:8px"><b>${K.esc(qs[qi])}</b></p>
+          <div class="pte-stage"></div>
+        </div>`;
+      K.say(qs[qi], ctx.seed + qi, () => {
+        const stage = body.querySelector(".pte-stage");
+        if (stage) K.captureSpeech(stage, perSec, (said) => {
+          const words = wordCount(said);
+          results.push({ said, f: Math.min(1, words / targetWords) });
+          qi++; step();
+        });
+      });
+    };
+    step();
+  }
+  const renderSpeakingP1 = (b, it, c) => renderSpeakingSet(b, it, c, { perSec: 20, targetWords: 18 });
+  const renderSpeakingP3 = (b, it, c) => renderSpeakingSet(b, it, c, { perSec: 30, targetWords: 28 });
+
+  function renderCueCard(body, item, ctx) {
+    body.innerHTML = `
+      <div class="card pte-item">
+        <p class="pte-inst">${tx("1 minuto pra anotar ideias mentalmente, depois fale por até 1min30 cobrindo os pontos do cartão.",
+          "1 minute to plan, then speak for up to 1m30s covering the card's points.")}</p>
+        <div class="ielts-cue">
+          <b>${K.esc(item.topic)}</b>
+          <span>${tx("Você deve falar sobre:", "You should say:")}</span>
+          <ul>${item.points.map(p => `<li>${K.esc(p)}</li>`).join("")}</ul>
+        </div>
+        <div class="pte-stage"></div>
+      </div>`;
+    const stage = body.querySelector(".pte-stage");
+    const prep = document.createElement("div");
+    stage.appendChild(prep);
+    const btnRow = document.createElement("div");
+    btnRow.innerHTML = `<button class="btn pte-go">🎙 ${tx("Falar agora", "Speak now")}</button>`;
+    btnRow.style.marginTop = "10px";
+    stage.appendChild(btnRow);
+    let went = false;
+    const tm = K.countdown(prep, 60, () => start(), tx("Preparação", "Preparation"));
+    const start = () => {
+      if (went) return; went = true;
+      tm.cancel();
+      stage.innerHTML = "";
+      const rec = document.createElement("div");
+      stage.appendChild(rec);
+      K.captureSpeech(rec, 90, (said) => {
+        const sw = K.norm(said);
+        const hits = item.keywords.filter(k => K.norm(k).every(w => sw.includes(w)));
+        const f = Math.min(1, hits.length / 6) * 0.55 + Math.min(1, sw.length / 80) * 0.45;
+        const chips = item.keywords.map(k => `<span class="pte-kw ${hits.includes(k) ? "hit" : ""}">${K.esc(k)}</span>`).join("");
+        ctx.done(f, K.heardHtml(said) +
+          `<p class="pte-key"><b>${tx("Palavras que uma boa resposta usa:", "Words a good answer uses:")}</b></p><p>${chips}</p>`);
+      });
+    };
+    btnRow.querySelector(".pte-go").onclick = start;
+  }
+
+  // ---------- registry ----------
+  const SECTIONS = {
+    listening: { emoji: "🎧", name: () => tx("Escuta", "Listening") },
+    reading: { emoji: "📖", name: () => tx("Leitura", "Reading") },
+    writing: { emoji: "✍️", name: () => tx("Escrita", "Writing") },
+    speaking: { emoji: "🎙️", name: () => tx("Fala", "Speaking") }
+  };
+
+  const TASKS = {
+    "form": { emoji: "📋", section: "listening", bank: "formCompletion", n: 2, en: "Form Completion", mic: false,
+      name: () => tx("Complete o Formulário", "Form Completion"),
+      desc: () => tx("A Parte 1 clássica do Listening: um telefonema, um formulário, e detalhes que passam voando — nomes, números, dias.",
+        "Classic Listening Part 1: a phone call, a form, and details flying past — names, numbers, days."),
+      facts: () => "🎧 + 90s" },
+    "mcq-listen": { emoji: "🔘", section: "listening", bank: "mcqListening", n: 4, en: "Listening MCQ", mic: false,
+      name: () => tx("Múltipla Escolha (Áudio)", "Listening Multiple Choice"),
+      desc: () => tx("Ouça uma vez e escolha — os distratores são mencionados de propósito pra te pegar.",
+        "Listen once and choose — the distractors are mentioned on purpose to trap you."),
+      facts: () => "🎧 + 45s" },
+    "tfng": { emoji: "⚖️", section: "reading", bank: "tfng", n: 2, en: "True / False / Not Given", mic: false,
+      name: () => tx("True / False / Not Given", "True / False / Not Given"),
+      desc: () => tx("A tarefa mais temida do IELTS: 'não consta' NÃO é 'falso'. Aqui você treina a diferença.",
+        "The most feared IELTS task: 'not given' is NOT 'false'. Train the difference here."),
+      facts: () => "⏱ 4min · 📖" },
+    "headings": { emoji: "🏷️", section: "reading", bank: "headings", n: 2, en: "Matching Headings", mic: false,
+      name: () => tx("Combine os Títulos", "Matching Headings"),
+      desc: () => tx("Escolha o título de cada parágrafo — com dois títulos-armadilha sobrando, como na prova.",
+        "Pick each paragraph's heading — with two trap headings left over, like the real exam."),
+      facts: () => "⏱ 4min · 📖" },
+    "sentence": { emoji: "✂️", section: "reading", bank: "sentenceCompletion", n: 2, en: "Sentence Completion", mic: false,
+      name: () => tx("Complete as Frases", "Sentence Completion"),
+      desc: () => tx("No máximo DUAS palavras, copiadas exatamente do texto. Três palavras = zero, mesmo certo.",
+        "NO MORE THAN TWO WORDS, copied exactly from the text. Three words = zero, even if right."),
+      facts: () => "⏱ 4min · 📖" },
+    "letter": { emoji: "✉️", section: "writing", bank: "letters", n: 1, en: "Task 1 — Letter", mic: false,
+      name: () => tx("Tarefa 1 — Carta", "Task 1 — Letter"),
+      desc: () => tx("Escreva uma carta de 150+ palavras cobrindo os 3 pontos pedidos — formal ou informal conforme o caso.",
+        "Write a 150+ word letter covering the 3 required points — formal or informal as the situation asks."),
+      facts: () => "⏱ 12min · ✍️ 150+" },
+    "essay": { emoji: "📝", section: "writing", bank: "essays", n: 1, en: "Task 2 — Essay", mic: false,
+      name: () => tx("Tarefa 2 — Redação", "Task 2 — Essay"),
+      desc: () => tx("A redação de opinião de 250+ palavras — a parte que mais pesa na nota de Escrita.",
+        "The 250+ word opinion essay — the heaviest part of the Writing band."),
+      facts: () => "⏱ 20min · ✍️ 250+" },
+    "speak-p1": { emoji: "💬", section: "speaking", bank: "speakingP1", n: 2, en: "Speaking Part 1", mic: true,
+      name: () => tx("Fala — Parte 1", "Speaking Part 1"),
+      desc: () => tx("Perguntas pessoais curtas, como a entrevista real: casa, trabalho, comida. Responda com frases, não palavras soltas.",
+        "Short personal questions, like the real interview: home, work, food. Answer in sentences, not single words."),
+      facts: () => "🎙 4 × 20s" },
+    "cue-card": { emoji: "🗂️", section: "speaking", bank: "cueCards", n: 1, en: "Speaking Part 2 — Cue Card", mic: true,
+      name: () => tx("Fala — Parte 2 (Cartão)", "Speaking Part 2 — Cue Card"),
+      desc: () => tx("O famoso long turn: 1 minuto pra preparar, até 1min30 falando sozinho cobrindo os pontos do cartão.",
+        "The famous long turn: 1 minute to prepare, up to 1m30s speaking solo covering the card."),
+      facts: () => "⏱ 1min + 1min30 · 🎙" },
+    "speak-p3": { emoji: "🧠", section: "speaking", bank: "speakingP3", n: 2, en: "Speaking Part 3", mic: true,
+      name: () => tx("Fala — Parte 3", "Speaking Part 3"),
+      desc: () => tx("A discussão abstrata que vem depois do cartão — opiniões, comparações, 'por quê?'. Onde as bandas altas se decidem.",
+        "The abstract discussion after the cue card — opinions, comparisons, 'why?'. Where high bands are decided."),
+      facts: () => "🎙 3 × 30s" }
+  };
+  const RENDERERS = {
+    "form": renderFormCompletion, "mcq-listen": renderMcqListening, "tfng": renderTFNG,
+    "headings": renderHeadings, "sentence": renderSentenceCompletion,
+    "letter": renderLetter, "essay": renderEssay,
+    "speak-p1": renderSpeakingP1, "cue-card": renderCueCard, "speak-p3": renderSpeakingP3
+  };
+  const bankOf = (t) => (window.IELTS_BANK && IELTS_BANK[t.bank]) || [];
+
+  // ---------- pages ----------
+  function hubHead() {
+    return `
+      <div class="page-head">
+        <div class="page-kicker">${tx("Estudo · Simulador", "Study · Simulator")}</div>
+        <div class="page-title">📘 ${tx("Simulador IELTS", "IELTS Simulator")}</div>
+        <p class="page-blurb">${tx(
+          "O IELTS General Training é o outro teste aceito pra vistos da Austrália — bandas de 0 a 9, meio ponto por vez. Treine os formatos que mais derrubam brasileiros: Not Given, títulos-armadilha, a carta de 150 palavras e o cartão da fala.",
+          "IELTS General Training is the other test accepted for Australian visas — bands 0-9 in half steps. Train the formats that trip Brazilians up most: Not Given, trap headings, the 150-word letter and the speaking cue card.")}</p>
+      </div>`;
+  }
+
+  function renderHub($main) {
+    const d = ieltsStore.load();
+    const best = d.best || {};
+    const lastMock = (d.mocks || [])[(d.mocks || []).length - 1];
+    const secBlocks = Object.entries(SECTIONS).map(([sec, meta]) => {
+      const tasks = Object.entries(TASKS).filter(([, t]) => t.section === sec);
+      return `
+        <div class="section-title">${meta.emoji} ${meta.name()}</div>
+        <div class="grid grid-2">
+          ${tasks.map(([id, t]) => `
+            <a class="card scenario-card pte-card" href="#/ielts/t/${id}">
+              <span class="sc-emoji">${t.emoji}</span>
+              <span class="sc-title">${t.name()}${t.name() !== t.en ? `<span class="sc-title-pt">${t.en}</span>` : ""}</span>
+              <span class="sc-blurb">${t.desc()}</span>
+              <span class="sc-meta">
+                <span class="chip">${t.facts()}</span>
+                ${bankOf(t).length ? "" : `<span class="chip gold">${tx("em breve", "soon")}</span>`}
+                ${best[id] ? `<span class="chip pte-band ${classOfBand(best[id])}">${tx("melhor:", "best:")} ${fmtBand(best[id])}</span>` : ""}
+              </span>
+            </a>`).join("")}
+        </div>`;
+    }).join("");
+    $main.innerHTML = `
+      ${hubHead()}
+      <div class="card pte-mock-cta">
+        <div>
+          <h3>⚡ ${tx("Simulado Rápido", "Quick Mock Test")}</h3>
+          <p>${tx("9 tarefas cobrindo as 4 seções, sem feedback no meio. No final: banda estimada por seção e geral (0-9).",
+            "9 tasks across all 4 sections, no mid-exam feedback. At the end: an estimated band per section and overall (0-9).")}</p>
+          ${lastMock ? `<p class="pte-lastmock">${tx("Último simulado:", "Last mock:")} <b>${fmtBand(lastMock.overall)}</b> · ${new Date(lastMock.date).toLocaleDateString(isPT() ? "pt-BR" : "en-AU")}</p>` : ""}
+        </div>
+        <a class="btn" href="#/ielts/mock">▶ ${tx("Começar simulado", "Start mock test")}</a>
+      </div>
+      ${K.progressCard(ieltsStore, 1, 9, classOfBand)}
+      <div class="card pte-note-card">
+        <p>ℹ️ ${tx("Estimativa não oficial (reconhecimento de voz + palavras-chave). Pra visto australiano: banda 6 = Competent, 7 = Proficient (10 pontos), 8 = Superior (20 pontos). O irmão deste simulador, o PTE, está em 🎓 Simulador PTE.",
+          "Unofficial estimate (speech recognition + keyword matching). For Australian visas: band 6 = Competent, 7 = Proficient (10 points), 8 = Superior (20 points). This simulator's sibling, PTE, lives under 🎓 PTE Simulator.")}</p>
+      </div>
+      ${secBlocks}`;
+  }
+
+  function feedbackScreen($main, headHtml, f, fbHtml, nextLabel, onNext) {
+    const b = band9(f);
+    $main.innerHTML = `
+      ${headHtml}
+      <div class="card pte-fb">
+        <div class="pte-score ${classOfBand(b)}">
+          <span class="pte-score-num">${fmtBand(b)}</span>
+          <span class="pte-score-cap">${tx("banda nesta tarefa (0-9)", "band on this task (0-9)")}</span>
+        </div>
+        <div class="pte-fb-body">${fbHtml}</div>
+        <button class="btn continue-btn" id="ielts-next">${nextLabel}</button>
+      </div>`;
+    document.getElementById("ielts-next").onclick = onNext;
+  }
+
+  function renderTask($main, typeId) {
+    const t = TASKS[typeId];
+    if (!t) return renderHub($main);
+    const bank = bankOf(t);
+    const head = (extra) => `
+      <a class="back-link" href="#/ielts">← ${tx("Simulador IELTS", "IELTS Simulator")}</a>
+      <div class="page-head">
+        <div class="page-kicker">IELTS · ${SECTIONS[t.section].emoji} ${SECTIONS[t.section].name()}${extra ? " · " + extra : ""}</div>
+        <div class="page-title">${t.emoji} ${t.name()}</div>
+      </div>`;
+    if (!bank.length) {
+      $main.innerHTML = head() + `<div class="card"><p style="color:var(--ink-soft)">${tx("Conteúdo chegando em breve.", "Content coming soon.")}</p></div>`;
+      return;
+    }
+    const items = K.shuffle(bank).slice(0, Math.min(t.n, bank.length));
+    let i = 0; const scores = [];
+
+    const report = () => {
+      const avg = scores.length ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
+      const b = band9(avg);
+      ieltsStore.best(typeId, b);
+      ieltsStore.round(typeId, b);
+      $main.innerHTML = head() + `
+        <div class="card quiz-score pte-report">
+          <div style="font-size:40px">${t.emoji}</div>
+          <div class="big">${fmtBand(b)}</div>
+          <p style="color:var(--ink-soft)">${tx("banda estimada nesta rodada (0-9)", "estimated band this round (0-9)")}</p>
+          <div class="pte-report-items">${scores.map((f, k) => `<span class="chip pte-band ${classOfF(f)}">${k + 1}: ${fmtBand(band9(f))}</span>`).join("")}</div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+            <button class="btn" id="ielts-again">↻ ${tx("Treinar de novo", "Train again")}</button>
+            <a class="btn ghost" href="#/ielts">${tx("Todas as tarefas", "All tasks")}</a>
+          </div>
+        </div>`;
+      document.getElementById("ielts-again").onclick = () => renderTask($main, typeId);
+    };
+
+    const step = () => {
+      clean();
+      if (i >= items.length) return report();
+      const headHtml = head(`${i + 1} ${tx("de", "of")} ${items.length}`);
+      $main.innerHTML = headHtml + `
+        <div class="progress-bar"><div style="width:${(i / items.length) * 100}%"></div></div>
+        <div id="ielts-body"></div>`;
+      let answered = false;
+      RENDERERS[typeId](document.getElementById("ielts-body"), items[i], {
+        exam: false, seed: i,
+        done: (f, fb) => {
+          if (answered) return; answered = true;
+          clean();
+          scores.push(f);
+          feedbackScreen($main, headHtml, f, fb,
+            i + 1 < items.length ? tx("Próxima ▸", "Next ▸") : tx("Ver resultado ▸", "See result ▸"),
+            () => { i++; step(); });
+        }
+      });
+      window.scrollTo(0, 0);
+    };
+
+    $main.innerHTML = head() + `
+      <div class="card pte-intro">
+        <p class="pte-inst">${t.desc()}</p>
+        <p><span class="chip">${t.facts()}</span> <span class="chip">${items.length} ${tx("tarefas", "tasks")}</span>
+        ${t.mic ? `<span class="chip ${SR ? "" : "coral"}">${SR ? "🎙 " + tx("microfone pronto", "microphone ready") : "⌨️ " + tx("sem microfone — modo digitado", "no mic — typed mode")}</span>` : ""}</p>
+        <button class="btn" id="ielts-start">▶ ${tx("Começar", "Start")}</button>
+      </div>`;
+    document.getElementById("ielts-start").onclick = step;
+  }
+
+  // ---------- mock ----------
+  const MOCK_PLAN = [
+    ["form", 1], ["mcq-listen", 2], ["tfng", 1], ["headings", 1], ["sentence", 1],
+    ["letter", 1], ["speak-p1", 1], ["cue-card", 1]
+  ];
+
+  function renderMock($main) {
+    const seq = [];
+    MOCK_PLAN.forEach(([typeId, count]) => {
+      const t = TASKS[typeId];
+      K.shuffle(bankOf(t)).slice(0, count).forEach(item => seq.push({ typeId, item }));
+    });
+    if (!seq.length) return renderHub($main);
+    const head = (extra) => `
+      <a class="back-link" href="#/ielts">← ${tx("Simulador IELTS", "IELTS Simulator")}</a>
+      <div class="page-head">
+        <div class="page-kicker">IELTS · ${tx("Simulado", "Mock test")}${extra ? " · " + extra : ""}</div>
+        <div class="page-title">⚡ ${tx("Simulado Rápido", "Quick Mock Test")}</div>
+      </div>`;
+    let i = 0; const results = [];
+
+    const report = () => {
+      clean();
+      const bySec = {};
+      results.forEach(r => {
+        const sec = TASKS[r.typeId].section;
+        (bySec[sec] = bySec[sec] || []).push(r.f);
+      });
+      const secBands = Object.fromEntries(Object.entries(bySec).map(([s, arr]) => [s, band9(arr.reduce((a, b) => a + b, 0) / arr.length)]));
+      const bandsArr = Object.values(secBands);
+      const overall = Math.round((bandsArr.reduce((a, b) => a + b, 0) / bandsArr.length) * 2) / 2;
+      ieltsStore.addMock({ date: Date.now(), overall, sections: secBands });
+      const secRows = Object.entries(SECTIONS).map(([sec, meta]) => {
+        if (secBands[sec] === undefined) return "";
+        const b = secBands[sec];
+        return `<div class="pte-sec-row">
+          <span>${meta.emoji} ${meta.name()}</span>
+          <div class="pte-sec-bar"><div class="${classOfBand(b)}" style="width:${((b - 1) / 8) * 100}%"></div></div>
+          <b>${fmtBand(b)}</b>
+        </div>`;
+      }).join("");
+      const msg = overall >= 8
+        ? tx("Banda Superior — 20 pontos de visto. Nível raríssimo. 🏆", "Superior band — 20 visa points. Rare air. 🏆")
+        : overall >= 7
+          ? tx("Banda Proficient (7+) — 10 pontos de visto. 💪", "Proficient band (7+) — 10 visa points. 💪")
+          : overall >= 6
+            ? tx("Banda Competent (6+) — o mínimo da maioria dos vistos. Dá pra subir: treine as seções fracas. 🎯", "Competent band (6+) — most visas' minimum. Push higher: drill your weak sections. 🎯")
+            : tx("Ainda aquecendo — treine tarefa por tarefa e repita o simulado. 🔁", "Still warming up — drill task by task and retake the mock. 🔁");
+      $main.innerHTML = head() + `
+        <div class="card quiz-score pte-report">
+          <div style="font-size:40px">📘</div>
+          <div class="big">${fmtBand(overall)}</div>
+          <p style="color:var(--ink-soft)">${tx("banda geral estimada (0-9, não oficial)", "estimated overall band (0-9, unofficial)")}</p>
+          <div class="pte-secs">${secRows}</div>
+          <p style="color:var(--ink-soft);margin:14px 0 4px">${msg}</p>
+          <div class="pte-report-items">
+            ${results.map(r => `<span class="chip pte-band ${classOfF(r.f)}" title="${TASKS[r.typeId].en}">${TASKS[r.typeId].emoji} ${fmtBand(band9(r.f))}</span>`).join("")}
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+            <a class="btn" href="#/ielts/mock" onclick="location.reload()">↻ ${tx("Refazer simulado", "Retake mock")}</a>
+            <a class="btn ghost" href="#/ielts">${tx("Treinar tarefas", "Train tasks")}</a>
+          </div>
+        </div>`;
+    };
+
+    const step = () => {
+      clean();
+      if (i >= seq.length) return report();
+      const { typeId, item } = seq[i];
+      const t = TASKS[typeId];
+      $main.innerHTML = head(`${i + 1} ${tx("de", "of")} ${seq.length}`) + `
+        <div class="progress-bar"><div style="width:${(i / seq.length) * 100}%"></div></div>
+        <div class="pte-exam-type">${t.emoji} ${t.name()} <span>${t.en}</span></div>
+        <div id="ielts-body"></div>`;
+      let answered = false;
+      RENDERERS[typeId](document.getElementById("ielts-body"), item, {
+        exam: true, seed: i,
+        done: (f) => {
+          if (answered) return; answered = true;
+          clean();
+          results.push({ typeId, f });
+          const note = document.createElement("div");
+          note.className = "pte-saved";
+          note.textContent = "✓ " + tx("Resposta registrada", "Answer recorded");
+          $main.appendChild(note);
+          setTimeout(() => { i++; step(); }, 700);
+        }
+      });
+      window.scrollTo(0, 0);
+    };
+
+    $main.innerHTML = head() + `
+      <div class="card pte-intro">
+        <p class="pte-inst">${tx(
+          "9 tarefas seguidas pelas 4 seções, sem feedback até o final. Reserve uns 25 minutos, com fone e microfone.",
+          "9 tasks straight through all 4 sections, no feedback until the end. Set aside ~25 minutes, with headphones and a microphone.")}</p>
+        <p>
+          <span class="chip">${seq.length} ${tx("tarefas", "tasks")}</span>
+          <span class="chip">~25 min</span>
+          <span class="chip ${SR ? "" : "coral"}">${SR ? "🎙 " + tx("microfone pronto", "microphone ready") : "⌨️ " + tx("sem microfone — modo digitado", "no mic — typed mode")}</span>
+        </p>
+        <button class="btn" id="ielts-start">▶ ${tx("Começar o simulado", "Start the mock")}</button>
+      </div>`;
+    document.getElementById("ielts-start").onclick = step;
+  }
+
+  window.RTIELTS = { renderHub, renderTask, renderMock };
 })();
 
 </script>
@@ -11832,6 +13227,7 @@ swt: [
     document.querySelector('.nav-item[data-route="grammar"]').innerHTML = navLabelHtml("📚", L("grammar"), "Grammar");
     document.querySelector('.nav-item[data-route="exercises"]').innerHTML = navLabelHtml("✏️", L("exercises"), "Exercises");
     document.querySelector('.nav-item[data-route="pte"]').innerHTML = navLabelHtml("🎓", isPT() ? "Simulador PTE" : "PTE Simulator", "PTE Simulator");
+    document.querySelector('.nav-item[data-route="ielts"]').innerHTML = navLabelHtml("📘", isPT() ? "Simulador IELTS" : "IELTS Simulator", "IELTS Simulator");
     document.getElementById("study-label").textContent = L("study");
     document.getElementById("rle-label").textContent = isPT() ? "Inglês da Vida Real" : "Real Life English";
     renderMobileNav();
@@ -11850,6 +13246,7 @@ swt: [
       <a class="mnav-item" href="#/grammar" data-mroute="grammar"><span class="mn-emoji">📚</span>${L("grammar")}</a>
       <a class="mnav-item" href="#/exercises" data-mroute="exercises"><span class="mn-emoji">✏️</span>${L("exercises")}</a>
       <a class="mnav-item" href="#/pte" data-mroute="pte"><span class="mn-emoji">🎓</span>PTE</a>
+      <a class="mnav-item" href="#/ielts" data-mroute="ielts"><span class="mn-emoji">📘</span>IELTS</a>
       <button class="mnav-item" id="mnav-voice"><span class="mn-emoji">${RealTalkPlayer.speech.enabled ? "🔊" : "🔇"}</span>${isPT() ? "Voz" : "Voice"}</button>`;
     mn.querySelector("#mnav-voice").onclick = () => {
       RealTalkPlayer.speech.enabled = !RealTalkPlayer.speech.enabled;
@@ -11945,7 +13342,7 @@ swt: [
       }).join("")}
 
       <div class="section-title">${L("study")}</div>
-      <div class="grid grid-3">
+      <div class="grid grid-4">
         <a class="card scenario-card" href="#/grammar">
           <span class="sc-emoji">📚</span><span class="sc-title">${L("grammar")}</span>
           <span class="sc-blurb">${L("grammarBlurb")}</span>
@@ -11957,8 +13354,14 @@ swt: [
         <a class="card scenario-card" href="#/pte">
           <span class="sc-emoji">🎓</span><span class="sc-title">${isPT() ? "Simulador PTE" : "PTE Simulator"}</span>
           <span class="sc-blurb">${isPT()
-            ? "Treine o teste de inglês dos vistos australianos: 10 tipos de tarefa com tempo, microfone e nota estimada de 10 a 90."
-            : "Train the English test behind Australian visas: 10 task types with timers, microphone and an estimated 10-90 score."}</span>
+            ? "O teste dos vistos australianos: 10 tipos de tarefa com tempo, microfone e nota de 10 a 90 — agora com histórico de progresso."
+            : "The Australian-visa test: 10 task types with timers, microphone and a 10-90 score — now with progress history."}</span>
+        </a>
+        <a class="card scenario-card" href="#/ielts">
+          <span class="sc-emoji">📘</span><span class="sc-title">${isPT() ? "Simulador IELTS" : "IELTS Simulator"}</span>
+          <span class="sc-blurb">${isPT()
+            ? "O outro teste de visto: bandas 0-9, True/False/Not Given, carta, redação e o cartão da fala."
+            : "The other visa test: bands 0-9, True/False/Not Given, letter, essay and the speaking cue card."}</span>
         </a>
       </div>`;
   }
@@ -12269,6 +13672,13 @@ swt: [
           if (parts[1] === "t" && parts[2]) RTPTE.renderTask($main, parts[2]);
           else if (parts[1] === "mock") RTPTE.renderMock($main);
           else RTPTE.renderHub($main);
+        } else pageHome();
+        break;
+      case "ielts":
+        if (window.RTIELTS) {
+          if (parts[1] === "t" && parts[2]) RTIELTS.renderTask($main, parts[2]);
+          else if (parts[1] === "mock") RTIELTS.renderMock($main);
+          else RTIELTS.renderHub($main);
         } else pageHome();
         break;
       case "scenario": pageScenario(parts[1], parts[2]); break;
